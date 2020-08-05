@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>myWork</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="js/publicTool.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/publicTool.css">
+</head>
+<body>
+<div style="width: 600px;height: 600px;">
+
+    <!-- 左侧导航栏 -->
+    <div id="navigator"></div>
+
+    <div style="background-color: gainsboro;width: 430px;height: 600px;float: left;text-align: center" id="wfmContent">
+
+    </div>
+
+    <script>
+        $.ready(showNavigator());
+        $.ready(showAddWorkFlow());
+
+        function showAddWorkFlow() {
+            $.ajax({
+                url: "/wf/showWorkFlow",
+                method: "post",
+                success: function (res) {
+                    let tmp = "<table style=\"text-align: center;margin: auto;\">" +
+                        "            <div class=\"contentTitle\">工作流管理</div>" +
+                        "            <thead>" +
+                        "               <tr>" +
+                        "            <td>工作流标识</td><td>工作流名称</td><td>工作流描述</td><td>工作流长度</td><td>操作</td>" +
+                        "               </tr>" +
+                        "            </thead>" +
+                        "            <tbody id=\"tbody\">";
+                    for (let i = 0; i < res.length; i++) {
+                        tmp += "<tr>" +
+                            "<td>" + res[i]['wfId'] + "</td>" +
+                            "<td>" + res[i]['wfName'] + "</td>" +
+                            "<td>" + res[i]['wfdesc'] + "</td>" +
+                            "<td>" + res[i]['wfLength'] + "</td>" +
+                            "<td>" +
+                            "<button onclick=deleteWorkFlow(" + res[i]['wfId'] + ")>删除</button>" +
+                            "<button onclick=showWorkStep(" + res[i]['wfId'] + ")>查看</button>" +
+                            "</td>" +
+                            "</tr>"
+                    }
+                    tmp += "            </tbody>\n" +
+                        "        </table>";
+                    $("#wfmContent").html(tmp)
+                }
+            })
+        }
+
+        function deleteWorkFlow(wfId) {
+            window.location.href = "/wf/deleteWorkFlow/" + wfId;
+        }
+
+        function showWorkStep(wfId) {
+            $.ajax({
+                url: "/wf/showWorkFlow/" + wfId,
+                method: "get",
+                success: function (rest) {
+                    console.log(rest);
+                    let res = rest[0]['wws'];
+
+                    let tmp = "<table style=\"text-align: center;margin: auto;\">" +
+                        "            <div class=\"contentTitle\">工作流内容</div>" +
+                        "            <thead>" +
+                        "               <tr>" +
+                        "            <td>步骤序号</td><td>步骤名称</td><td>步骤描述</td><td>步骤权限</td>" +
+                        "               </tr>" +
+                        "            </thead>" +
+                        "            <tbody id=\"tbody\">";
+                    for (let i = 0; i < res.length; i++) {
+                        tmp += "<tr>" +
+                            "<td>" + res[i]['ranking'] + "</td>" +
+                            "<td>" + res[i]['wsName'] + "</td>" +
+                            "<td>" + res[i]['wsdesc'] + "</td>" +
+                            "<td>" + res[i]['rId'] + "</td>" +
+                            "</tr>"
+                    }
+                    tmp += "            </tbody>\n" +
+                        "        </table><br><br>" +
+                        "<button onclick=deleteWorkFlow(" + wfId + ")>删除</button>" +
+                        "<button onclick=showInitWork("+
+                        wfId + "," + rest[0]['wfLength']+
+                    ")>启用工作流</button>";
+                    $("#wfmContent").html(tmp)
+                }
+            })
+        }
+
+
+        function showInitWork(wfId,wfLength) {
+            let tmp = "<div class='contentTitle'>导入工作流</div>" +
+                "<form action='/w/initWork' method=\"post\" enctype=\"multipart/form-data\">" +
+                "<input type='hidden' name='wfId' value='"+wfId+"'>" +
+                "<input type='hidden' name='wfLength' value='"+wfLength+"'>" +
+                "工作名称：<input class='contentTitle' type='text' name='wName'><br>" +
+                "工作描述：<input class='contentTitle' type='text' name='wdesc'><br>" +
+                "上传所需附件：<input type=\"file\" name='uploadFile'><br><br><br><br>" +
+                "<input type=\"submit\" value=\"导入\"><br>" +
+                "</form>";
+            $("#wfmContent").html(tmp)
+        }
+
+    </script>
+
+</div>
+</body>
+</html>
+
+
+
+
+

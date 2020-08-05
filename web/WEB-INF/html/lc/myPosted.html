@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>myWork</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="js/publicTool.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="css/publicTool.css">
+</head>
+<body>
+<div style="width: 600px;height: 600px;">
+    <!-- 左侧导航栏 -->
+    <div id="navigator"></div>
+
+    <!-- 主信息窗口区 -->
+    <div style="background-color: gainsboro;width: 430px;height: 600px;float: left;" id="myContent">
+    </div>
+
+
+    <script>
+        $.ready(showNavigator());
+        $.ready(showMyPosted());
+
+        function showMyPosted() {
+            $.ajax({
+                url: "/w/showMyPosted",
+                method: "get",
+                success: function (res) {
+                    let tmp = "<table style=\"text-align: center;margin: auto;\">\n" +
+                        "            <div class=\"contentTitle\">我发布的业务</div>\n" +
+                        "            <thead>\n" +
+                        "            <tr>\n" +
+                        "                <td>业务ID</td>\n" +
+                        "                <td>业务描述</td>\n" +
+                        "                <td>所属工作流ID</td>\n" +
+                        "                <td>当前执行步</td>\n" +
+                        "                <td>业务长度</td>\n" +
+                        "                <td>处理</td>\n" +
+                        "            </tr>\n" +
+                        "            </thead>\n" +
+                        "            <tbody id=\"tbody\">\n";
+
+                    for (let i = 0; i < res.length; i++) {
+                        tmp += "<tr>" +
+                            "<td>" + res[i]['wId'] + "</td>" +
+                            "<td>" + res[i]['wdesc'] + "</td>" +
+                            "<td>" + res[i]['wfId'] + "</td>" +
+                            "<td>" + res[i]['ranking'] + "</td>" +
+                            "<td>" + res[i]['wLength'] + "</td>" +
+                            "<td>" +
+                            "<button onclick=deleteWork(" + res[i]['wId']
+                            + ")>取消</button></td></tr>"
+                    }
+                    tmp += "            </tbody>\n" +
+                        "        </table>";
+                    $("#myContent").html(tmp)
+                }
+            })
+        }
+
+        function deleteWork(wId) {
+            window.location.href = "/w/deleteWork/" + wId;
+        }
+
+    </script>
+
+</div>
+</body>
+</html>

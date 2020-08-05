@@ -1,0 +1,69 @@
+
+/*
+导航栏部分
+*/
+#navigator{
+    background-color: #7F7F7F;
+    width: 170px;
+    height: 600px;
+    float: left;
+}
+
+/*
+弹窗部分
+*/
+#shade {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    background: #000;
+    width: 100%;
+    height: 100%;
+    opacity: 1;
+}
+
+#popup {
+    position: relative;
+    background: #fff;
+    width: 50%;
+    height: 80%;
+    border-radius: 5px;
+    margin: 5% auto;
+}
+
+#header {
+    height: 40px;
+}
+
+#header-right {
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    background: red;
+    color: #fff;
+    right: 5px;
+    top: 5px;
+    text-align: center;
+}
+
+
+thead td{
+    border: black solid 0.0625rem;
+    width: 6.25rem;
+    background-color: aliceblue;
+}
+
+.contentTitle{
+    text-align: center;
+    background-color: darkgray;
+    height: 40px;
+    margin-bottom: 2.5rem;
+    font-size: larger;
+}
+
+ul li{
+    list-style: none;
+    margin-top: 2.5rem;
+}
+

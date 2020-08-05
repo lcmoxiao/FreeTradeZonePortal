@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="
+        http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context-3.0.xsd
+        http://www.springframework.org/schema/mvc
+        http://www.springframework.org/schema/mvc/spring-mvc-3.0.xsd">
+
+
+    <!-- 1. 扫描配置
+        自动扫描的包名，包括controller，service等，是这些子包的父包，因此可合并文com.lc
+    -->
+    <context:component-scan base-package="com.ftzp.controller, com.ftzp.service"/>
+
+    <!-- 2. 注解配置
+        默认的注解映射的支持
+     -->
+    <mvc:annotation-driven/>
+
+
+    <!-- 3. 默认视图
+     -->
+    <mvc:default-servlet-handler/>
+    <!-- 3. 视图配置
+        （1）前缀
+        （2）后缀
+     -->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <!-- 视图前缀 -->
+        <property name="prefix" value="/WEB-INF/html"/>
+        <!-- 视图后缀 -->
+        <property name="suffix" value=".html"/>
+    </bean>
+
+    <!-- 4. 静态资源文件配置
+        （1）在url路径中包含/images/**这样的请求不会被拦截，并对应的目录为/WEB-INF/static/images/
+        （2）** 表示可以带子目录
+    -->
+    <mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
+    <mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
+    <mvc:resources mapping="/wf/js/**" location="/WEB-INF/js/"/>
+    <mvc:resources mapping="/wf/css/**" location="/WEB-INF/css/"/>
+    <mvc:resources mapping="/w/js/**" location="/WEB-INF/js/"/>
+    <mvc:resources mapping="/w/css/**" location="/WEB-INF/css/"/>
+
+
+    <!-- 5. Mapper扫描配置
+    -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.ftzp.mapper.lc"/>
+    </bean>
+
+    <!-- jackson 转换器 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <list>
+                <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/html; charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+                <bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                    <property name="supportedMediaTypes">
+                        <list>
+                            <value>text/html; charset=UTF-8</value>
+                            <value>application/json;charset=UTF-8</value>
+                        </list>
+                    </property>
+                </bean>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 为了上传文件 -->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="maxUploadSize" value="10000000"/>
+    </bean>
+
+</beans>
