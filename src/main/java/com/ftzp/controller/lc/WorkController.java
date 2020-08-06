@@ -52,7 +52,7 @@ public class WorkController {
         w.setwLength(wfLength);
         w.setWdesc(wdesc);
         workService.insertWork(w);
-        return "/lc/myWork";
+        return "/lc/workflow/myWork";
     }
 
     @RequestMapping(value = "/commmitWork", method = RequestMethod.POST)
@@ -69,7 +69,7 @@ public class WorkController {
             w.setRanking(ranking + 1);
             workService.updateWork(w);
         }
-        return "/lc/myWork";
+        return "/lc/workflow/myWork";
     }
 
     @RequestMapping(value = "/deleteWork/{wId}", method = RequestMethod.GET)

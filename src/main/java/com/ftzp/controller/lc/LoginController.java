@@ -21,13 +21,13 @@ public class LoginController {
 
     @RequestMapping("/")
     String defualt() {
-        return "/lc/index";
+        return "/index";
     }
 
 
     @RequestMapping("/index")
     String index() {
-        return "/lc/index";
+        return "/index";
     }
 
 
@@ -41,7 +41,7 @@ public class LoginController {
         } else {
             System.out.println("login failed");
         }
-        return "/lc/index";
+        return "/index";
     }
 
 

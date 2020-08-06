@@ -24,11 +24,9 @@ import java.util.UUID;
 @RequestMapping("/wf")
 public class WorkFlowController {
 
-
     WorkStepService workStepService;
     UserService userService;
     WorkFlowService workFlowService;
-
 
     @Autowired
     public void setWorkStepService(WorkStepService workStepService) {
@@ -45,25 +43,24 @@ public class WorkFlowController {
         this.workFlowService = workFlowService;
     }
 
-
     @RequestMapping("/goToMyWork")
     String goToMyWork() {
-        return "/lc/myWork";
+        return "/lc/workflow/myWork";
     }
 
     @RequestMapping("/goToAddWorkFlow")
     String goToAddWorkFlow() {
-        return "/lc/addWorkFlow";
+        return "/lc/workflow/addWorkFlow";
     }
 
     @RequestMapping("/goToMyPosted")
     String goToInitWorkFlow() {
-        return "/lc/myPosted";
+        return "/lc/workflow/myPosted";
     }
 
     @RequestMapping("/goToWorkFlowManager")
     String goToWorkFlowManager() {
-        return "/lc/workFlowManager";
+        return "/lc/workflow/workFlowManager";
     }
 
     @RequestMapping(value = "/addWorkFlow", method = RequestMethod.POST)
@@ -77,7 +74,7 @@ public class WorkFlowController {
         } catch (IOException | DocumentException e) {
             e.printStackTrace();
         }
-        return "/lc/workFlowManager";
+        return "/lc/workflow/workFlowManager";
     }
 
     //获取指定工作流的流程信息或者所有工作流的信息

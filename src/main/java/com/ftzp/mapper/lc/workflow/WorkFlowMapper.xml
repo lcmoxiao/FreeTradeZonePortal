@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.ftzp.mapper.lc.workflow.WorkFlowMapper">
+
+    <resultMap id="workFlowInfo" type="com.ftzp.pojo.lc.WorkFlow">
+        <id column="wfId" property="wfId"/>
+        <result column="wfName" property="wfName"/>
+        <result column="wfdesc" property="wfdesc"/>
+        <result column="wfLength" property="wfLength"/>
+        <collection property="wws" ofType="com.ftzp.pojo.lc.WorkStep">
+            <id column="wsId" property="wsId"/>
+            <result column="wsName" property="wsName"/>
+            <result column="wfId" property="wfId"/>
+            <result column="ranking" property="ranking"/>
+            <result column="rId" property="rId"/>
+            <result column="wsdesc" property="wsdesc"/>
+        </collection>
+    </resultMap>
+
+    <select id="findWorkFlow" resultMap="workFlowInfo">
+        SELECT f.wfId, wfName,wfLength,wfdesc,wsdesc, wsId, wsName, ranking, rId, 'desc'
+        FROM workflow f
+        join workstep s on f.wfId = s.wfId
+        <where>
+            <if test="wfId!=null">and f.wfId = #{wfId}</if>
+        </where>
+    </select>
+
+    <insert id="insertWorkFlow" keyProperty="wfId" useGeneratedKeys="true">
+        insert into workflow(wfName)
+        VALUES (#{wfName})
+    </insert>
+
+    <update id="updateWorkFlow">
+        update workflow
+        set wfLength = #{wfLength},
+            wfdesc= #{wfdesc}
+        where wfId = #{wfId}
+
+    </update>
+
+    <delete id="deleteWorkFlow">
+        delete
+        from workflow
+        where wfId = #{wfId}
+    </delete>
+
+</mapper>

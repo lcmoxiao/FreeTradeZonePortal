@@ -50,7 +50,7 @@
     <!-- 5. Mapper扫描配置
     -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-        <property name="basePackage" value="com.ftzp.mapper.lc"/>
+        <property name="basePackage" value="com.ftzp.mapper"/>
     </bean>
 
     <!-- jackson 转换器 -->

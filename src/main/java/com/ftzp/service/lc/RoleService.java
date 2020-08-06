@@ -6,6 +6,8 @@ import com.ftzp.pojo.lc.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /*
 权限生成流程：
 传入权限数组，generatePStr(int[] permissions)生成128位权限字符串。
@@ -73,7 +75,7 @@ public class RoleService implements RoleMapper {
     }
 
     @Override
-    public Role getRole(int rId) {
+    public List<Role> getRole(int rId) {
         return roleMapper.getRole(rId);
     }
 

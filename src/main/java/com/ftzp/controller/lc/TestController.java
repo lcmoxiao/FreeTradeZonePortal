@@ -25,21 +25,21 @@ public class TestController {
 
     @RequestMapping("/test")
     String test() {
-        return "/lc/index";
+        return "/index";
     }
 
     @RequestMapping("test2")
     String test2() {
 
 
-        return "/lc/index";
+        return "/index";
     }
 
     @RequestMapping("test3")
     String test3() {
         List<WorkStep> wss = workStepService.getWorkStep(1);
         System.out.println(wss);
-        return "/lc/index";
+        return "/index";
     }
 
 
