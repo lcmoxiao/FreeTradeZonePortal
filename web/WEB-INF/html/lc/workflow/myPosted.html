@@ -7,17 +7,17 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta charset="utf-8">
     <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
-    <script type="text/javascript" src="js/publicTool.js"></script>
+    <script type="text/javascript" src="js/workNavigator.js"></script>
 
-    <link rel="stylesheet" type="text/css" href="css/publicTool.css">
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 </head>
 <body>
-<div style="width: 600px;height: 600px;">
+<div>
     <!-- 左侧导航栏 -->
-    <div id="navigator"></div>
+    <div id="navigator" style="float: left"></div>
 
-    <!-- 主信息窗口区 -->
-    <div style="background-color: gainsboro;width: 430px;height: 600px;float: left;" id="myContent">
+    <div id="mpContent" style="float: left"></div>
+
     </div>
 
 
@@ -30,8 +30,7 @@
                 url: "/w/showMyPosted",
                 method: "get",
                 success: function (res) {
-                    let tmp = "<table style=\"text-align: center;margin: auto;\">\n" +
-                        "            <div class=\"contentTitle\">我发布的业务</div>\n" +
+                    let tmp = "<table class=\"layui-table\">\n" +
                         "            <thead>\n" +
                         "            <tr>\n" +
                         "                <td>业务ID</td>\n" +
@@ -52,12 +51,12 @@
                             "<td>" + res[i]['ranking'] + "</td>" +
                             "<td>" + res[i]['wLength'] + "</td>" +
                             "<td>" +
-                            "<button onclick=deleteWork(" + res[i]['wId']
+                            "<button class=\"layui-btn layui-btn-normal layui-btn-sm\" onclick=deleteWork(" + res[i]['wId']
                             + ")>取消</button></td></tr>"
                     }
                     tmp += "            </tbody>\n" +
                         "        </table>";
-                    $("#myContent").html(tmp)
+                    $("#mpContent").html(tmp)
                 }
             })
         }

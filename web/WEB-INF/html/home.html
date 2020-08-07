@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <script src="https://cdn.bootcss.com/jquery/1.12.4/jquery.min.js"></script>
+    <title>123</title>
+    <style>
+        * {
+            margin: 0 auto;
+            padding: 0;
+        }
+
+        @keyframes rotate {
+            0% {
+                transform: rotateX(0deg) rotateY(0deg);
+            }
+            100% {
+                transform: rotateX(360deg) rotateY(360deg);
+            }
+        }
+
+        html {
+            background: linear-gradient(#aa00ff 0%, #880055 80%);
+            height: 100%;
+        }
+
+        button {
+            background-color: #ff5500;
+            width: 26%;
+            height: 26%;
+        }
+
+        button:hover{
+            background-color:#ff0055
+        }
+
+        .wrap {
+            margin-top: 200px;
+            perspective: 600px; /* 视图距元素的距离 相当于摄像机 */
+        }
+
+        .cube {
+            width: 200px;
+            height: 200px;
+            position: relative;
+            color: #ff5d6d;
+            font-size: 36px;
+            font-weight: bold;
+            text-align: center;
+            /* 	line-height:100px; */
+            transform-style: preserve-3d; /* 默认flat 2D */
+            transform: rotateX(-30deg) rotateY(-70deg);
+            animation: rotate 20s infinite linear; /*播放时间 播放次数为循环 缓动效果为匀速 */
+        }
+
+        .cube > div {
+            width: 100%;
+            height: 100%;
+            border: 1px solid #ff5500;
+            position: absolute;
+            background: linear-gradient(#aa00ff 0%, #880055 100%);
+            opacity: .9;
+            transition: transform 0.4s ease-in;
+        }
+
+        .cube .out-front {
+            transform: translateZ(100px);
+        }
+
+        .cube .out-back {
+            transform: translateZ(-100px) rotateY(180deg);
+        }
+
+        .cube .out-left {
+            transform: translateX(-100px) rotateY(-90deg);
+        }
+
+        .cube .out-right {
+            transform: translateX(100px) rotateY(90deg);
+        }
+
+        .cube .out-top {
+            transform: translateY(-100px) rotateX(90deg);
+        }
+
+        .cube .out-bottom {
+            transform: translateY(100px) rotateX(-90deg);
+        }
+
+        .wrap:hover .out-front {
+            transform: translateZ(200px);
+        }
+
+        .wrap:hover .out-back {
+            transform: translateZ(-200px) rotateY(180deg);
+        }
+
+        .wrap:hover .out-left {
+            transform: translateX(-200px) rotateY(-90deg);
+        }
+
+        .wrap:hover .out-right {
+            transform: translateX(200px) rotateY(90deg);
+        }
+
+        .wrap:hover .out-top {
+            transform: translateY(-200px) rotateX(90deg);
+        }
+
+        .wrap:hover .out-bottom {
+            transform: translateY(200px) rotateX(-90deg);
+        }
+
+    </style>
+</head>
+<body>
+<div class="wrap">
+    <div class="cube">
+        <div class="out-front">
+            <button class="button1" onclick="goToMyWork()" onmouseenter="changeColor(0)" onmouseleave="changeColor()">
+                123
+            </button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+        </div>
+        <div class="out-back">
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+        </div>
+        <div class="out-left">
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+        </div>
+        <div class="out-right">
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+        </div>
+        <div class="out-top">
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+        </div>
+        <div class="out-bottom">
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+            <button>123</button>
+        </div>
+
+        <!-- 		<span class="in-front"></span>
+                <span class="in-back"></span>
+                <span class="in-left"></span>
+                <span class="in-right"></span>
+                <span class="in-top"></span>
+                <span class="in-bottom"></span> -->
+    </div>
+</div>
+<script>
+    function goToMyWork() {
+        window.location.href = "/wf/goToMyWork";
+    };
+
+    $.ready(init())
+
+    function init() {
+        let ht = "";
+        for (let i = 0; i < 9; i++) {
+            ht += "<button class='button" + i + "'  onclick=\"goToMyWork()\">123</button>\n";
+        }
+        console.log(ht);
+        $(".out-front").html(ht);
+    }
+</script>
+
+</body>
+</html>

@@ -30,6 +30,10 @@ public class LoginController {
         return "/index";
     }
 
+    @RequestMapping("/home")
+    String home() {
+        return "/home";
+    }
 
     @RequestMapping("/login")
     String login(User user, HttpSession session) {
@@ -37,7 +41,7 @@ public class LoginController {
         if (u != null) {
             session.setAttribute("user", u);
             System.out.println("login success");
-            return "redirect:/wf/goToMyWork";
+            return "redirect:/home";
         } else {
             System.out.println("login failed");
         }
