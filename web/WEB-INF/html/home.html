@@ -201,12 +201,17 @@
         window.location.href = "/wf/goToMyWork";
     };
 
+    function goUserManager(){
+        window.location.href = "/u/goUserManager";
+    }
+
     $.ready(init())
 
     function init() {
         let ht = "";
         for (let i = 0; i < 9; i++) {
-            ht += "<button class='button" + i + "'  onclick=\"goToMyWork()\">123</button>\n";
+            if(i%2===0) ht += "<button class='button" + i + "'  onclick=\"goToMyWork()\">123</button>\n";
+            else ht += "<button class='button" + i + "'  onclick=\"goUserManager()\">123</button>\n";
         }
         console.log(ht);
         $(".out-front").html(ht);

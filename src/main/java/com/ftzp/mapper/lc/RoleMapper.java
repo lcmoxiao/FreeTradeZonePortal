@@ -7,7 +7,11 @@ import java.util.List;
 
 public interface RoleMapper {
 
-    List<Role> getRole(int rId);
+    List<Role> getRole(Integer rId);
 
-    Role insertRole(@Param("rName") String rName, @Param("rPermission") int rPermission);
+    void insertRole(Role role);
+
+    void updateRole(Role role);
+
+    void deleteRole(Integer rId);
 }

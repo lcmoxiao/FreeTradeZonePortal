@@ -17,9 +17,16 @@
           and uPass = #{uPass}
     </select>
 
+    <insert id="insertUser" useGeneratedKeys="true" keyProperty="uId">
+        insert into user(uName, uPass, rId)
+        values (#{uName}, #{uPass}, #{rId})
+    </insert>
+
+
     <delete id="deleteUser">
         delete
         from user
         where uId = #{uId};
     </delete>
+
 </mapper>

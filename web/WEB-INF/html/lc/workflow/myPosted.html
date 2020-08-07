@@ -18,55 +18,55 @@
 
     <div id="mpContent" style="float: left"></div>
 
-    </div>
-
-
-    <script>
-        $.ready(showNavigator());
-        $.ready(showMyPosted());
-
-        function showMyPosted() {
-            $.ajax({
-                url: "/w/showMyPosted",
-                method: "get",
-                success: function (res) {
-                    let tmp = "<table class=\"layui-table\">\n" +
-                        "            <thead>\n" +
-                        "            <tr>\n" +
-                        "                <td>业务ID</td>\n" +
-                        "                <td>业务描述</td>\n" +
-                        "                <td>所属工作流ID</td>\n" +
-                        "                <td>当前执行步</td>\n" +
-                        "                <td>业务长度</td>\n" +
-                        "                <td>处理</td>\n" +
-                        "            </tr>\n" +
-                        "            </thead>\n" +
-                        "            <tbody id=\"tbody\">\n";
-
-                    for (let i = 0; i < res.length; i++) {
-                        tmp += "<tr>" +
-                            "<td>" + res[i]['wId'] + "</td>" +
-                            "<td>" + res[i]['wdesc'] + "</td>" +
-                            "<td>" + res[i]['wfId'] + "</td>" +
-                            "<td>" + res[i]['ranking'] + "</td>" +
-                            "<td>" + res[i]['wLength'] + "</td>" +
-                            "<td>" +
-                            "<button class=\"layui-btn layui-btn-normal layui-btn-sm\" onclick=deleteWork(" + res[i]['wId']
-                            + ")>取消</button></td></tr>"
-                    }
-                    tmp += "            </tbody>\n" +
-                        "        </table>";
-                    $("#mpContent").html(tmp)
-                }
-            })
-        }
-
-        function deleteWork(wId) {
-            window.location.href = "/w/deleteWork/" + wId;
-        }
-
-    </script>
-
 </div>
+
+
+<script>
+    $.ready(showNavigator());
+    $.ready(showMyPosted());
+
+    function showMyPosted() {
+        $.ajax({
+            url: "/w/showMyPosted",
+            method: "get",
+            success: function (res) {
+                let tmp = "<table class=\"layui-table\">\n" +
+                    "            <thead>\n" +
+                    "            <tr>\n" +
+                    "                <td>业务ID</td>\n" +
+                    "                <td>业务描述</td>\n" +
+                    "                <td>所属工作流ID</td>\n" +
+                    "                <td>当前执行步</td>\n" +
+                    "                <td>业务长度</td>\n" +
+                    "                <td>处理</td>\n" +
+                    "            </tr>\n" +
+                    "            </thead>\n" +
+                    "            <tbody id=\"tbody\">\n";
+
+                for (let i = 0; i < res.length; i++) {
+                    tmp += "<tr>" +
+                        "<td>" + res[i]['wId'] + "</td>" +
+                        "<td>" + res[i]['wdesc'] + "</td>" +
+                        "<td>" + res[i]['wfId'] + "</td>" +
+                        "<td>" + res[i]['ranking'] + "</td>" +
+                        "<td>" + res[i]['wLength'] + "</td>" +
+                        "<td>" +
+                        "<button class=\"layui-btn layui-btn-normal layui-btn-sm\" onclick=deleteWork(" + res[i]['wId']
+                        + ")>取消</button></td></tr>"
+                }
+                tmp += "            </tbody>\n" +
+                    "        </table>";
+                $("#mpContent").html(tmp)
+            }
+        })
+    }
+
+    function deleteWork(wId) {
+        window.location.href = "/w/deleteWork/" + wId;
+    }
+
+</script>
+
+
 </body>
 </html>

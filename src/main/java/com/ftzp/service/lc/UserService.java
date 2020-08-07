@@ -28,6 +28,11 @@ public class UserService implements UserMapper {
     }
 
     @Override
+    public void insertUser(User user) {
+        userMapper.insertUser(user);
+    }
+
+    @Override
     public void deleteUser(Integer uId) {
         userMapper.deleteUser(uId);
     }

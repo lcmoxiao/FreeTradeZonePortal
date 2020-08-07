@@ -11,5 +11,7 @@ public interface UserMapper {
 
     User checkUser(User user);
 
+    void insertUser(User user);
+
     void deleteUser(@Param("uId") Integer uId);
 }

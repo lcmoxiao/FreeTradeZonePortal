@@ -22,7 +22,7 @@ public class LoginFilter implements Filter {
         } else {
             if (hsr.getSession().getAttribute("user") == null) {
                 System.out.println("没登录，去登录吧");
-                hsr.getRequestDispatcher("/index.html").forward(servletRequest, servletResponse);
+                hsr.getRequestDispatcher("/index").forward(servletRequest, servletResponse);
             } else {
                 System.out.println("已经登陆了,随便访问");
                 filterChain.doFilter(servletRequest, servletResponse);
@@ -55,7 +55,7 @@ public class LoginFilter implements Filter {
                 return true;
             }
         }
-        System.out.println(url + "不给访问");
+        System.out.println(url + "需要检测权限才给访问");
         return false;
     }
 

@@ -23,51 +23,10 @@ import java.util.List;
 
 @Service
 public class RoleService implements RoleMapper {
-    static String tt = "0000000000000000000000000000000000000000000000000000" +
-            "0000000000000000000000000000000000000000000000000000000000000000000000000000";
-    PermissionMapper permissionMapper;
 
 
     RoleMapper roleMapper;
 
-    //通过权限数组生成权限字符串
-    public static String generatePStr(int[] permissions) {
-        StringBuilder sb = new StringBuilder(tt);
-        for (int permission : permissions) {
-            sb.replace(permission, permission + 1, "1");
-        }
-        return sb.toString();
-    }
-
-    // 将字符串转换成二进制字符串，每个字符为16位输出
-    public static String StrToBinStr(String str) {
-        char[] strChar = str.toCharArray();
-        StringBuilder sb = new StringBuilder();
-        for (char c : strChar) {
-            String tmp = Integer.toBinaryString(c);
-            sb.append("0".repeat(16 - tmp.length()));
-            sb.append(tmp);
-        }
-        return String.valueOf(sb);
-    }
-
-    // 将128位的二进制字符串，转化为8个char的字符串
-    public static String BinStrToStr(String bstr) {
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < 8; i++) {
-            sb.append((char) (Integer.parseInt(bstr.substring(i * 16, (i + 1) * 16), 2)));
-        }
-        return String.valueOf(sb);
-    }
-
-    /**
-     * @param rPermission  是一个8个字符的字符安川，为128位，每一位代表相应的权限
-     * @param functionNeed 是一个具体的0-127的数字，代表相应的权限
-     * @return 如果rPermission中functionNeed的位为1，则有权限。
-     */
-    public static boolean checkPermission(String rPermission, Integer functionNeed) {
-        return StrToBinStr(rPermission).charAt(functionNeed) == '1';
-    }
 
     @Autowired
     public void setRoleMapper(RoleMapper roleMapper) {
@@ -75,13 +34,23 @@ public class RoleService implements RoleMapper {
     }
 
     @Override
-    public List<Role> getRole(int rId) {
+    public List<Role> getRole(Integer rId) {
         return roleMapper.getRole(rId);
     }
 
     @Override
-    public Role insertRole(String rName, int rPermission) {
-        return roleMapper.insertRole(rName, rPermission);
+    public void insertRole(Role role) {
+        roleMapper.insertRole(role);
+    }
+
+    @Override
+    public void updateRole(Role role) {
+        roleMapper.updateRole(role);
+    }
+
+    @Override
+    public void deleteRole(Integer rId) {
+        roleMapper.deleteRole(rId);
     }
 
 }

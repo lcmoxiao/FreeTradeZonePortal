@@ -6,14 +6,35 @@
     <select id="getPermission" resultType="com.ftzp.pojo.lc.Permission">
         select * from permission
         <where>
-            <if test="rId!=null">and uId = #{rId}</if>
+            <if test="pId!=null">and pId = #{pId}</if>
         </where>
     </select>
 
-    <insert id="insertPermission" useGeneratedKeys="true" keyProperty="wId">
-        insert into permission(pName)
-        values (#{pName})
+    <select id="getPermissionByList" resultType="com.ftzp.pojo.lc.Permission">
+        SELECT *
+        from permission
+        WHERE pId IN
+        <foreach collection="list" item="pId" open="(" close=")" separator=",">
+            #{pId}
+        </foreach>
+    </select>
+
+    <insert id="insertPermission" useGeneratedKeys="true" keyProperty="pId">
+        insert into permission(pName, pSrc)
+        values (#{pName}, #{pSrc})
     </insert>
 
+    <update id="updatePermission">
+        update permission
+        set pName = #{pName},
+            pSrc  = #{pSrc}
+        where pId = #{pId}
+    </update>
+
+    <delete id="deletePermission">
+        delete
+        from permission
+        where pId = #{pId};
+    </delete>
 
 </mapper>

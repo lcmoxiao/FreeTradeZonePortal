@@ -2,9 +2,17 @@ package com.ftzp.mapper.lc;
 
 import com.ftzp.pojo.lc.Permission;
 
+import java.util.List;
+
 public interface PermissionMapper {
 
-    Permission getPermission(int pId);
+    List<Permission> getPermission(Integer pId);
 
-    Permission insertPerssion(String pName);
+    void insertPermission(Permission permission);
+
+    void deletePermission(Integer pId);
+
+    void updatePermission(Permission permission);
+
+    List<Permission> getPermissionByList(List<Integer> permissionList);
 }

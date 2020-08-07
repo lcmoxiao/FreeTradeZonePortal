@@ -4,6 +4,15 @@ public class Permission {
 
     Integer pId;
     String pName;
+    String pSrc;
+
+    public String getpSrc() {
+        return pSrc;
+    }
+
+    public void setpSrc(String pSrc) {
+        this.pSrc = pSrc;
+    }
 
     public int getpId() {
         return pId;

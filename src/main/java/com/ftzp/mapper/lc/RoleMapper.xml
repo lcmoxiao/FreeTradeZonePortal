@@ -6,14 +6,28 @@
     <select id="getRole" resultType="com.ftzp.pojo.lc.Role">
         select * from role
         <where>
-            <if test="rId!=null">and uId = #{rId}</if>
+            <if test="rId!=null">and rId = #{rId}</if>
         </where>
     </select>
 
-    <insert id="insertRole" useGeneratedKeys="true" keyProperty="wId">
+    <insert id="insertRole" useGeneratedKeys="true" keyProperty="rId">
         insert into role(rName, rPermission)
         values (#{rName}, #{rPermission})
     </insert>
+
+    <update id="updateRole">
+        update role
+        set rName = #{rName},
+            rPermission  = #{rPermission}
+        where rId = #{rId}
+    </update>
+
+
+    <delete id="deleteRole">
+        delete
+        from role
+        where rId = #{rId};
+    </delete>
 
 
 </mapper>
