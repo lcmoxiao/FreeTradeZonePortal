@@ -1,9 +1,10 @@
 ;
+
 /*
 导航栏初始化
 */
 function showNavigator() {
-    let str2 = "<ul class=\"layui-nav layui-nav-tree layui-bg-blue\" lay-filter=\"test\">\n" +
+    let s = "<ul class=\"layui-nav\" id='navigator_ul'>\n" +
         "<!-- 侧边导航: <ul class=\"layui-nav layui-nav-tree layui-nav-side\"> -->\n" +
         "  <li class=\"layui-nav-item\">\n" +
         "    <a href=\"javascript:;\" onclick='goUserManager()'>用户管理</a>\n" +
@@ -14,9 +15,12 @@ function showNavigator() {
         "  <li class=\"layui-nav-item\">\n" +
         "    <a href=\"javascript:;\" onclick='goPermissionManager()'>权限管理</a>\n" +
         "  </li>\n" +
+        "  <li class=\"layui-nav-item\">\n" +
+        "    <a href=\"javascript:;\" onclick='goToHome()'>返回功能中心</a>\n" +
+        "  </li>\n" +
         "</ul>";
 
-    $("#navigator").html(str2);
+    $("#navigator").html(s);
 };
 
 function goUserManager() {
@@ -29,4 +33,8 @@ function goRoleManager() {
 
 function goPermissionManager() {
     window.location.href = "/u/goPermissionManager";
+};
+
+function goToHome() {
+    window.location.href = "/home";
 };

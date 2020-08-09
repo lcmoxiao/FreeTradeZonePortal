@@ -29,4 +29,12 @@
         where uId = #{uId};
     </delete>
 
+    <update id="updateUser">
+        update user
+        set uName=#{uName},
+            uPass=#{uPass},
+            rId=#{rId}
+        where uId = #{uId}
+    </update>
+
 </mapper>

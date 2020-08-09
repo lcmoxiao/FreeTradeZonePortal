@@ -1,0 +1,15 @@
+#mainContent{
+    width:1000px;
+    margin: auto;
+    text-align: center;
+}
+
+#navigator{
+    width:1000px;
+    margin: auto;
+    text-align: center;
+}
+
+#navigator_ul li{
+    width: 25%;
+}

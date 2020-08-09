@@ -1,6 +1,5 @@
 package com.ftzp.controller.lc;
 
-
 import com.ftzp.pojo.lc.Permission;
 import com.ftzp.pojo.lc.Role;
 import com.ftzp.pojo.lc.User;
@@ -68,6 +67,17 @@ public class UserController {
     @RequestMapping(value = "/insertUser", method = RequestMethod.POST)
     String insertUser(@RequestParam("uName") String uName, @RequestParam("uPass") String uPass, @RequestParam("rId") Integer rId) {
         User user = new User();
+        user.setrId(rId);
+        user.setuName(uName);
+        user.setuPass(uPass);
+        userService.insertUser(user);
+        return "redirect:/u/goUserManager";
+    }
+
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST)
+    String updateUser(@RequestParam("uId") Integer uId, @RequestParam("uName") String uName, @RequestParam("uPass") String uPass, @RequestParam("rId") Integer rId) {
+        User user = new User();
+        user.setuId(uId);
         user.setrId(rId);
         user.setuName(uName);
         user.setuPass(uPass);

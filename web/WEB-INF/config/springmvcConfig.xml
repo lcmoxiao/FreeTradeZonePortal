@@ -41,15 +41,7 @@
     -->
     <mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
     <mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
-    <mvc:resources mapping="/wf/js/**" location="/WEB-INF/js/"/>
-    <mvc:resources mapping="/wf/css/**" location="/WEB-INF/css/"/>
-    <mvc:resources mapping="/w/js/**" location="/WEB-INF/js/"/>
-    <mvc:resources mapping="/w/css/**" location="/WEB-INF/css/"/>
-    <mvc:resources mapping="/u/js/**" location="/WEB-INF/js/"/>
-    <mvc:resources mapping="/u/css/**" location="/WEB-INF/css/"/>
-    <mvc:resources mapping="/layui/css/**" location="/WEB-INF/layui/css/"/>
-    <mvc:resources mapping="/layui/**.js" location="/WEB-INF/layui/"/>
-
+    <mvc:resources mapping="/layui/**" location="/WEB-INF/layui/"/>
 
     <!-- 5. Mapper扫描配置
     -->

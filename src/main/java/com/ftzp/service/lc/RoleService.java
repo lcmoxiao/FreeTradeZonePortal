@@ -1,6 +1,5 @@
 package com.ftzp.service.lc;
 
-import com.ftzp.mapper.lc.PermissionMapper;
 import com.ftzp.mapper.lc.RoleMapper;
 import com.ftzp.pojo.lc.Role;
 import org.springframework.beans.factory.annotation.Autowired;

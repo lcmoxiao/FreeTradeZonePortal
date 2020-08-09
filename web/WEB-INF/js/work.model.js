@@ -3,8 +3,7 @@
 导航栏初始化
 */
 function showNavigator() {
-    let str2 = "<ul class=\"layui-nav layui-nav-tree layui-bg-blue\" lay-filter=\"test\">\n" +
-        "<!-- 侧边导航: <ul class=\"layui-nav layui-nav-tree layui-nav-side\"> -->\n" +
+    let s = "<ul class=\"layui-nav\" lay-filter=\"\">\n" +
         "  <li class=\"layui-nav-item\">\n" +
         "    <a href=\"javascript:;\" onclick='goToMyWork()'>我的工作</a>\n" +
         "  </li>\n" +
@@ -17,9 +16,13 @@ function showNavigator() {
         "  <li class=\"layui-nav-item\">\n" +
         "    <a href=\"javascript:;\" onclick='goToAddWorkFlow()'>导入工作流</a>\n" +
         "  </li>\n" +
+        "  <li class=\"layui-nav-item\">\n" +
+        "    <a href=\"javascript:;\" onclick='goToHome()'>返回功能中心</a>\n" +
+        "  </li>\n" +
         "</ul>";
 
-    $("#navigator").html(str2);
+
+    $("#navigator").html(s);
 };
 
 function goToMyWork() {
@@ -38,3 +41,6 @@ function goToWorkFlowManager() {
     window.location.href = "/wf/goToWorkFlowManager";
 };
 
+function goToHome() {
+    window.location.href = "/home";
+};

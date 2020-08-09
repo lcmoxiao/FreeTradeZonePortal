@@ -13,5 +13,7 @@ public interface UserMapper {
 
     void insertUser(User user);
 
+    void updateUser(User user);
+
     void deleteUser(@Param("uId") Integer uId);
 }
