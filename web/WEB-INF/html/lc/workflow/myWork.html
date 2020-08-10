@@ -28,7 +28,7 @@
 
     function showWorkStep() {
         $.ajax({
-            url: "/w/showWorkStep",
+            url: "/work/needDoing",
             method: "get",
             success: function (res) {
                 let tmp = "<table class=\"layui-table\">\n" +
@@ -66,7 +66,7 @@
     }
 
     function doWork(wId, ranking, wsId, wsName, desc) {
-        let str = "<form action=\"/w/commmitWork\" method=\"post\" enctype=\"multipart/form-data\">\n" +
+        let str = "<form action=\"/work/add\" method=\"post\" enctype=\"multipart/form-data\">\n" +
             "<input type=\"hidden\" value=" + wId + " name=\"wId\">\n" +
             "<input type=\"hidden\" value=" + ranking + " name=\"ranking\">\n" +
 

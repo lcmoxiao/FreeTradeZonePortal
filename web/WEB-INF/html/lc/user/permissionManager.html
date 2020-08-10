@@ -33,7 +33,7 @@
 
     function showPermissionManager() {
         $.ajax({
-            url: "/u/getPermission",
+            url: "/permission/get",
             method: "get",
             success: function (res) {
                 let tmp = "<table class=\"layui-table\">\n" +
@@ -66,12 +66,12 @@
     }
 
     function deletePermission(pId) {
-        window.location.href = "/u/deletePermission/" + pId;
+        window.location.href = "/permission/delete/" + pId;
     }
 
     function showInsertPermission() {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/u/insertPermission\" method=\"post\">\n" +
+            "\t\t<form class=\"layui-form\" action=\"/permission/add\" method=\"post\">\n" +
 
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">权限名</label>\n" +
@@ -95,7 +95,7 @@
 
     function showUpDatePermission(pId) {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/u/updatePermission\" method=\"post\">\n" +
+            "\t\t<form class=\"layui-form\" action=\"/permission/update\" method=\"post\">\n" +
             "<input type=\"hidden\" value=" + pId + " name=\"pId\">\n" +
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">权限名</label>\n" +

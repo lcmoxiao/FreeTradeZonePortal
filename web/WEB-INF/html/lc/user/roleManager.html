@@ -48,7 +48,7 @@
 
     function showRoleManager() {
         $.ajax({
-            url: "/u/getRole",
+            url: "/role/get",
             method: "get",
             success: function (res) {
                 let tmp = "<table class=\"layui-table\">\n" +
@@ -84,12 +84,12 @@
     }
 
     function deleteRole(rId) {
-        window.location.href = "/u/deleteRole/" + rId;
+        window.location.href = "/role/delete" + rId;
     }
 
     function showRole(rId, rName, rPermission) {
         $.ajax({
-            url: "/u/getPermission/" + rPermission,
+            url: "/permission/get/" + rPermission,
             method: "get",
             success: function (res) {
                 let tmp =
@@ -123,7 +123,7 @@
 
     function showInsertRole() {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/u/insertRole\" method=\"post\">\n" +
+            "\t\t<form class=\"layui-form\" action=\"/role/add\" method=\"post\">\n" +
 
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">角色名</label>\n" +
@@ -137,7 +137,7 @@
             "    <div class=\"layui-input-block\" id='permissionTB'>\n";
 
         $.ajax({
-            url: "/u/getPermission",
+            url: "/permission/get",
             method: "get",
             success: function (res) {
                 let tmp = "";
@@ -168,7 +168,7 @@
 
     function showUpdateRole(rId) {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/u/updateRole\" method=\"post\">\n" +
+            "\t\t<form class=\"layui-form\" action='/role/update' method=\"post\">\n" +
             "<input type=\"hidden\" value=" + rId + " name=\"rId\">\n" +
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">角色名</label>\n" +

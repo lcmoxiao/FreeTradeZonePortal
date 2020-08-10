@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Controller
-@RequestMapping("/wf")
+@RequestMapping("/workflow")
 public class WorkFlowController {
 
     WorkStepService workStepService;
@@ -43,27 +43,7 @@ public class WorkFlowController {
         this.workFlowService = workFlowService;
     }
 
-    @RequestMapping("/goToMyWork")
-    String goToMyWork() {
-        return "/lc/workflow/myWork";
-    }
-
-    @RequestMapping("/goToAddWorkFlow")
-    String goToAddWorkFlow() {
-        return "/lc/workflow/addWorkFlow";
-    }
-
-    @RequestMapping("/goToMyPosted")
-    String goToInitWorkFlow() {
-        return "/lc/workflow/myPosted";
-    }
-
-    @RequestMapping("/goToWorkFlowManager")
-    String goToWorkFlowManager() {
-        return "/lc/workflow/workFlowManager";
-    }
-
-    @RequestMapping(value = "/addWorkFlow", method = RequestMethod.POST)
+    @RequestMapping(value = "/add", method = RequestMethod.POST)
     String addWorkFlow(@RequestParam("uploadXML") MultipartFile multipartFile) {
         File file;
         try {
@@ -74,29 +54,29 @@ public class WorkFlowController {
         } catch (IOException | DocumentException e) {
             e.printStackTrace();
         }
-        return "/lc/workflow/workFlowManager";
+        return "redirect:/workflowManagement";
     }
 
     //获取指定工作流的流程信息或者所有工作流的信息
-    @RequestMapping(value = "/showWorkFlow", method = RequestMethod.POST)
+    @RequestMapping(value = "/get", method = RequestMethod.POST)
     @ResponseBody
     List<WorkFlow> findWorkFlow() {
         return workFlowService.findWorkFlow(null);
     }
 
     //获取指定工作流的流程信息或者所有工作流的信息
-    @RequestMapping(value = "/showWorkFlow/{wfId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/get/{wfId}", method = RequestMethod.GET)
     @ResponseBody
     List<WorkFlow> findWorkFlow(@PathVariable(value = "wfId", required = false) Integer wfId) {
         if (wfId == null) return workFlowService.findWorkFlow(null);
         else return workFlowService.findWorkFlow(wfId);
     }
 
-    @RequestMapping(value = "/deleteWorkFlow/{wfId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{wfId}", method = RequestMethod.GET)
     String deleteWorkFlow(@PathVariable Integer wfId) {
         workFlowService.deleteWorkFlow(wfId);
         workStepService.deleteWorkStep(wfId);
-        return "redirect:/wf/goToWorkFlowManager";
+        return "redirect:/workflowManagement";
     }
 
     public Integer parseXmlAndSaveWorkFlow(File f) throws DocumentException {

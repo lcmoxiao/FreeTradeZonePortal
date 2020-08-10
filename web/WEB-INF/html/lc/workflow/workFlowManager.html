@@ -23,11 +23,11 @@
 
 <script>
     $.ready(showNavigator());
-    $.ready(showAddWorkFlow());
+    $.ready(showWorkFlow());
 
-    function showAddWorkFlow() {
+    function showWorkFlow() {
         $.ajax({
-            url: "/wf/showWorkFlow",
+            url: "/workflow/get",
             method: "post",
             success: function (res) {
                 let tmp = "<table class=\"layui-table\" >" +
@@ -56,18 +56,19 @@
                 }
                 tmp += "            </tbody>\n" +
                     "        </table>";
+                tmp+="<button class=\"layui-btn layui-btn-normal layui-btn-sm\" onclick=addWorkFlow()>新增工作流</button>";
                 $("#mainContent").html(tmp)
             }
         })
     }
 
     function deleteWorkFlow(wfId) {
-        window.location.href = "/wf/deleteWorkFlow/" + wfId;
+        window.location.href = "/workflow/delete/" + wfId;
     }
 
     function showWorkStep(wfId) {
         $.ajax({
-            url: "/wf/showWorkFlow/" + wfId,
+            url: "/workflow/get/" + wfId,
             method: "get",
             success: function (rest) {
                 console.log(rest);
@@ -106,7 +107,7 @@
 
     function showInitWork(wfId, wfLength) {
         let tmp = "<div class='contentTitle'>导入工作流</div>" +
-            "<form class=\"layui-form\" action='/w/initWork' method=\"post\" enctype=\"multipart/form-data\">" +
+            "<form class=\"layui-form\" action='/workflow/add' method=\"post\" enctype=\"multipart/form-data\">" +
             "<input type='hidden' name='wfId' value='" + wfId + "'>" +
             "<input type='hidden' name='wfLength' value='" + wfLength + "'>" +
 
@@ -132,8 +133,37 @@
         $("#mainContent").html(tmp)
     }
 
-</script>
+    function addWorkFlow() {
+        let tmp =
+            "\t\t<form class=\"layui-form\" action=\"/workflow/add\" method=\"post\" enctype=\"multipart/form-data\">\n" +
 
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">工作流名称</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"wfName\" required  lay-verify=\"required\" placeholder=\"工作名称\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "</div>" +
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">工作流描述</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"wfdesc\" required  lay-verify=\"required\" placeholder=\"工作描述\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">文件：</label>" +
+            "    <div class=\"layui-input-block\">\n" +
+            "       <input type=\"file\" name=\"uploadXML\"><br><br><br><br>\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "\t\t\t<input type=\"submit\" class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"导入\"><br>\n" +
+            "\t\t</form>";
+        $("#mainContent").html(tmp)
+    }
+</script>
 </div>
 </body>
 </html>

@@ -33,7 +33,7 @@
 
     function showUserManager() {
         $.ajax({
-            url: "/u/getUser",
+            url: "/user/get",
             method: "get",
             success: function (res) {
                 let tmp = "<table class=\"layui-table\">\n" +
@@ -65,12 +65,12 @@
     }
 
     function deleteUser(uId) {
-        window.location.href = "/u/deleteUser/" + uId;
+        window.location.href = "/user/delete/" + uId;
     }
 
     function showInsertUser() {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/u/insertUser\" method=\"post\">\n" +
+            "\t\t<form class=\"layui-form\" action=\"/user/add\" method=\"post\">\n" +
 
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">用户名</label>\n" +
@@ -102,7 +102,7 @@
 
     function showUpdateUser(uId) {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/u/updateUser\" method=\"post\">\n" +
+            "\t\t<form class=\"layui-form\" action=\"/user/update\" method=\"post\">\n" +
             "<input type=\"hidden\" value=" + uId + " name=\"uId\">\n" +
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">用户名</label>\n" +

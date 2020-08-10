@@ -15,14 +15,15 @@
     <div id="output">
         <div class="containerT">
             <h1>用户登录</h1>
-            <form class="form" action="/login" method="post">
+            <form class="form">
                 <label>
                     <input type="text" placeholder="用户名" name="uName" value="z">
                 </label>
                 <label>
                     <input type="password" placeholder="密码" name="uPass" value="123">
                 </label>
-                <input type="submit" id="entry_btn" value="登录">
+                <input type="button" id="entry_btn" value="登录" onclick="mySubmit()">
+                <div id="error" style="color: red;"></div>
                 <div id="prompt" class="prompt"></div>
             </form>
         </div>
@@ -39,6 +40,18 @@
             }
         });
     });
+
+    function mySubmit() {
+        $.ajax({
+            url: "/login",
+            data: $(".form").serialize(),
+            type: "post",
+            success: function (res) {
+                if (res === "loginSuccess") window.location.href = "/home";
+                else $("#error").html(res+"，请重试");
+            }
+        });
+    }
 </script>
 <div style="text-align:center;">
 </div>

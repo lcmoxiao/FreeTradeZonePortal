@@ -24,15 +24,15 @@ function showNavigator() {
 };
 
 function goUserManager() {
-    window.location.href = "/u/goUserManager";
+    window.location.href = "/userManagement";
 };
 
 function goRoleManager() {
-    window.location.href = "/u/goRoleManager";
+    window.location.href = "/roleManagement";
 };
 
 function goPermissionManager() {
-    window.location.href = "/u/goPermissionManager";
+    window.location.href = "/permissionManagement";
 };
 
 function goToHome() {

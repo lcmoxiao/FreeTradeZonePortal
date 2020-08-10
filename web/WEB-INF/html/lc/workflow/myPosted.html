@@ -27,7 +27,7 @@
 
     function showMyPosted() {
         $.ajax({
-            url: "/w/showMyPosted",
+            url: "/work/myPosted",
             method: "get",
             success: function (res) {
                 let tmp = "<table class=\"layui-table\">\n" +
@@ -62,7 +62,7 @@
     }
 
     function deleteWork(wId) {
-        window.location.href = "/w/deleteWork/" + wId;
+        window.location.href = "/work/delete/" + wId;
     }
 
 </script>
