@@ -25,7 +25,7 @@ public class UserController {
         return userService.getUser(null);
     }
 
-    @RequestMapping(value = "/delete/{uId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/delete/{uId}", method = RequestMethod.POST)
     String deleteUser(@PathVariable Integer uId) {
         userService.deleteUser(uId);
         return "redirect:/userManagement";

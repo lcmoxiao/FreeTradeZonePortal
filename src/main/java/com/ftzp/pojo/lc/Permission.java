@@ -1,6 +1,8 @@
 package com.ftzp.pojo.lc;
 
-public class Permission {
+import java.io.Serializable;
+
+public class Permission implements Serializable {
 
     Integer pId;
     String pName;

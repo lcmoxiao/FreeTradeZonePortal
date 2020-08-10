@@ -2,6 +2,7 @@ package com.ftzp.mapper.lc;
 
 import com.ftzp.pojo.lc.Permission;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface PermissionMapper {
@@ -14,5 +15,5 @@ public interface PermissionMapper {
 
     void updatePermission(Permission permission);
 
-    List<Permission> getPermissionByList(List<Integer> permissionList);
+    ArrayList<Permission> getPermissionByList(List<Integer> permissionList);
 }

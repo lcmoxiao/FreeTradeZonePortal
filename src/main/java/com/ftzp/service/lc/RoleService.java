@@ -5,6 +5,7 @@ import com.ftzp.pojo.lc.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /*
@@ -20,17 +21,11 @@ import java.util.List;
  */
 
 
-@Service
+@Service("roleService")
 public class RoleService implements RoleMapper {
 
-
+    @Resource
     RoleMapper roleMapper;
-
-
-    @Autowired
-    public void setRoleMapper(RoleMapper roleMapper) {
-        this.roleMapper = roleMapper;
-    }
 
     @Override
     public List<Role> getRole(Integer rId) {

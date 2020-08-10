@@ -1,6 +1,9 @@
 package com.ftzp.filter.lc;
 
 
+import com.ftzp.cache.RedisObjCache;
+
+import javax.annotation.Resource;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -11,6 +14,9 @@ public class LoginFilter implements Filter {
 
     List<String> prefixIignores = new ArrayList<>();
 
+    @Resource(name = "redisObjCache")
+    RedisObjCache redisObjCache;
+
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         HttpServletRequest hsr = (HttpServletRequest) servletRequest;
@@ -20,7 +26,8 @@ public class LoginFilter implements Filter {
             System.out.println(hsr.getRequestURI() + "不会被过滤哦");
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
-            if (hsr.getSession().getAttribute("user") == null) {
+            String sId = hsr.getSession().getId();
+            if (redisObjCache.getValue(sId+"u") == null) {
                 System.out.println("没登录，去登录吧");
                 hsr.getRequestDispatcher("/index").forward(servletRequest, servletResponse);
             } else {
@@ -40,7 +47,6 @@ public class LoginFilter implements Filter {
         }
     }
 
-
     @Override
     public void destroy() {
 
@@ -49,7 +55,6 @@ public class LoginFilter implements Filter {
     private boolean canIgnore(HttpServletRequest request) {
         String url = request.getRequestURI();
         for (String ignore : prefixIignores) {
-
             if (url.startsWith(ignore)) {
                 System.out.println(url + "不会被过滤哦");
                 return true;

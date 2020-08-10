@@ -5,18 +5,14 @@ import com.ftzp.pojo.lc.WorkFlow;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
-@Service
+@Service("workFlowService")
 public class WorkFlowService implements WorkFlowMapper {
 
+    @Resource
     WorkFlowMapper workFlowMapper;
-
-
-    @Autowired
-    public void setWorkFlowMapper(WorkFlowMapper workFlowMapper) {
-        this.workFlowMapper = workFlowMapper;
-    }
 
     @Override
     public  List<WorkFlow> findWorkFlow(Integer wfId) {

@@ -1,6 +1,8 @@
 package com.ftzp.pojo.lc;
 
-public class User {
+import java.io.Serializable;
+
+public class User implements Serializable {
 
     Integer uId;
     String uName;

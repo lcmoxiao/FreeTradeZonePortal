@@ -6,18 +6,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 @Controller
 @RequestMapping("/permission")
 public class PermissionController {
 
+    @Resource(name = "permissionService")
     PermissionService permissionService;
-
-    @Autowired
-    public void setPermissionService(PermissionService permissionService) {
-        this.permissionService = permissionService;
-    }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     @ResponseBody

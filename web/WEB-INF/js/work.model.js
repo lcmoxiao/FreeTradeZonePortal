@@ -37,3 +37,10 @@ function goToWorkFlowManager() {
 function goToHome() {
     window.location.href = "/home";
 };
+
+function flushLayUi() {
+    layui.use('form', function () {
+        let form = layui.form;
+        form.render();
+    });
+}

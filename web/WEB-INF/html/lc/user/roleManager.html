@@ -15,12 +15,6 @@
     <script charset="utf-8" src="/layui/layui.js"></script>
     <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 
-    <style>
-        html {
-            background-color: #909F9F;
-        }
-    </style>
-
 </head>
 <body>
 <div>
@@ -36,15 +30,6 @@
 <script>
     $.ready(showNavigator());
     $.ready(showRoleManager());
-    $.ready(flushLayUi());
-
-    function flushLayUi() {
-        layui.use('form', function () {
-            let form = layui.form;
-            form.render();
-        });
-    }
-
 
     function showRoleManager() {
         $.ajax({
@@ -142,20 +127,13 @@
             success: function (res) {
                 let tmp = "";
                 for (let i = 0; i < res.length; i++) {
-                    tmp += "<input type=\"checkbox\" name=\"permission[" + i + "]\" title=\"" + res[i]['pName'] + "\">";
+                    tmp += "<input type=\"checkbox\" name=\"permissions\" value='" + res[i]['pId'] + "' title=\"" + res[i]['pName'] + "\">";
                 }
                 $("#permissionTB").html(tmp);
                 flushLayUi();
             }
-        })
+        });
         tmp +=
-            "    </div>\n" +
-            "  </div>" +
-            "</div>" +
-            "  <div class=\"layui-form-item\">\n" +
-            "    <label class=\"layui-form-label\">权限字符串</label>\n" +
-            "    <div class=\"layui-input-block\">\n" +
-            "      <input type=\"text\" name=\"rPermission\" required  lay-verify=\"required\" placeholder=\"权限字符串\" autocomplete=\"off\" class=\"layui-input\">\n" +
             "    </div>\n" +
             "  </div>" +
 
@@ -177,14 +155,26 @@
             "    </div>\n" +
             "  </div>" +
 
-            "</div>" +
             "  <div class=\"layui-form-item\">\n" +
-            "    <label class=\"layui-form-label\">权限字符串</label>\n" +
-            "    <div class=\"layui-input-block\">\n" +
-            "      <input type=\"text\" name=\"rPermission\" required  lay-verify=\"required\" placeholder=\"权限字符串\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    <label class=\"layui-form-label\">权限选择</label>\n" +
+            "    <div class=\"layui-input-block\" id='permissionTB'>\n";
+
+        $.ajax({
+            url: "/permission/get",
+            method: "get",
+            success: function (res) {
+                let tmp = "";
+                for (let i = 0; i < res.length; i++) {
+                    tmp += "<input type=\"checkbox\" value='" + res[i]['pId'] + "' name=\"permissions\" title=\"" + res[i]['pName'] + "\">";
+                }
+                $("#permissionTB").html(tmp);
+                flushLayUi();
+            }
+        });
+
+        tmp +=
             "    </div>\n" +
             "  </div>" +
-
             "\t\t\t<input type=\"submit\" class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"更新\"><br>\n" +
             "\t\t</form>";
         tmp += "<button onclick='showRoleManager()' class=\"layui-btn layui-btn-normal layui-btn-sm\">返回</button>";

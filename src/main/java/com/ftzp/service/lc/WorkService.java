@@ -2,20 +2,16 @@ package com.ftzp.service.lc;
 
 import com.ftzp.mapper.lc.workflow.WorkMapper;
 import com.ftzp.pojo.lc.Work;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
-@Service
+@Service("workService")
 public class WorkService implements WorkMapper {
 
+    @Resource
     WorkMapper workMapper;
-
-    @Autowired
-    public void setWorkMapper(WorkMapper workMapper) {
-        this.workMapper = workMapper;
-    }
 
     @Override
     public List<Work> getWork(Integer wId) {

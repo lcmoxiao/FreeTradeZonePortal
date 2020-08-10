@@ -13,21 +13,13 @@
     <!-- 1. 扫描配置
         自动扫描的包名，包括controller，service等，是这些子包的父包，因此可合并文com.lc
     -->
-    <context:component-scan base-package="com.ftzp.controller, com.ftzp.service"/>
+    <context:component-scan base-package="com.ftzp"/>
 
-    <!-- 2. 注解配置
-        默认的注解映射的支持
-     -->
     <mvc:annotation-driven/>
 
 
-    <!-- 3. 默认视图
-     -->
     <mvc:default-servlet-handler/>
-    <!-- 3. 视图配置
-        （1）前缀
-        （2）后缀
-     -->
+
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
         <!-- 视图前缀 -->
         <property name="prefix" value="/WEB-INF/html"/>

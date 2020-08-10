@@ -1,22 +1,20 @@
 package com.ftzp.service.lc;
 
 import com.ftzp.Sha256Util;
+import com.ftzp.mapper.lc.RoleMapper;
 import com.ftzp.mapper.lc.UserMapper;
 import com.ftzp.pojo.lc.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.List;
 
-@Service
+@Service("userService")
 public class UserService implements UserMapper {
 
+    @Resource
     UserMapper userMapper;
-
-    @Autowired
-    public void setUserMapper(UserMapper userMapper) {
-        this.userMapper = userMapper;
-    }
 
     @Override
     public List<User> getUser(Integer uId) {

@@ -6,15 +6,8 @@
 
     <!--1.  servlet配置 -->
     <servlet>
-        <!--
-            （1） servlet名称
-            （2） servlet类名
-            （3）加载servlet的时机，1表示服务器启动时加载
-            （4）servlet配置文件的位置
-        -->
         <servlet-name>HelloSpringWeb</servlet-name>
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
-        <!--contextConfigLocation配置springmvc加载的配置文件（配置处理器映射器、适配器等等) 如果不配置contextConfigLocation,默认加载的是/WEB-INF/servlet名称-serlvet.xml(springmvc-servlet.xml) -->
         <init-param>
             <param-name>contextConfigLocation</param-name>
             <param-value>/WEB-INF/config/springmvcConfig.xml</param-value>
@@ -38,7 +31,7 @@
     </servlet-mapping>
 
 
-    <!-- 3. mybatis配置 -->
+    <!-- 3. 数据库配置 -->
     <!-- （1）参数文件位置 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>

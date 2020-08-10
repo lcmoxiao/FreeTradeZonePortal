@@ -6,18 +6,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
+
+import static com.ftzp.PermissionParseUtil.generateHexStrByArray;
 
 @Controller
 @RequestMapping("/role")
 public class RoleController {
 
+    @Resource(name = "roleService")
     RoleService roleService;
-
-    @Autowired
-    public void setRoleService(RoleService roleService) {
-        this.roleService = roleService;
-    }
 
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
@@ -33,22 +32,24 @@ public class RoleController {
     }
 
     @RequestMapping(value = "/add", method = RequestMethod.POST)
-    String insertRole(@RequestParam("rName") String rName, @RequestParam("rPermission") String rPermission) {
+    String insertRole(@RequestParam("rName") String rName,
+                      @RequestParam("permissions") String[] permissions) {
         Role role = new Role();
         role.setrName(rName);
-        role.setrPermission(rPermission);
+        String rpermission = generateHexStrByArray(permissions);
+        System.out.println(rpermission);
+        role.setrPermission(rpermission);
         roleService.insertRole(role);
         return "redirect:/roleManagement";
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.POST)
-    String updateRole(@RequestParam("rId") Integer rId, @RequestParam("rName") String rName, @RequestParam("rPermission") String rPermission) {
+    String updateRole(@RequestParam("rId") Integer rId, @RequestParam("rName") String rName, @RequestParam("permissions") String[] permissions) {
         Role role = new Role();
         role.setrId(rId);
         role.setrName(rName);
-        role.setrPermission(rPermission);
+        role.setrPermission(generateHexStrByArray(permissions));
         roleService.updateRole(role);
         return "redirect:/roleManagement";
     }
-
 }

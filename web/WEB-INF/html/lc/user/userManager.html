@@ -11,13 +11,8 @@
     <script type="text/javascript" src="/js/user.model.js"></script>
     <link rel="stylesheet" href="/css/user.model.css" media="all">
 
+    <script charset="utf-8" src="/layui/layui.js"></script>
     <link rel="stylesheet" href="/layui/css/layui.css" media="all">
-
-    <style>
-        html {
-            background-color: #9cb78e;
-        }
-    </style>
 
 </head>
 <body>
@@ -65,12 +60,19 @@
     }
 
     function deleteUser(uId) {
-        window.location.href = "/user/delete/" + uId;
+        $.post({
+            url: "/user/delete/" + uId,
+            type: "post",
+            data: $("#mf").serialize(),
+            success: function (res) {
+                showUserManager();
+            }
+        });
     }
 
     function showInsertUser() {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/user/add\" method=\"post\">\n" +
+            "\t\t<form id='mf' class=\"layui-form\">\n" +
 
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">用户名</label>\n" +
@@ -87,22 +89,38 @@
             "    </div>\n" +
             "  </div>" +
 
-            "</div>" +
             "  <div class=\"layui-form-item\">\n" +
-            "    <label class=\"layui-form-label\">角色ID</label>\n" +
+            "    <label class=\"layui-form-label\">角色权限</label>\n" +
             "    <div class=\"layui-input-block\">\n" +
-            "      <input type=\"text\" name=\"rId\" required  lay-verify=\"required\" placeholder=\"角色ID\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "      <select name=\"rId\" id='roleSelect'>\n" +
+
+            $.ajax({
+                url: "/role/get",
+                method: "get",
+                success: function (res) {
+                    let tmp = "";
+                    for (let i = 0; i < res.length; i++) {
+                        tmp += " <option value='" + res[i]['rId'] + "'>" + res[i]['rName'] + "</option>";
+                    }
+                    $("#roleSelect").html(tmp);
+                    flushLayUi();
+                }
+            });
+
+        tmp +=
+            "      </select>\n" +
             "    </div>\n" +
             "  </div>" +
+            "</div>" +
 
-            "\t\t\t<input type=\"submit\" class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"注册\"><br>\n" +
+            "\t\t\t<input type=\"button\" onclick='submitRegisterForm()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"注册\"><br>\n" +
             "\t\t</form>";
-        $("#mainContent").html(tmp)
+        $("#mainContent").html(tmp);
     }
 
     function showUpdateUser(uId) {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/user/update\" method=\"post\">\n" +
+            "\t\t<form id='mf' class=\"layui-form\">\n" +
             "<input type=\"hidden\" value=" + uId + " name=\"uId\">\n" +
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">用户名</label>\n" +
@@ -119,18 +137,57 @@
             "    </div>\n" +
             "  </div>" +
 
-            "</div>" +
             "  <div class=\"layui-form-item\">\n" +
-            "    <label class=\"layui-form-label\">角色ID</label>\n" +
+            "    <label class=\"layui-form-label\">角色权限</label>\n" +
             "    <div class=\"layui-input-block\">\n" +
-            "      <input type=\"text\" name=\"rId\" required  lay-verify=\"required\" placeholder=\"角色ID\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "      <select name=\"rId\" id='roleSelect'>\n" +
+
+            $.ajax({
+                url: "/role/get",
+                method: "get",
+                success: function (res) {
+                    let tmp = "";
+                    for (let i = 0; i < res.length; i++) {
+                        tmp += " <option value='" + res[i]['rId'] + "'>" + res[i]['rName'] + "</option>";
+                    }
+                    $("#roleSelect").html(tmp);
+                    flushLayUi();
+                }
+            });
+
+        tmp +=
+            "      </select>\n" +
             "    </div>\n" +
             "  </div>" +
+            "</div>" +
 
-            "\t\t\t<input type=\"submit\" class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"更新\"><br>\n" +
+            "\t\t\t<input type=\"button\" onclick='submitUpdateForm()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"更新\"><br>\n" +
             "\t\t</form>";
         $("#mainContent").html(tmp)
     }
+
+    function submitRegisterForm() {
+        $.post({
+            url: "/user/add",
+            type: "post",
+            data: $("#mf").serialize(),
+            success: function (res) {
+                showUserManager();
+            }
+        });
+    }
+
+    function submitUpdateForm() {
+        $.post({
+            url: "/user/update",
+            type: "post",
+            data: $("#mf").serialize(),
+            success: function (res) {
+                showUserManager();
+            }
+        });
+    }
+
 
 </script>
 

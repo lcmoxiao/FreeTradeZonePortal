@@ -22,39 +22,33 @@ public class GoController {
     }
 
     @RequestMapping("/userManagement")
-    String goToUserManager() {
+    String userManagement() {
         return "/lc/user/userManager";
     }
 
     @RequestMapping("/roleManagement")
-    String goRoleManager() {
+    String roleManagement() {
         return "/lc/user/roleManager";
     }
 
     @RequestMapping("/permissionManagement")
-    String goPermissionManager() {
+    String permissionManagement() {
         return "/lc/user/permissionManager";
     }
 
     @RequestMapping("/workManagement")
-    String goToMyWork() {
+    String workManagement() {
         return "/lc/workflow/myWork";
     }
 
-    @RequestMapping("/workflowAdd")
-    String goToAddWorkFlow() {
-        return "/lc/workflow/addWorkFlow";
-    }
-
     @RequestMapping("/myPost")
-    String goToInitWorkFlow() {
+    String myPost() {
         return "/lc/workflow/myPosted";
     }
 
     @RequestMapping("/workflowManagement")
-    String goToWorkFlowManager() {
+    String workflowManagement() {
         return "/lc/workflow/workFlowManager";
     }
-
 
 }
