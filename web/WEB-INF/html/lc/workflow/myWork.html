@@ -66,7 +66,7 @@
     }
 
     function doWork(wId, ranking, wsId, wsName, desc) {
-        let str = "<form action=\"/work/add\" method=\"post\" enctype=\"multipart/form-data\">\n" +
+        let str = "<form class=\"layui-form\" enctype=\"multipart/form-data\">\n" +
             "<input type=\"hidden\" value=" + wId + " name=\"wId\">\n" +
             "<input type=\"hidden\" value=" + ranking + " name=\"ranking\">\n" +
 
@@ -101,9 +101,19 @@
             "    </div>\n" +
             "  </div>" +
 
-            "\t\t\t\t\t<input class=\"layui-btn layui-btn-warm layui-btn-sm\" type=\"submit\" value=\"提交\">\n" +
+            "\t\t\t\t\t<input class=\"layui-btn layui-btn-warm layui-btn-sm\" type=\"button\" onclick='putW()' value=\"提交\">\n" +
             "\t\t\t\t</form>";
         $("#mainContent").html(str);
+    }
+
+
+    function putW() {
+        $.post({
+            url: "/work",
+            type: "put",
+            data: $(".layui-form").serialize(),
+            success: function() {showWorkFlow()}
+        });
     }
 
 </script>

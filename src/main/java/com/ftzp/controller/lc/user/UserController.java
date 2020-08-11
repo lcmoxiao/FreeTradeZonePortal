@@ -1,4 +1,4 @@
-package com.ftzp.controller.lc;
+package com.ftzp.controller.lc.user;
 
 import com.ftzp.pojo.lc.User;
 import com.ftzp.service.lc.UserService;
@@ -19,19 +19,21 @@ public class UserController {
         this.userService = userService;
     }
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     List<User> getUser() {
         return userService.getUser(null);
     }
 
-    @RequestMapping(value = "/delete/{uId}", method = RequestMethod.POST)
+    @RequestMapping(value = "/{uId}", method = RequestMethod.DELETE)
+    @ResponseBody
     String deleteUser(@PathVariable Integer uId) {
         userService.deleteUser(uId);
         return "redirect:/userManagement";
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
     String insertUser(@RequestParam("uName") String uName, @RequestParam("uPass") String uPass, @RequestParam("rId") Integer rId) {
         User user = new User();
         user.setrId(rId);
@@ -41,14 +43,15 @@ public class UserController {
         return "redirect:/userManagement";
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseBody
     String updateUser(@RequestParam("uId") Integer uId, @RequestParam("uName") String uName, @RequestParam("uPass") String uPass, @RequestParam("rId") Integer rId) {
         User user = new User();
         user.setuId(uId);
         user.setrId(rId);
         user.setuName(uName);
         user.setuPass(uPass);
-        userService.insertUser(user);
+        userService.updateUser(user);
         return "redirect:/userManagement";
     }
 

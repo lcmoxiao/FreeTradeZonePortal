@@ -16,14 +16,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
-import java.util.Collections;
 
 @Controller
 public class LoginController {
 
     @Resource(name = "redisObjCache")
     RedisObjCache redisObjCache;
-
     @Resource(name = "userService")
     UserService userService;
     @Resource(name = "permissionService")
@@ -46,7 +44,7 @@ public class LoginController {
             Role r = roleService.getRole(u.getrId()).get(0);
             String rP = r.getrPermission();
             ArrayList<Permission> permission = permissionService.getPermission(rP);
-            redisObjCache.setValue(sId + "p", Collections.singletonList(permission));
+            redisObjCache.setValue(sId + "p", permission);
             return "loginSuccess";
         }
         return "loginFailed";

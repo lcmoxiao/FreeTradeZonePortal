@@ -62,7 +62,11 @@
     }
 
     function deleteWork(wId) {
-        window.location.href = "/work/delete/" + wId;
+        $.post({
+            url: "/work/" + wId,
+            type: "delete",
+            success: function() {showMyPosted()}
+        });
     }
 
 </script>

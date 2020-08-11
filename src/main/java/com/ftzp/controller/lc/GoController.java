@@ -6,15 +6,16 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class GoController {
 
-    @RequestMapping("/")
-    String defualt() {
-        return "/index";
-    }
-
     @RequestMapping("/index")
     String index() {
         return "/index";
     }
+
+    @RequestMapping("/error")
+    String error() {
+        return "/error";
+    }
+
 
     @RequestMapping("/home")
     String home() {

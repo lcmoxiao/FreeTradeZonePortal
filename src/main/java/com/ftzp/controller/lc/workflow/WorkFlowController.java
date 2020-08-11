@@ -1,4 +1,4 @@
-package com.ftzp.controller.lc;
+package com.ftzp.controller.lc.workflow;
 
 import com.ftzp.pojo.lc.WorkFlow;
 import com.ftzp.pojo.lc.WorkStep;
@@ -43,7 +43,8 @@ public class WorkFlowController {
         this.workFlowService = workFlowService;
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
     String addWorkFlow(@RequestParam("uploadXML") MultipartFile multipartFile) {
         File file;
         try {
@@ -58,21 +59,21 @@ public class WorkFlowController {
     }
 
     //获取指定工作流的流程信息或者所有工作流的信息
-    @RequestMapping(value = "/get", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     List<WorkFlow> findWorkFlow() {
         return workFlowService.findWorkFlow(null);
     }
 
     //获取指定工作流的流程信息或者所有工作流的信息
-    @RequestMapping(value = "/get/{wfId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{wfId}", method = RequestMethod.GET)
     @ResponseBody
     List<WorkFlow> findWorkFlow(@PathVariable(value = "wfId", required = false) Integer wfId) {
         if (wfId == null) return workFlowService.findWorkFlow(null);
         else return workFlowService.findWorkFlow(wfId);
     }
 
-    @RequestMapping(value = "/delete/{wfId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{wfId}", method = RequestMethod.DELETE)
     String deleteWorkFlow(@PathVariable Integer wfId) {
         workFlowService.deleteWorkFlow(wfId);
         workStepService.deleteWorkStep(wfId);

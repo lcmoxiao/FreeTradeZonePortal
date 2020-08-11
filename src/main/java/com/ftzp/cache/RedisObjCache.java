@@ -8,8 +8,8 @@ import org.springframework.stereotype.Repository;
 import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
-@Repository("redisObjCache")
-@Scope(ConfigurableListableBeanFactory.SCOPE_SINGLETON)
+@Repository(value = "redisObjCache")
+@Scope(ConfigurableListableBeanFactory.SCOPE_PROTOTYPE)
 public class RedisObjCache {
 
     @Resource(name = "redisTemplate")
@@ -22,4 +22,5 @@ public class RedisObjCache {
     public Object getValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }
+
 }

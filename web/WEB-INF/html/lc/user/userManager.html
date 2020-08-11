@@ -28,7 +28,7 @@
 
     function showUserManager() {
         $.ajax({
-            url: "/user/get",
+            url: "/user",
             method: "get",
             success: function (res) {
                 let tmp = "<table class=\"layui-table\">\n" +
@@ -59,17 +59,6 @@
         })
     }
 
-    function deleteUser(uId) {
-        $.post({
-            url: "/user/delete/" + uId,
-            type: "post",
-            data: $("#mf").serialize(),
-            success: function (res) {
-                showUserManager();
-            }
-        });
-    }
-
     function showInsertUser() {
         let tmp =
             "\t\t<form id='mf' class=\"layui-form\">\n" +
@@ -95,7 +84,7 @@
             "      <select name=\"rId\" id='roleSelect'>\n" +
 
             $.ajax({
-                url: "/role/get",
+                url: "/role",
                 method: "get",
                 success: function (res) {
                     let tmp = "";
@@ -121,7 +110,7 @@
     function showUpdateUser(uId) {
         let tmp =
             "\t\t<form id='mf' class=\"layui-form\">\n" +
-            "<input type=\"hidden\" value=" + uId + " name=\"uId\">\n" +
+            "<input type=\"hidden\" value=" + uId + " name='uId'>\n" +
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">用户名</label>\n" +
             "    <div class=\"layui-input-block\">\n" +
@@ -143,7 +132,7 @@
             "      <select name=\"rId\" id='roleSelect'>\n" +
 
             $.ajax({
-                url: "/role/get",
+                url: "/role",
                 method: "get",
                 success: function (res) {
                     let tmp = "";
@@ -166,25 +155,30 @@
         $("#mainContent").html(tmp)
     }
 
+
+    function deleteUser(uId) {
+        $.post({
+            url: "/delete/" + uId,
+            type: "delete",
+            success: function() {showUserManager()}
+        });
+    }
+
     function submitRegisterForm() {
         $.post({
-            url: "/user/add",
+            url: "/user",
             type: "post",
             data: $("#mf").serialize(),
-            success: function (res) {
-                showUserManager();
-            }
+            success: function() {showUserManager()}
         });
     }
 
     function submitUpdateForm() {
         $.post({
-            url: "/user/update",
-            type: "post",
+            url: "/user",
+            type: "put",
             data: $("#mf").serialize(),
-            success: function (res) {
-                showUserManager();
-            }
+            success: function() {showUserManager()}
         });
     }
 

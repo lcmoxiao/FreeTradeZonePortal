@@ -1,8 +1,7 @@
-package com.ftzp.controller.lc;
+package com.ftzp.controller.lc.user;
 
 import com.ftzp.pojo.lc.Role;
 import com.ftzp.service.lc.RoleService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,19 +18,21 @@ public class RoleController {
     RoleService roleService;
 
 
-    @RequestMapping(value = "/get", method = RequestMethod.GET)
+    @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     List<Role> getRole() {
         return roleService.getRole(null);
     }
 
-    @RequestMapping(value = "/delete/{rId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/{rId}", method = RequestMethod.DELETE)
+    @ResponseBody
     String deleteRole(@PathVariable Integer rId) {
         roleService.deleteRole(rId);
         return "redirect:/roleManagement";
     }
 
-    @RequestMapping(value = "/add", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseBody
     String insertRole(@RequestParam("rName") String rName,
                       @RequestParam("permissions") String[] permissions) {
         Role role = new Role();
@@ -43,7 +44,8 @@ public class RoleController {
         return "redirect:/roleManagement";
     }
 
-    @RequestMapping(value = "/update", method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.PUT)
+    @ResponseBody
     String updateRole(@RequestParam("rId") Integer rId, @RequestParam("rName") String rName, @RequestParam("permissions") String[] permissions) {
         Role role = new Role();
         role.setrId(rId);

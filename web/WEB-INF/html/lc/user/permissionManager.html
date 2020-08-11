@@ -27,7 +27,7 @@
 
     function showPermissionManager() {
         $.ajax({
-            url: "/permission/get",
+            url: "/permission",
             method: "get",
             success: function (res) {
                 let tmp = "<table class=\"layui-table\">\n" +
@@ -48,7 +48,8 @@
                         "<td>" + res[i]['pSrc'] + "</td>" +
                         "<td>" +
                         "<button class=\"layui-btn layui-btn-normal layui-btn-sm\" onclick=deletePermission("
-                        + res[i]['pId'] + ")>删除</button>" + "<button class=\"layui-btn layui-btn-warm layui-btn-sm\" onclick=showUpDatePermission("
+                        + res[i]['pId'] + ")>删除</button>" +
+                        "<button class=\"layui-btn layui-btn-warm layui-btn-sm\" onclick=showUpDatePermission("
                         + res[i]['pId'] + ")>更新</button></td></tr>"
                 }
                 tmp += "            </tbody>\n" +
@@ -59,13 +60,9 @@
         })
     }
 
-    function deletePermission(pId) {
-        window.location.href = "/permission/delete/" + pId;
-    }
-
     function showInsertPermission() {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/permission/add\" method=\"post\">\n" +
+            "\t\t<form class=\"layui-form\">\n" +
 
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">权限名</label>\n" +
@@ -82,14 +79,14 @@
             "    </div>\n" +
             "  </div>" +
 
-            "\t\t\t<input type=\"submit\" class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"添加\"><br>\n" +
+            "\t\t\t<input type=\"button\" onclick='postPer()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"添加\"><br>\n" +
             "\t\t</form>";
         $("#mainContent").html(tmp)
     }
 
     function showUpDatePermission(pId) {
         let tmp =
-            "\t\t<form class=\"layui-form\" action=\"/permission/update\" method=\"post\">\n" +
+            "\t\t<form class=\"layui-form\">\n" +
             "<input type=\"hidden\" value=" + pId + " name=\"pId\">\n" +
             "  <div class=\"layui-form-item\">\n" +
             "    <label class=\"layui-form-label\">权限名</label>\n" +
@@ -106,11 +103,36 @@
             "    </div>\n" +
             "  </div>" +
 
-            "\t\t\t<input type=\"submit\" class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"更新\"><br>\n" +
+            "\t\t\t<input type=\"button\" onclick='putPer()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"更新\"><br>\n" +
             "\t\t</form>";
         $("#mainContent").html(tmp)
     }
 
+    function deletePermission(pId) {
+        $.ajax({
+            method: "delete",
+            url: "/permission/" + pId,
+            success: function() {showPermissionManager()}
+        });
+    }
+
+    function postPer() {
+        $.ajax({
+            url: "/permission",
+            type: "post",
+            data: $(".layui-form").serialize(),
+            success: function() {showPermissionManager()}
+        });
+    }
+
+    function putPer() {
+        $.ajax({
+            url: "/permission/",
+            type: "put",
+            data: $(".layui-form").serialize(),
+            success: function() {showPermissionManager()}
+        });
+    }
 </script>
 
 
