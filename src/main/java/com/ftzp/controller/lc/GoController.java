@@ -16,12 +16,7 @@ public class GoController {
         return "/error";
     }
 
-
-    @RequestMapping("/home")
-    String home() {
-        return "/home";
-    }
-
+    //需要在权限中配置的
     @RequestMapping("/userManagement")
     String userManagement() {
         return "/lc/user/userManager";
@@ -37,7 +32,7 @@ public class GoController {
         return "/lc/user/permissionManager";
     }
 
-    @RequestMapping("/workManagement")
+    @RequestMapping("/myWork")
     String workManagement() {
         return "/lc/workflow/myWork";
     }

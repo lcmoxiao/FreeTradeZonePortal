@@ -1,66 +1,93 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <title>myWork</title>
+    <title>userManager</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta charset="utf-8">
     <script src="/js/jquery-3.5.1.min.js"></script>
-
-    <script type="text/javascript" src="/js/work.model.js"></script>
-    <link rel="stylesheet" href="/css/work.model.css" media="all">
-
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
     <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 </head>
-<body>
 
-<div>
-    <div id="navigator"></div>
-    <div id="mainContent"></div>
-</div>
+
+<body class="layui-layout-body">
+
+<div id="navigator"></div>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="do">执行</a>
+</script>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<div id="tmpContent" style='text-align: center' ></div>
 
 
 <script>
+    let index;//关闭弹窗用的
+
+    layui.use('element', function(){
+        let element = layui.element;
+    });
+
     $.ready(showNavigator());
     $.ready(showWorkStep());
-
 
     function showWorkStep() {
         $.ajax({
             url: "/work/needDoing",
             method: "get",
             success: function (res) {
-                let tmp = "<table class=\"layui-table\">\n" +
-                    "            <thead>\n" +
-                    "            <tr>\n" +
-                    "                <td>事务ID</td>\n" +
-                    "                <td>事务名</td>\n" +
-                    "                <td>事务描述</td>\n" +
-                    "                <td>附件</td>\n" +
-                    "                <td>处理</td>\n" +
-                    "            </tr>\n" +
-                    "            </thead>\n" +
-                    "            <tbody id=\"tbody\">\n";
-                for (let i = 0; i < res.length; i++) {
-                    tmp += "<tr>" +
-                        "<td>" + res[i]['wsId'] + "</td>" +
-                        "<td>" + res[i]['wsName'] + "</td>" +
-                        "<td>" + res[i]['wsdesc'] + "</td>" +
-                        "<td>" + res[i]['wFile'] + "</td>" +
-                        "<td>" +
-                        "<button class=\"layui-btn layui-btn-warm layui-btn-sm\" onclick=doWork(" +
-                        res[i]['wId'] + "," +
-                        res[i]['ranking'] + "," +
-                        res[i]['wsId'] + "," +
-                        "'" + res[i]['wsName'] + "'" + "," +
-                        "'" + res[i]['wsdesc'] + "'" + "," +
-                        ")>处理</button>" + "</td>" +
-                        "</tr>"
-                }
-                tmp += "            </tbody>\n" +
-                    "        </table>";
-                $("#mainContent").html(tmp)
+                layui.use('table', function(){
+                    var table = layui.table;
+                    table.render({
+                        elem: '#test'
+                        ,data: res
+                        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                            title: '提示'
+                            ,layEvent: 'LAYTABLE_TIPS'
+                            ,icon: 'layui-icon-tips'
+                        }]
+                        ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        ,cols: [[
+                            {field:'wsId',  title: '事务ID', sort: true}
+                            ,{field:'wsName', title: '事务名称'}
+                            ,{field:'wsdesc', title: '事务描述', sort: true}
+                            ,{field:'wFile', title: '附件', sort: true}
+                            , {fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                        ]]
+                        ,page: true
+                    });
+
+                    //监听行工具事件
+                    table.on('tool(test)', function(obj){
+                        var data = obj.data;
+
+                        if(obj.event === 'do'){
+                            doWork(data.wId, data.ranking, data.wsId, data.wsName, data.wsdesc);
+                            index = layer.open({
+                                type: 1,
+                                title: "工作表单",
+                                area: ['30%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent"),
+                                end: function(index, layero){
+                                    $("#tmpContent").html("");
+                                }
+                            });
+                        }
+                    });
+
+                });
+
             }
         })
     }
@@ -103,16 +130,18 @@
 
             "\t\t\t\t\t<input class=\"layui-btn layui-btn-warm layui-btn-sm\" type=\"button\" onclick='putW()' value=\"提交\">\n" +
             "\t\t\t\t</form>";
-        $("#mainContent").html(str);
+        $("#tmpContent").html(str);
     }
-
 
     function putW() {
         $.post({
             url: "/work",
             type: "put",
             data: $(".layui-form").serialize(),
-            success: function() {showWorkFlow()}
+            success: function() {
+                showWorkFlow();
+                layer.close(index);
+            }
         });
     }
 

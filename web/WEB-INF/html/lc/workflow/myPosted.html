@@ -1,27 +1,38 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <title>myWork</title>
+    <title>userManager</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta charset="utf-8">
     <script src="/js/jquery-3.5.1.min.js"></script>
-
-    <script type="text/javascript" src="/js/work.model.js"></script>
-    <link rel="stylesheet" href="/css/work.model.css" media="all">
-
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
     <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 </head>
-<body>
 
-<div>
-    <div id="navigator"></div>
-    <div id="mainContent"></div>
-</div>
+
+<body class="layui-layout-body">
+
+<div id="navigator"></div>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="del">取消</a>
+</script>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<div id="tmpContent" style='text-align: center' ></div>
 
 
 <script>
+    let index;//关闭弹窗用的
+
+    layui.use('element', function(){
+        let element = layui.element;
+    });
+
     $.ready(showNavigator());
     $.ready(showMyPosted());
 
@@ -30,33 +41,53 @@
             url: "/work/myPosted",
             method: "get",
             success: function (res) {
-                let tmp = "<table class=\"layui-table\">\n" +
-                    "            <thead>\n" +
-                    "            <tr>\n" +
-                    "                <td>业务ID</td>\n" +
-                    "                <td>业务描述</td>\n" +
-                    "                <td>所属工作流ID</td>\n" +
-                    "                <td>当前执行步</td>\n" +
-                    "                <td>业务长度</td>\n" +
-                    "                <td>处理</td>\n" +
-                    "            </tr>\n" +
-                    "            </thead>\n" +
-                    "            <tbody id=\"tbody\">\n";
+                layui.use('table', function(){
+                    var table = layui.table;
+                    table.render({
+                        elem: '#test'
+                        ,data: res
+                        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                            title: '提示'
+                            ,layEvent: 'LAYTABLE_TIPS'
+                            ,icon: 'layui-icon-tips'
+                        }]
+                        ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        ,cols: [[
+                            {field:'wId',  title: '业务ID', sort: true}
+                            ,{field:'wdesc', title: '业务描述'}
+                            ,{field:'wfId', title: '所属工作流ID', sort: true}
+                            ,{field:'ranking', title: '当前执行步', sort: true}
+                            ,{field:'wLength', title: '业务长度', sort: true}
+                            , {fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                        ]]
+                        ,page: true
+                    });
 
-                for (let i = 0; i < res.length; i++) {
-                    tmp += "<tr>" +
-                        "<td>" + res[i]['wId'] + "</td>" +
-                        "<td>" + res[i]['wdesc'] + "</td>" +
-                        "<td>" + res[i]['wfId'] + "</td>" +
-                        "<td>" + res[i]['ranking'] + "</td>" +
-                        "<td>" + res[i]['wLength'] + "</td>" +
-                        "<td>" +
-                        "<button class=\"layui-btn layui-btn-normal layui-btn-sm\" onclick=deleteWork(" + res[i]['wId']
-                        + ")>取消</button></td></tr>"
-                }
-                tmp += "            </tbody>\n" +
-                    "        </table>";
-                $("#mainContent").html(tmp)
+                    //监听行工具事件
+                    table.on('tool(test)', function(obj){
+                        var data = obj.data;
+
+                        if(obj.event === 'del'){
+                            deleteWork(data.wId);
+                            index = layer.open({
+                                type: 1,
+                                title: "工作表单",
+                                area: ['30%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent"),
+                                end: function(index, layero){
+                                    $("#tmpContent").html("");
+                                }
+                            });
+                        }
+                    });
+
+                });
             }
         })
     }
@@ -65,7 +96,7 @@
         $.post({
             url: "/work/" + wId,
             type: "delete",
-            success: function() {showMyPosted()}
+            success: closeTmpWindow()
         });
     }
 

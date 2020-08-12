@@ -16,7 +16,7 @@ public class RedisObjCache {
     private RedisTemplate<String, Object> redisTemplate;
 
     public void setValue(String key, Object value) {
-        redisTemplate.opsForValue().set(key, value, 600, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(key, value, 6000, TimeUnit.SECONDS);
     }
 
     public Object getValue(String key) {

@@ -17,7 +17,6 @@ public class RoleController {
     @Resource(name = "roleService")
     RoleService roleService;
 
-
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     List<Role> getRole() {

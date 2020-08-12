@@ -7,6 +7,11 @@ public class PermissionParseUtil {
     //128位的辅助权限生成字符串
     static String tt = "00000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000";
 
+    public static void main(String[] args) {
+        String tete = "EEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE";
+        System.out.println(HexStrToBinStr(tete));
+    }
+
     //通过权限数组生成权限字符串
     public static String generateHexStrByArray(String[] permissions) {
         StringBuilder sb = new StringBuilder(tt);

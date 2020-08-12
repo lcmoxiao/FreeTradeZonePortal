@@ -1,33 +1,46 @@
 <!DOCTYPE html>
 <html lang="zh">
 <head>
-    <title>roleManager</title>
+    <title>userManager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
     <meta http-equiv="content-type" content="text/html;charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="renderer" content="webkit">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <meta charset="utf-8">
     <script src="/js/jquery-3.5.1.min.js"></script>
-
-    <script type="text/javascript" src="/js/user.model.js"></script>
-    <link rel="stylesheet" href="/css/user.model.css" media="all">
-
+    <script src="/js/navigator.js"></script>
     <script charset="utf-8" src="/layui/layui.js"></script>
     <link rel="stylesheet" href="/layui/css/layui.css" media="all">
-
 </head>
-<body>
-<div>
 
-    <div>
-        <div id="navigator"></div>
-        <div id="mainContent"></div>
+
+<body class="layui-layout-body">
+
+<div id="navigator"></div>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
     </div>
+</script>
 
-</div>
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="show">查看</a>
+</script>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<div id="tmpContent" style='text-align: center' ></div>
 
 
 <script>
+    let index;
+
+    layui.use('element', function(){
+        let element = layui.element;
+    });
+
     $.ready(showNavigator());
     $.ready(showRoleManager());
 
@@ -36,34 +49,92 @@
             url: "/role",
             method: "get",
             success: function (res) {
-                let tmp = "<table class=\"layui-table\">\n" +
-                    "            <thead>\n" +
-                    "            <tr>\n" +
-                    "                <td>角色ID</td>\n" +
-                    "                <td>角色名</td>\n" +
-                    "                <td>角色权限字串</td>\n" +
-                    "                <td>操作</td>\n" +
-                    "            </tr>\n" +
-                    "            </thead>\n" +
-                    "            <tbody id=\"tbody\">\n";
+                layui.use('table', function(){
+                    let table = layui.table;
+                    table.render({
+                        elem: '#test'
+                        ,data: res
+                        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                            title: '提示'
+                            ,layEvent: 'LAYTABLE_TIPS'
+                            ,icon: 'layui-icon-tips'
+                        }]
+                        ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        ,cols: [[
+                            {field:'rId',  title: '角色ID', sort: true}
+                            ,{field:'rName', title: '角色名'}
+                            ,{field:'rPermission', title: '权限串', sort: true}
+                            ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:160}
+                        ]]
+                        ,page: true
+                    });
 
-                for (let i = 0; i < res.length; i++) {
-                    tmp += "<tr>" +
-                        "<td>" + res[i]['rId'] + "</td>" +
-                        "<td>" + res[i]['rName'] + "</td>" +
-                        "<td>" + res[i]['rPermission'] + "</td>" +
-                        "<td>" +
-                        "<button class=\"layui-btn layui-btn-normal layui-btn-sm\" onclick=deleteRole("
-                        + res[i]['rId'] + ")>删除</button>" +
-                        "<button class=\"layui-btn layui-btn-warm layui-btn-sm\" onclick=showUpdateRole(" + res[i]['rId'] + ")>更新</button>" +
-                        "<button class=\"layui-btn layui-btn-checked layui-btn-sm\" onclick=showRole(" + res[i]['rId'] + ",'" + res[i]['rName'] + "','" + res[i]['rPermission'] + "')>查看</button>" +
-                        "</td></tr>"
-                }
-                tmp += "            </tbody>\n" +
-                    "        </table>";
-                tmp += "<button onclick='showInsertRole()' class=\"layui-btn layui-btn-normal layui-btn-sm\">添加权限</button>";
-                $("#mainContent").html(tmp);
-                flushLayUi();
+                    //监听行工具事件
+                    table.on('tool(test)', function(obj){
+                        var data = obj.data;
+
+                        if(obj.event === 'del'){
+                            deleteRole(data.rId);
+                            obj.del();
+                        } else if(obj.event === 'edit'){
+                            showUpdateRole(data.rId);
+                            index = layer.open({
+                                type: 1,
+                                title: "用户信息编辑",
+                                area: ['30%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent"),
+                                end: function(index, layero){
+                                    $("#tmpContent").html("");
+                                }
+                            });
+                        } else if(obj.event === 'show'){
+                            showRole(data.rId, data.rName, data.rPermission);
+                            index = layer.open({
+                                type: 1,
+                                title: "详细角色信息",
+                                area: ['30%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent"),
+                                end: function(index, layero){
+                                    $("#tmpContent").html("");
+                                }
+                            });
+                        }
+                    });
+
+                    //头工具栏事件
+                    table.on('toolbar(test)', function(obj){
+                        if(obj.event === 'add'){
+                            showInsertRole()
+                            index = layer.open({
+                                type: 1,
+                                title: "角色信息新增",
+                                area: ['30%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent"),
+                                end: function(index, layero){
+                                    $("#tmpContent").html("");
+                                }
+                            });
+                            layui.form.render();
+                        }
+                    });
+                });
+
             }
         })
     }
@@ -96,9 +167,11 @@
                 }
                 tmp += "            </tbody>\n" +
                     "        </table>";
-                tmp += "<button onclick='showRoleManager()' class=\"layui-btn layui-btn-normal layui-btn-sm\">返回</button>";
-                $("#mainContent").html(tmp);
-                flushLayUi();
+                tmp += "<button onclick='function close(){layui.close(index);}' class=\"layui-btn layui-btn-normal layui-btn-sm\">返回</button>";
+                $("#tmpContent").html(tmp);
+                layui.use('form', function () {
+                    layui.form.render();
+                });
             }
         })
     }
@@ -136,8 +209,7 @@
 
             "\t\t\t<input type=\"button\" onclick='postRole()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"添加\"><br>\n" +
             "\t\t</form>";
-        tmp += "<button onclick='showRoleManager()' class=\"layui-btn layui-btn-normal layui-btn-sm\">返回</button>";
-        $("#mainContent").html(tmp);
+        $("#tmpContent").html(tmp);
         flushLayUi();
     }
 
@@ -174,16 +246,15 @@
             "  </div>" +
             "\t\t\t<input type=\"button\" onclick='putRole()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"更新\"><br>\n" +
             "\t\t</form>";
-        tmp += "<button onclick='showRoleManager()' class=\"layui-btn layui-btn-normal layui-btn-sm\">返回</button>";
-        $("#mainContent").html(tmp);
+         $("#tmpContent").html(tmp);
         flushLayUi();
     }
 
     function deleteRole(rId) {
         $.ajax({
             method: "delete",
-            url: "/permission/" + rId,
-            success: showRoleManager()
+            url: "/role/" + rId,
+            success: closeTmpWindow()
         });
     }
 
@@ -192,7 +263,10 @@
             url: "/role",
             type: "post",
             data: $(".layui-form").serialize(),
-            success:showRoleManager()
+            success:function (){
+                showRoleManager();
+                closeTmpWindow();
+            }
         });
     }
 
@@ -201,7 +275,10 @@
             url: "/role/",
             type: "put",
             data: $(".layui-form").serialize(),
-            success:showRoleManager()
+            success:function (){
+                showRoleManager();
+                closeTmpWindow();
+            }
         });
     }
 

@@ -7,22 +7,38 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta charset="utf-8">
     <script src="/js/jquery-3.5.1.min.js"></script>
-
-    <script type="text/javascript" src="/js/user.model.js"></script>
-    <link rel="stylesheet" href="/css/user.model.css" media="all">
-
+    <script src="/js/navigator.js"></script>
     <script charset="utf-8" src="/layui/layui.js"></script>
     <link rel="stylesheet" href="/layui/css/layui.css" media="all">
-
 </head>
-<body>
-<div>
-    <div id="navigator"></div>
-    <div id="mainContent"></div>
-</div>
 
+<body class="layui-layout-body">
+
+<div id="navigator"></div>
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<div id="tmpContent" style='text-align: center' ></div>
 
 <script>
+
+    let index;//关闭弹窗用的
+
+    layui.use('element', function(){
+        let element = layui.element;
+    });
+
     $.ready(showNavigator());
     $.ready(showUserManager());
 
@@ -31,80 +47,85 @@
             url: "/user",
             method: "get",
             success: function (res) {
-                let tmp = "<table class=\"layui-table\">\n" +
-                    "            <thead>\n" +
-                    "            <tr>\n" +
-                    "                <td>用户ID</td>\n" +
-                    "                <td>用户名</td>\n" +
-                    "                <td>用户角色</td>\n" +
-                    "                <td>操作</td>\n" +
-                    "            </tr>\n" +
-                    "            </thead>\n" +
-                    "            <tbody id=\"tbody\">\n";
+                layui.use('table', function(){
+                    let table = layui.table;
 
-                for (let i = 0; i < res.length; i++) {
-                    tmp += "<tr>" +
-                        "<td>" + res[i]['uId'] + "</td>" +
-                        "<td>" + res[i]['uName'] + "</td>" +
-                        "<td>" + res[i]['rId'] + "</td>" +
-                        "<td><button class=\"layui-btn layui-btn-normal layui-btn-sm\" onclick=deleteUser(" + res[i]['uId'] + ")>删除</button>" +
-                        "<button class=\"layui-btn layui-btn-warm layui-btn-sm\" onclick=showUpdateUser(" + res[i]['uId'] + ")>更新</button></td>" +
-                        "</tr>"
-                }
-                tmp += "            </tbody>\n" +
-                    "        </table>";
-                tmp += "<button onclick='showInsertUser()' class=\"layui-btn layui-btn-normal layui-btn-sm\">添加用户</button>";
-                $("#mainContent").html(tmp)
+                    table.render({
+                        elem: '#test'
+                        ,data: res
+                        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                            title: '提示'
+                            ,layEvent: 'LAYTABLE_TIPS'
+                            ,icon: 'layui-icon-tips'
+                        }]
+                        ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        ,cols: [[
+                            {field:'uId',  title: '用户ID', sort: true}
+                            ,{field:'uName', title: '用户名'}
+                            ,{field:'rId', title: '角色ID', sort: true},
+                            {fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                        ]]
+                        ,page: true
+                    });
+
+                    //监听行工具事件
+                    table.on('tool(test)', function(obj){
+                        var data = obj.data;
+
+                        if(obj.event === 'del'){
+                            deleteUser(data.uId);
+                            obj.del();
+                        } else if(obj.event === 'edit'){
+                            showUpdateUser(data.uId);
+                            index = layer.open({
+                                type: 1,
+                                title: "用户信息编辑",
+                                area: ['30%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent"),
+                                end: function(index, layero){
+                                    $("#tmpContent").html("");
+                                }
+                            });
+                        }
+                    });
+
+                    //头工具栏事件
+                    table.on('toolbar(test)', function(obj){
+                        if(obj.event === 'add'){
+                            showInsertUser();
+                            index = layer.open({
+                                type: 1,
+                                title: "用户信息新增",
+                                area: ['30%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent"),
+                                end: function(index, layero){
+                                    $("#tmpContent").html("");
+                                }
+                            });
+                        }
+                    });
+                });
             }
         })
     }
 
-    function showInsertUser() {
-        let tmp =
-            "\t\t<form id='mf' class=\"layui-form\">\n" +
-
-            "  <div class=\"layui-form-item\">\n" +
-            "    <label class=\"layui-form-label\">用户名</label>\n" +
-            "    <div class=\"layui-input-block\">\n" +
-            "      <input type=\"text\" name=\"uName\" required  lay-verify=\"required\" placeholder=\"用户名\" autocomplete=\"off\" class=\"layui-input\">\n" +
-            "    </div>\n" +
-            "  </div>" +
-
-            "</div>" +
-            "  <div class=\"layui-form-item\">\n" +
-            "    <label class=\"layui-form-label\">用户密码</label>\n" +
-            "    <div class=\"layui-input-block\">\n" +
-            "      <input type=\"text\" name=\"uPass\" required  lay-verify=\"required\" placeholder=\"用户密码\" autocomplete=\"off\" class=\"layui-input\">\n" +
-            "    </div>\n" +
-            "  </div>" +
-
-            "  <div class=\"layui-form-item\">\n" +
-            "    <label class=\"layui-form-label\">角色权限</label>\n" +
-            "    <div class=\"layui-input-block\">\n" +
-            "      <select name=\"rId\" id='roleSelect'>\n" +
-
-            $.ajax({
-                url: "/role",
-                method: "get",
-                success: function (res) {
-                    let tmp = "";
-                    for (let i = 0; i < res.length; i++) {
-                        tmp += " <option value='" + res[i]['rId'] + "'>" + res[i]['rName'] + "</option>";
-                    }
-                    $("#roleSelect").html(tmp);
-                    flushLayUi();
-                }
-            });
-
-        tmp +=
-            "      </select>\n" +
-            "    </div>\n" +
-            "  </div>" +
-            "</div>" +
-
-            "\t\t\t<input type=\"button\" onclick='submitRegisterForm()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"注册\"><br>\n" +
-            "\t\t</form>";
-        $("#mainContent").html(tmp);
+    function deleteUser(uId) {
+        $.post({
+            url: "/user/" + uId,
+            type: "delete",
+            success: function() {layer.close(index);}
+        });
     }
 
     function showUpdateUser(uId) {
@@ -140,7 +161,9 @@
                         tmp += " <option value='" + res[i]['rId'] + "'>" + res[i]['rName'] + "</option>";
                     }
                     $("#roleSelect").html(tmp);
-                    flushLayUi();
+                    layui.use('form', function () {
+                        layui.form.render();
+                    });
                 }
             });
 
@@ -150,27 +173,9 @@
             "  </div>" +
             "</div>" +
 
-            "\t\t\t<input type=\"button\" onclick='submitUpdateForm()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"更新\"><br>\n" +
+            "\t\t\t<input type=\"button\" style='text-align: center;' onclick='submitUpdateForm()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"更新\"><br>\n" +
             "\t\t</form>";
-        $("#mainContent").html(tmp)
-    }
-
-
-    function deleteUser(uId) {
-        $.post({
-            url: "/delete/" + uId,
-            type: "delete",
-            success: function() {showUserManager()}
-        });
-    }
-
-    function submitRegisterForm() {
-        $.post({
-            url: "/user",
-            type: "post",
-            data: $("#mf").serialize(),
-            success: function() {showUserManager()}
-        });
+        $("#tmpContent").html(tmp)
     }
 
     function submitUpdateForm() {
@@ -178,13 +183,76 @@
             url: "/user",
             type: "put",
             data: $("#mf").serialize(),
-            success: function() {showUserManager()}
+            success: function() {
+                showUserManager();
+                layer.close(index);
+            }
         });
     }
 
+    function showInsertUser() {
+        let tmp =
+            "\t\t<form id='mf' class=\"layui-form\">\n" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">用户名</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"uName\" required  lay-verify=\"required\" placeholder=\"用户名\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "</div>" +
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">用户密码</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"uPass\" required  lay-verify=\"required\" placeholder=\"用户密码\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">角色权限</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <select name=\"rId\" id='roleSelect'>\n" +
+
+            $.ajax({
+                url: "/role",
+                method: "get",
+                success: function (res) {
+                    let tmp = "";
+                    for (let i = 0; i < res.length; i++) {
+                        tmp += " <option value='" + res[i]['rId'] + "'>" + res[i]['rName'] + "</option>";
+                    }
+                    $("#roleSelect").html(tmp);
+                    layui.use('form', function () {
+                        layui.form.render();
+                    });
+                }
+            });
+
+        tmp +=
+            "      </select>\n" +
+            "    </div>\n" +
+            "  </div>" +
+            "</div>" +
+
+            "\t\t\t<input type=\"button\" onclick='submitRegisterForm()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"注册\"><br>\n" +
+            "\t\t</form>";
+        $("#tmpContent").html(tmp);
+    }
+
+    function submitRegisterForm() {
+        $.post({
+            url: "/user",
+            type: "post",
+            data: $("#mf").serialize(),
+            success: function() {
+                showUserManager();
+                layer.close(index);
+            }
+        });
+    }
 
 </script>
-
-
 </body>
+
 </html>

@@ -1,13 +1,11 @@
 package com.ftzp.controller.lc.workflow;
 
 import com.ftzp.cache.RedisObjCache;
-import com.ftzp.config.RedisConfig;
 import com.ftzp.pojo.lc.User;
 import com.ftzp.pojo.lc.Work;
 import com.ftzp.pojo.lc.WorkStep;
 import com.ftzp.service.lc.WorkService;
 import com.ftzp.service.lc.WorkStepService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -36,19 +34,19 @@ public class WorkController {
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     String initWork(@RequestParam("wfLength") Integer wfLength, @RequestParam("wfId") Integer wfId,
-                    @RequestParam(value = "uploadFile",required = false) MultipartFile file,
-                    @RequestParam("wdesc") String wdesc, HttpServletRequest request,HttpSession session) throws Exception {
+                    @RequestParam(value = "uploadFile", required = false) MultipartFile file,
+                    @RequestParam("wdesc") String wdesc, HttpServletRequest request, HttpSession session) throws Exception {
         String uploadPath = request.getServletContext().getRealPath("/upload");
         File dir = new File(uploadPath);
         Work w = new Work();
         if (!dir.exists()) {
             if (!dir.mkdirs()) throw new Exception("初始化文件夹失败");
         }
-        if(file!=null) {
+        if (file != null) {
             String wFileName = saveWorkFile(file, uploadPath);
             w.setwFile(wFileName);
         }
-        User u = (User) redisObjCache.getValue(session.getId()+"u");
+        User u = (User) redisObjCache.getValue(session.getId() + "u");
         w.setuId(u.getuId());
         w.setWfId(wfId);
         w.setwLength(wfLength);
@@ -86,8 +84,8 @@ public class WorkController {
 
     @RequestMapping(value = "/myPosted", method = RequestMethod.GET)
     @ResponseBody
-    List<Work> commitWork(HttpSession session) throws IOException {
-        User u = (User) redisObjCache.getValue(session.getId()+"u");
+    List<Work> commitWork(HttpSession session) {
+        User u = (User) redisObjCache.getValue(session.getId() + "u");
         return workService.getWorkByUId(u.getuId());
     }
 
@@ -95,7 +93,7 @@ public class WorkController {
     @ResponseBody
     List<WorkStep> showWork(HttpSession session) {
         //登陆时会把User信息存入session
-        User u = (User) redisObjCache.getValue(session.getId()+"u");
+        User u = (User) redisObjCache.getValue(session.getId() + "u");
         List<Work> works = workService.getWork(null);
         List<WorkStep> res = new ArrayList<>();
         for (Work w : works) {

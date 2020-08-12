@@ -34,7 +34,7 @@
     <mvc:resources mapping="/js/**" location="/WEB-INF/js/"/>
     <mvc:resources mapping="/css/**" location="/WEB-INF/css/"/>
     <mvc:resources mapping="/layui/**" location="/WEB-INF/layui/"/>
-
+    <mvc:resources mapping="/html/**" location="/WEB-INF/html/"/>
     <!-- 5. Mapper扫描配置
     -->
     <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
