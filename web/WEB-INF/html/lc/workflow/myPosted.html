@@ -70,20 +70,6 @@
 
                         if(obj.event === 'del'){
                             deleteWork(data.wId);
-                            index = layer.open({
-                                type: 1,
-                                title: "工作表单",
-                                area: ['30%', '60%'],
-                                fix: false,
-                                maxmin: true,
-                                shadeClose: true,
-                                shade: 0.4,
-                                skin: 'layui-layer-rim',
-                                content: $("#tmpContent"),
-                                end: function(index, layero){
-                                    $("#tmpContent").html("");
-                                }
-                            });
                         }
                     });
 

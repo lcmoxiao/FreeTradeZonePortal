@@ -18,8 +18,8 @@
     </select>
 
     <insert id="insertWork" useGeneratedKeys="true" keyProperty="wId">
-        insert into work(wfId, ranking, wdesc, wLength, uId)
-        values (#{wfId}, 1, #{wdesc}, #{wLength}, #{uId})
+        insert into work(wfId, ranking, wdesc, wFile, wLength, uId)
+        values (#{wfId}, 1, #{wdesc}, #{wFile}, #{wLength}, #{uId})
     </insert>
 
     <delete id="deleteWork">
@@ -27,6 +27,7 @@
         from work
         where wId = #{wId}
     </delete>
+
     <update id="updateWork">
         update work
         set ranking = #{ranking},

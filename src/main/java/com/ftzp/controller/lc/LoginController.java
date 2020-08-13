@@ -50,5 +50,12 @@ public class LoginController {
         return "loginFailed";
     }
 
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
+    String logout(User user, HttpSession session) {
+        String sId = session.getId();
+        redisObjCache.delValue(sId + "u");
+        redisObjCache.delValue(sId + "p");
+        return "redirect:/login";
+    }
 
 }

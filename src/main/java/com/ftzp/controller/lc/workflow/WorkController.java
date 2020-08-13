@@ -65,8 +65,10 @@ public class WorkController {
         if (w.getwLength().equals(ranking)) {
             workService.deleteWork(w);
         } else {
-            String wFileName = saveWorkFile(file, uploadPath);
-            w.setwFile(wFileName);
+            if (file != null) {
+                String wFileName = saveWorkFile(file, uploadPath);
+                w.setwFile(wFileName);
+            }
             w.setRanking(ranking + 1);
             workService.updateWork(w);
         }

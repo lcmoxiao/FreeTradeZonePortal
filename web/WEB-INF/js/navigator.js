@@ -20,7 +20,7 @@ function showNavigator() {
         "            <li class=\"layui-nav-item\"><a href='/modelManagement'>模板管理</a></li>\n" +
         "        </ul>\n" +
         "        <ul class=\"layui-nav layui-layout-right\">\n" +
-        "            <li class=\"layui-nav-item\"><a href=\"\">注销</a></li>\n" +
+        "            <li class=\"layui-nav-item\"><a href=\"/logout\">注销</a></li>\n" +
         "        </ul>\n" +
         "    </div>\n" +
         "</div>";

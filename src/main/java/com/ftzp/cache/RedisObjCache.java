@@ -19,6 +19,11 @@ public class RedisObjCache {
         redisTemplate.opsForValue().set(key, value, 6000, TimeUnit.SECONDS);
     }
 
+    public void delValue(String key) {
+        redisTemplate.delete("key");
+    }
+
+
     public Object getValue(String key) {
         return redisTemplate.opsForValue().get(key);
     }
