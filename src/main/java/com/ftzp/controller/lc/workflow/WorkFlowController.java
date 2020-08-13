@@ -74,6 +74,7 @@ public class WorkFlowController {
     }
 
     @RequestMapping(value = "/{wfId}", method = RequestMethod.DELETE)
+    @ResponseBody
     String deleteWorkFlow(@PathVariable Integer wfId) {
         workFlowService.deleteWorkFlow(wfId);
         workStepService.deleteWorkStep(wfId);

@@ -1,4 +1,6 @@
-;function showNavigator(){
+;
+
+function showNavigator() {
     let tmp = "<div class=\"layui-layout layui-layout-admin\">\n" +
         "    <div class=\"layui-header\">\n" +
         "        <div class=\"layui-logo\">门户网站管理</div>\n" +
@@ -15,6 +17,7 @@
         "            <li class=\"layui-nav-item\"><a href='/userManagement'>用户管理</a></li>\n" +
         "            <li class=\"layui-nav-item\"><a href='/roleManagement'>角色管理</a></li>\n" +
         "            <li class=\"layui-nav-item\"><a href='/permissionManagement'>权限管理</a></li>\n" +
+        "            <li class=\"layui-nav-item\"><a href='/modelManagement'>模板管理</a></li>\n" +
         "        </ul>\n" +
         "        <ul class=\"layui-nav layui-layout-right\">\n" +
         "            <li class=\"layui-nav-item\"><a href=\"\">注销</a></li>\n" +
@@ -24,12 +27,12 @@
     $("#navigator").html(tmp);
 }
 
-function flushLayUi(){
+function flushLayUi() {
     layui.use('form', function () {
         layui.form.render();
     });
 }
 
-function closeTmpWindow(){
+function closeTmpWindow() {
     layer.close(index);
 }

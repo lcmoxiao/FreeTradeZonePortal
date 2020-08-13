@@ -47,4 +47,10 @@ public class GoController {
         return "/lc/workflow/workFlowManager";
     }
 
+    @RequestMapping("/modelManagement")
+    String modelManagement() {
+        return "/lc/modelManager.";
+    }
+
+
 }

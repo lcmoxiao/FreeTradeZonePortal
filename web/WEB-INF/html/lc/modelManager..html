@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <title>userManager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <meta http-equiv="content-type" content="text/html;charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta charset="utf-8">
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+</head>
+
+<body class="layui-layout-body">
+
+<div id="navigator"></div>
+
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
+        <button class="layui-btn layui-btn-sm" lay-event="back">返回</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="show">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="down">下载</a>
+</script>
+
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<div id="tmpContent" style='text-align: center'></div>
+
+<script>
+
+    let index;//关闭弹窗用的
+    let nowPath = ""; //当前浏览的文件夹的相对路径
+
+    layui.use('element', function () {
+        let element = layui.element;
+    });
+
+    $.ready(showNavigator());
+    $.ready(showModelManager(""));
+
+    function showModelManager() {
+        $.ajax({
+            url: "/model?path=" + nowPath,
+            method: "get",
+            success: function (res) {
+                layui.use('table', function () {
+                    let table = layui.table;
+
+                    table.render({
+                        elem: '#test'
+                        , data: res
+                        , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                            title: '提示'
+                            , layEvent: 'LAYTABLE_TIPS'
+                            , icon: 'layui-icon-tips'
+                        }]
+                        , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        , cols: [[
+                            {field: 'fName', title: '文件名', sort: true}
+                            , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 160}
+                        ]]
+                        , page: true
+                    });
+
+                    //监听行工具事件
+                    table.on('tool(test)', function (obj) {
+                        var data = obj.data;
+                        if (obj.event === 'del') {
+                            deleteModel(nowPath + '/' + data.fName);
+                        } else if (obj.event === 'show') {
+                            nowPath += "/" + data.fName;
+                            showModelManager(nowPath);
+                        } else if (obj.event === 'down') {
+                            const a = document.createElement('a');
+                            a.setAttribute('href', "/model/download?path=" + nowPath + "/" + data.fName);    //a.href='文件链接'
+                            a.setAttribute('download', data.fName);   //a.download='文件名'
+                            a.click();
+                        }
+                    });
+
+                    //头工具栏事件
+                    table.on('toolbar(test)', function (obj) {
+                        if (obj.event === 'add') {
+                            showInsertModel();
+                            index = layer.open({
+                                type: 1,
+                                title: "新增模板",
+                                area: ['30%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent"),
+                                end: function (index, layero) {
+                                    $("#tmpContent").html("");
+                                }
+                            });
+                        } else if (obj.event === 'back') {
+                            let pattern = /(\S*)\//;
+                            nowPath = nowPath.match(pattern)[1];
+                            showModelManager();
+                        }
+                    });
+                });
+            }
+        })
+    }
+
+    function deleteModel(fname) {
+        $.post({
+            url: "/model?path=" + fname,
+            type: "delete",
+            success: function () {
+                showModelManager(nowPath)
+            }
+        });
+    }
+
+
+    function showInsertModel() {
+        let tmp =
+            "\t\t<form id='mf' class=\"layui-form\">\n" +
+            "<input type='hidden' name='nowPath' value='" + nowPath + "'>" +
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">上传模板</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input id=\"fileFolder\" name=\"fileFolder\" type=\"file\" webkitdirectory>" +
+            "    </div>\n" +
+            "  </div>";
+
+        tmp +=
+            "      </select>\n" +
+            "    </div>\n" +
+            "  </div>" +
+            "</div>" +
+
+            "\t\t\t<input type=\"button\" onclick='submit' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"添加\"><br>\n" +
+            "\t\t</form>";
+        $("#tmpContent").html(tmp);
+    }
+
+    function submit() {
+        $.post({
+            url: "/model",
+            type: "post",
+            data: $("#mf").serialize(),
+            success: function () {
+                showUserManager();
+                layer.close(index);
+            }
+        });
+    }
+</script>
+
+
+</body>
+</html>
