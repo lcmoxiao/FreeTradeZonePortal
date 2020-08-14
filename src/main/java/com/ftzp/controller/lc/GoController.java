@@ -6,11 +6,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class GoController {
 
-    @RequestMapping("/index")
-    String index() {
-        return "/index";
-    }
-
     @RequestMapping("/error")
     String error() {
         return "/error";
@@ -52,5 +47,9 @@ public class GoController {
         return "/lc/modelManager.";
     }
 
+    @RequestMapping("/loginStatistic")
+    String loginStatistic() {
+        return "/lc/loginStatistic";
+    }
 
 }

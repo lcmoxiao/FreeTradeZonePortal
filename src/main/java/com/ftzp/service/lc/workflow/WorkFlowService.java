@@ -1,8 +1,7 @@
-package com.ftzp.service.lc;
+package com.ftzp.service.lc.workflow;
 
 import com.ftzp.mapper.lc.workflow.WorkFlowMapper;
-import com.ftzp.pojo.lc.WorkFlow;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ftzp.pojo.lc.workflow.WorkFlow;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

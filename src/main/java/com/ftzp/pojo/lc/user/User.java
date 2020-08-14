@@ -1,4 +1,4 @@
-package com.ftzp.pojo.lc;
+package com.ftzp.pojo.lc.user;
 
 import java.io.Serializable;
 

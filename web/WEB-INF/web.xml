@@ -47,7 +47,9 @@
         <filter-class>com.ftzp.filter.lc.LoginFilter</filter-class>
         <init-param>
             <param-name>ignores</param-name>
-            <param-value>/js,/css,/index,/login,/error,/favicon,/layui,/html</param-value>
+            <param-value>/js,/css,/index,/favicon,/layui,/html
+                ,/logout,/login,/error
+            </param-value>
         </init-param>
     </filter>
     <filter-mapping>
@@ -62,7 +64,6 @@
         <filter-name>HttpPutFormFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
 
 
     <welcome-file-list>

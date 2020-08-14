@@ -1,9 +1,8 @@
 package com.ftzp.filter.lc;
 
-
 import com.ftzp.cache.RedisBeanFactory;
 import com.ftzp.cache.RedisObjCache;
-import com.ftzp.pojo.lc.Permission;
+import com.ftzp.pojo.lc.user.Permission;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -13,6 +12,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ftzp.controller.lc.LoginController.getRemoteIP;
+
 public class LoginFilter implements Filter {
 
     List<String> prefixIignores = new ArrayList<>();
@@ -20,7 +21,7 @@ public class LoginFilter implements Filter {
     RedisObjCache redisObjCache;
 
     @Override
-    public void init(FilterConfig config) throws ServletException {
+    public void init(FilterConfig config) {
         String cp = config.getServletContext().getContextPath();
         String ignoresParam = config.getInitParameter("ignores");
         String[] ignoreArray = ignoresParam.split(",");
@@ -35,25 +36,28 @@ public class LoginFilter implements Filter {
 
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest re
+            , ServletResponse servletResponse
+            , FilterChain filterChain) throws IOException, ServletException {
         if (redisObjCache == null) redisObjCache = RedisBeanFactory.getInstance();
-        HttpServletRequest hsr = (HttpServletRequest) servletRequest;
+        HttpServletRequest hsr = (HttpServletRequest) re;
         hsr.setCharacterEncoding("UTF-8");
+
         String targetUrl = hsr.getRequestURI();
         if (canIgnore(targetUrl)) {
             System.out.println(hsr.getRequestURI() + "不会被过滤哦");
-            filterChain.doFilter(servletRequest, servletResponse);
+            filterChain.doFilter(re, servletResponse);
         } else {
-            String sId = hsr.getSession().getId();
+            String IP = getRemoteIP(hsr);
             System.out.println(redisObjCache);
-            if (redisObjCache.getValue(sId + "u") == null) {
+            if (redisObjCache.getValue(IP + "u") == null) {
                 System.out.println("没登录，没权限，去登录吧");
-                hsr.getRequestDispatcher("/index").forward(servletRequest, servletResponse);
+                hsr.getRequestDispatcher("/index").forward(re, servletResponse);
             } else {
                 System.out.println("已经登陆了,再验证一下权限");
-                List<Permission> ps = (ArrayList<Permission>) redisObjCache.getValue(sId + "p");
-                if (authoricationCheck(targetUrl, ps)) filterChain.doFilter(servletRequest, servletResponse);
-                else hsr.getRequestDispatcher("/error").forward(servletRequest, servletResponse);
+                List<Permission> ps = (ArrayList<Permission>) redisObjCache.getValue(IP + "p");
+                if (authoricationCheck(targetUrl, ps)) filterChain.doFilter(re, servletResponse);
+                else hsr.getRequestDispatcher("/error").forward(re, servletResponse);
             }
         }
     }
@@ -80,5 +84,6 @@ public class LoginFilter implements Filter {
         System.out.println(targetUrl + "你没权限");
         return false;
     }
+
 
 }

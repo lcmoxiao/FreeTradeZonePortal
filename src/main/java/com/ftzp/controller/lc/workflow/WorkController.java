@@ -1,23 +1,30 @@
 package com.ftzp.controller.lc.workflow;
 
+import com.ftzp.ZipUtils;
 import com.ftzp.cache.RedisObjCache;
-import com.ftzp.pojo.lc.User;
-import com.ftzp.pojo.lc.Work;
-import com.ftzp.pojo.lc.WorkStep;
-import com.ftzp.service.lc.WorkService;
-import com.ftzp.service.lc.WorkStepService;
+import com.ftzp.pojo.lc.user.User;
+import com.ftzp.pojo.lc.workflow.Work;
+import com.ftzp.pojo.lc.workflow.WorkStep;
+import com.ftzp.service.lc.workflow.WorkService;
+import com.ftzp.service.lc.workflow.WorkStepService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
+import static com.ftzp.controller.lc.LoginController.getRemoteIP;
 
 @RequestMapping("/work")
 @Controller
@@ -36,7 +43,7 @@ public class WorkController {
     String initWork(@RequestParam("wfLength") Integer wfLength, @RequestParam("wfId") Integer wfId,
                     @RequestParam(value = "uploadFile", required = false) MultipartFile file,
                     @RequestParam("wdesc") String wdesc, HttpServletRequest request, HttpSession session) throws Exception {
-        String uploadPath = request.getServletContext().getRealPath("/upload");
+        String uploadPath = request.getServletContext().getRealPath("/worksUpload");
         File dir = new File(uploadPath);
         Work w = new Work();
         if (!dir.exists()) {
@@ -46,7 +53,8 @@ public class WorkController {
             String wFileName = saveWorkFile(file, uploadPath);
             w.setwFile(wFileName);
         }
-        User u = (User) redisObjCache.getValue(session.getId() + "u");
+        String IP = getRemoteIP(request);
+        User u = (User) redisObjCache.getValue(IP + "u");
         w.setuId(u.getuId());
         w.setWfId(wfId);
         w.setwLength(wfLength);
@@ -55,16 +63,53 @@ public class WorkController {
         return "redirect:/workManagement";
     }
 
+    @RequestMapping(value = "/download", method = RequestMethod.GET)
+    @ResponseBody
+    void downloadFile(@RequestParam("path") String path, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String uploadPath = request.getServletContext().getRealPath("/worksUpload");
+        String sourceName = uploadPath + File.separator + path;
+
+        String resName = sourceName + "tmp.zip";
+        ZipUtils.createZip(sourceName, resName);
+
+        response.setContentType("application/x-zip-compressed;charset=utf-8");
+        response.setCharacterEncoding("utf-8");
+        try {
+            // 设置相应头，控制浏览器下载该文件，这里就是会出现当你点击下载后，出现的下载地址框
+            response.setHeader("content-disposition",
+                    "attachment;filename=" + URLEncoder.encode(path, StandardCharsets.UTF_8));
+            FileInputStream in = new FileInputStream(resName);
+            OutputStream out = response.getOutputStream();
+            byte[] buffer = new byte[1024];
+            int len = 0;
+            while ((len = in.read(buffer)) > 0) {
+                out.write(buffer, 0, len);
+            }
+            in.close();
+            out.close();
+        } catch (Exception e) {
+            System.out.println("下载文件出错");
+        } finally {
+            new File(resName).delete();
+        }
+    }
+
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     String commitWork(@RequestParam("wId") Integer wId, @RequestParam("ranking") Integer ranking,
                       @RequestParam(value = "uploadFile", required = false) MultipartFile file,
-                      HttpServletRequest request) throws IOException {
-        String uploadPath = request.getServletContext().getRealPath("/upload");
+                      HttpServletRequest request) throws Exception {
+        String uploadPath = request.getServletContext().getRealPath("/worksUpload");
         Work w = workService.getWork(wId).get(0);
         if (w.getwLength().equals(ranking)) {
             workService.deleteWork(w);
         } else {
+            System.out.println(uploadPath);
+            System.out.println(file);
+            File dir = new File(uploadPath);
+            if (!dir.exists()) {
+                if (!dir.mkdirs()) throw new Exception("初始化文件夹失败");
+            }
             if (file != null) {
                 String wFileName = saveWorkFile(file, uploadPath);
                 w.setwFile(wFileName);
@@ -86,16 +131,18 @@ public class WorkController {
 
     @RequestMapping(value = "/myPosted", method = RequestMethod.GET)
     @ResponseBody
-    List<Work> commitWork(HttpSession session) {
-        User u = (User) redisObjCache.getValue(session.getId() + "u");
+    List<Work> myPosted(HttpServletRequest hsr) {
+        String IP = getRemoteIP(hsr);
+        User u = (User) redisObjCache.getValue(IP + "u");
         return workService.getWorkByUId(u.getuId());
     }
 
     @RequestMapping(value = "/needDoing", method = RequestMethod.GET)
     @ResponseBody
-    List<WorkStep> showWork(HttpSession session) {
+    List<WorkStep> showWork(HttpServletRequest hsr) {
         //登陆时会把User信息存入session
-        User u = (User) redisObjCache.getValue(session.getId() + "u");
+        String IP = getRemoteIP(hsr);
+        User u = (User) redisObjCache.getValue(IP + "u");
         List<Work> works = workService.getWork(null);
         List<WorkStep> res = new ArrayList<>();
         for (Work w : works) {
@@ -105,6 +152,8 @@ public class WorkController {
                     if (u.getrId() == ws.getrId()) {
                         ws.setwFile(w.getwFile());
                         ws.setwId(w.getwId());
+                        ws.setwLastDoTime(w.getwLastDoTime());
+                        ws.setwPostTime(w.getwPostTime());
                         res.add(ws);
                     }
                 }
@@ -118,11 +167,8 @@ public class WorkController {
         if (!file.isEmpty()) {
             String originalFilename = file.getOriginalFilename();
             assert originalFilename != null;
-            String suffix = originalFilename.split("\\.")[1];
-            String uuid = UUID.randomUUID().toString();
-            String wFileName = uuid.replace("-", "") + "." + suffix;
-            file.transferTo(new File(uploadPath + File.separator + wFileName));
-            return wFileName;
+            file.transferTo(new File(uploadPath + File.separator + originalFilename));
+            return originalFilename;
         }
         return null;
     }

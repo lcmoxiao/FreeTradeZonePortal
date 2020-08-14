@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="./js/Chart.bundle.js"></script>
+    <script src="./js/jquery-3.5.1.min.js"></script>
+    <title>Title</title>
+</head>
+<body>
+<div class="bar-chart" style="width:50% !important;height:300px!important;float:left;posttion:relative">
+    <canvas id="myChart" width="400" height="300"></canvas>
+</div>
+<script>
+    //
+    // var dayData=[1,2,3,4,5,0,2,0,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4];
+    // dayLine(dayData);
+    // /*
+    // var weekData=[1,2,3,4,5,1,2];
+    // weekLine(weekData);
+    //
+    // var monData=[1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4,5,1,2,3,4];
+    // monLine(2,2020,monData);*/
+
+
+    $.ajax(
+        {
+            url: "/statistic/getDays?model=day",
+            method: "get",
+            success: function (data) {
+                //TODO  需要自己生成完整的访问统计，把没有的补上
+                //返回的数组中对象格式为
+                /*
+                    time	"'2020-07-16 00:00:00'"
+                    num	1
+                 */
+                dayLine(data);
+            }
+        }
+    )
+
+
+    function dayLine(dayData) {
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ["0：00", "1：00", "2：00", "3：00", "4：00", "5：00", "6:00", "7:00", "8:00", "9:00", "10:00",
+                    "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22.00", "23:00"],
+                datasets: [{
+                    label: "人数",
+                    data: dayData,
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
+    function weekLine(weekData) {
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['day1', 'day2', 'day3', 'day4', 'day5', 'day6', 'day7'],
+                datasets: [{
+                    label: "人数",
+                    data: weekData,
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
+    function monLine(mon, year, monData) {
+        var monDays = 0;
+        if (mon === '1' || mon === '3' || mon === '5' || mon === '7' || mon === '8' || mon === '10' || mon === '12') {
+            monDays = 31;
+        } else if (mon === '2') {
+            while (year != 0) {
+                if (year % 4 === '0' && year % 100 !== '0' || year % 400 === '0') {
+                    monDays = 28;
+                } else {
+                    monDays = 29;
+                }
+            }
+        } else {
+            monDays = 30;
+        }
+
+        var label = [];
+        for (var i = 0; i <= monDays; i++) {
+            label.push(i + 1 + "号");
+        }
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: label,
+                datasets: [{
+                    label: "人数",
+                    data: monData,
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
+    function yearLine(yearData) {
+        var ctx = document.getElementById("myChart");
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'],
+                datasets: [{
+                    label: "人数",
+                    data: yearData,
+                    fillColor: "rgba(220,220,220,0.2)",
+                    strokeColor: "rgba(220,220,220,1)",
+                    pointColor: "rgba(220,220,220,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(220,220,220,1)",
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                }
+            }
+        });
+    }
+
+</script>
+</body>
+</html>

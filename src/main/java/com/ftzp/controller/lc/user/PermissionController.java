@@ -1,7 +1,7 @@
 package com.ftzp.controller.lc.user;
 
-import com.ftzp.pojo.lc.Permission;
-import com.ftzp.service.lc.PermissionService;
+import com.ftzp.pojo.lc.user.Permission;
+import com.ftzp.service.lc.user.PermissionService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

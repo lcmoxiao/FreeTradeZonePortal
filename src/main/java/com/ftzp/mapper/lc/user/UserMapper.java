@@ -1,6 +1,6 @@
-package com.ftzp.mapper.lc;
+package com.ftzp.mapper.lc.user;
 
-import com.ftzp.pojo.lc.User;
+import com.ftzp.pojo.lc.user.User;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;

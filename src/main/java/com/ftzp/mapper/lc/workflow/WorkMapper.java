@@ -1,6 +1,6 @@
 package com.ftzp.mapper.lc.workflow;
 
-import com.ftzp.pojo.lc.Work;
+import com.ftzp.pojo.lc.workflow.Work;
 
 import java.util.List;
 

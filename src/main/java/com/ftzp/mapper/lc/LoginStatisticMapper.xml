@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.ftzp.mapper.lc.LoginStatisticMapper">
+
+    <select id="getLoginStatistic" resultType="com.ftzp.pojo.lc.LoginStatistic">
+        select loginIp, loginTime, uId from loginstatistic
+        <where>
+            <if test="start!=null">
+                loginTime >= #{start}
+            </if>
+            <if test="end!=null">
+                and #{end} >= loginTime
+            </if>
+        </where>
+    </select>
+
+    <select id="getLoginStatisticToDayNum" resultType="com.ftzp.pojo.lc.LoginStatistic">
+        SELECT
+        DATE_FORMAT(loginTime, #{dateFormat}) AS time,
+        COUNT(*) AS num
+        FROM loginstatistic
+        <where>
+            <if test="start!=null">
+                loginTime >= #{start}
+            </if>
+            <if test="end!=null">
+                and #{end} >= loginTime
+            </if>
+        </where>
+        GROUP BY time
+        ORDER BY time;
+    </select>
+
+    <insert id="insertLoginStatistic">
+        insert into loginstatistic(loginIp, loginTime, uId)
+        values (#{loginIP}, #{loginTime}, #{uId})
+    </insert>
+
+
+</mapper>

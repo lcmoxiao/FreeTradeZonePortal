@@ -1,8 +1,7 @@
-package com.ftzp.service.lc;
+package com.ftzp.service.lc.user;
 
-import com.ftzp.mapper.lc.RoleMapper;
-import com.ftzp.pojo.lc.Role;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ftzp.mapper.lc.user.RoleMapper;
+import com.ftzp.pojo.lc.user.Role;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

@@ -1,6 +1,6 @@
-package com.ftzp.mapper.lc;
+package com.ftzp.mapper.lc.user;
 
-import com.ftzp.pojo.lc.Permission;
+import com.ftzp.pojo.lc.user.Permission;
 
 import java.util.ArrayList;
 import java.util.List;

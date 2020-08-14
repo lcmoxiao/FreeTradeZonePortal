@@ -36,3 +36,17 @@ function flushLayUi() {
 function closeTmpWindow() {
     layer.close(index);
 }
+
+function dateToStr(date) {
+    var time = new Date(date);
+    var y = time.getFullYear();
+    var M = time.getMonth() + 1;
+    M = M < 10 ? ("0" + M) : M;
+    var d = time.getDate();
+    d = d < 10 ? ("0" + d) : d;
+    var h = time.getHours();
+    h = h < 10 ? ("0" + h) : h;
+    var m = time.getMinutes();
+    m = m < 10 ? ("0" + m) : m;
+    return y + "-" + M + "-" + d + " " + h + ":" + m;
+}

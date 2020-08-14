@@ -9,7 +9,7 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 @Repository(value = "redisObjCache")
-@Scope(ConfigurableListableBeanFactory.SCOPE_PROTOTYPE)
+@Scope(ConfigurableListableBeanFactory.SCOPE_SINGLETON)
 public class RedisObjCache {
 
     @Resource(name = "redisTemplate")
@@ -20,7 +20,7 @@ public class RedisObjCache {
     }
 
     public void delValue(String key) {
-        redisTemplate.delete("key");
+        redisTemplate.delete(key);
     }
 
 

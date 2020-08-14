@@ -1,7 +1,7 @@
 package com.ftzp.controller.lc.user;
 
-import com.ftzp.pojo.lc.Role;
-import com.ftzp.service.lc.RoleService;
+import com.ftzp.pojo.lc.user.Role;
+import com.ftzp.service.lc.user.RoleService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

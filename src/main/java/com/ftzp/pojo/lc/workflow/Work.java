@@ -1,4 +1,6 @@
-package com.ftzp.pojo.lc;
+package com.ftzp.pojo.lc.workflow;
+
+import java.util.Date;
 
 public class Work {
 
@@ -9,6 +11,8 @@ public class Work {
     String wdesc;
     Integer wLength;
     Integer uId;
+    Date wLastDoTime;
+    Date wPostTime;
 
     public Integer getuId() {
         return uId;
@@ -77,4 +81,19 @@ public class Work {
     }
 
 
+    public Date getwLastDoTime() {
+        return wLastDoTime;
+    }
+
+    public void setwLastDoTime(Date wLastDoTime) {
+        this.wLastDoTime = wLastDoTime;
+    }
+
+    public Date getwPostTime() {
+        return wPostTime;
+    }
+
+    public void setwPostTime(Date wPostTime) {
+        this.wPostTime = wPostTime;
+    }
 }

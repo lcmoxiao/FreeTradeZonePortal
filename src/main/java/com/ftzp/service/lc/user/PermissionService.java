@@ -1,7 +1,7 @@
-package com.ftzp.service.lc;
+package com.ftzp.service.lc.user;
 
-import com.ftzp.mapper.lc.PermissionMapper;
-import com.ftzp.pojo.lc.Permission;
+import com.ftzp.mapper.lc.user.PermissionMapper;
+import com.ftzp.pojo.lc.user.Permission;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

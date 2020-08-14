@@ -16,11 +16,11 @@ public class RedisConfig {
 
     @Bean
     RedisStandaloneConfiguration redisStandaloneConfiguration() {
-        RedisStandaloneConfiguration redisStandaloneConfiguration = new RedisStandaloneConfiguration();
-        redisStandaloneConfiguration.setHostName("localhost");
-        redisStandaloneConfiguration.setPort(6379);
-        redisStandaloneConfiguration.setDatabase(0);
-        return redisStandaloneConfiguration;
+        RedisStandaloneConfiguration rdsc = new RedisStandaloneConfiguration();
+        rdsc.setHostName("localhost");
+        rdsc.setPort(6379);
+        rdsc.setDatabase(0);
+        return rdsc;
     }
 
     @Bean("connectionFactory")
@@ -28,6 +28,7 @@ public class RedisConfig {
         //redisStandaloneConfiguration.setPassword(RedisPassword.of(password));
         JedisClientConfiguration.JedisClientConfigurationBuilder jedisClientConfiguration = JedisClientConfiguration.builder();
         jedisClientConfiguration.connectTimeout(Duration.ofMillis(0));//  connection timeout
+        jedisClientConfiguration.usePooling();
         return new JedisConnectionFactory(redisStandaloneConfiguration,
                 jedisClientConfiguration.build());
     }

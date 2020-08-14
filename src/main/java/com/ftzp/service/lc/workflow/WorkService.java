@@ -1,11 +1,13 @@
-package com.ftzp.service.lc;
+package com.ftzp.service.lc.workflow;
 
 import com.ftzp.mapper.lc.workflow.WorkMapper;
-import com.ftzp.pojo.lc.Work;
+import com.ftzp.pojo.lc.workflow.Work;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+
+import static com.ftzp.TimeUtils.nowTime;
 
 @Service("workService")
 public class WorkService implements WorkMapper {
@@ -24,8 +26,10 @@ public class WorkService implements WorkMapper {
     }
 
     @Override
-    public void insertWork(Work work) {
-        workMapper.insertWork(work);
+    public void insertWork(Work w) {
+        w.setwPostTime(nowTime());
+        w.setwLastDoTime(nowTime());
+        workMapper.insertWork(w);
     }
 
     @Override
@@ -35,6 +39,7 @@ public class WorkService implements WorkMapper {
 
     @Override
     public void updateWork(Work w) {
+        w.setwLastDoTime(nowTime());
         workMapper.updateWork(w);
     }
 }

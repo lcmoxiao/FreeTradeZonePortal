@@ -19,17 +19,18 @@
 
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-xs" lay-event="do">执行</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="down">下载附件</a>
 </script>
 
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
-<div id="tmpContent" style='text-align: center' ></div>
+<div id="tmpContent" style='text-align: center'></div>
 
 
 <script>
     let index;//关闭弹窗用的
 
-    layui.use('element', function(){
+    layui.use('element', function () {
         let element = layui.element;
     });
 
@@ -41,33 +42,44 @@
             url: "/work/needDoing",
             method: "get",
             success: function (res) {
-                layui.use('table', function(){
+                layui.use('table', function () {
                     var table = layui.table;
                     table.render({
                         elem: '#test'
-                        ,data: res
-                        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-                        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                        , data: res
+                        , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                             title: '提示'
-                            ,layEvent: 'LAYTABLE_TIPS'
-                            ,icon: 'layui-icon-tips'
+                            , layEvent: 'LAYTABLE_TIPS'
+                            , icon: 'layui-icon-tips'
                         }]
-                        ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                        ,cols: [[
-                            {field:'wsId',  title: '事务ID', sort: true}
-                            ,{field:'wsName', title: '事务名称'}
-                            ,{field:'wsdesc', title: '事务描述', sort: true}
-                            ,{field:'wFile', title: '附件', sort: true}
-                            , {fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                        , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        , cols: [[
+                            {field: 'wId', title: '工作ID', sort: true}
+                            , {field: 'wsId', title: '事务ID', sort: true}
+                            , {field: 'wsName', title: '事务名称'}
+                            , {field: 'wsdesc', title: '事务描述'}
+                            , {field: 'wFile', title: '附件', sort: true}
+                            , {
+                                field: 'wLastDoTime', title: '上一次更新时间',
+                                templet: function (d) {
+                                    return dateToStr(d.wLastDoTime);
+                                }
+                            }
+                            , {field: 'wPostTime', title: '发布时间',
+                                templet: function (d) {
+                                    return dateToStr(d.wPostTime);
+                                }}
+                            , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
                         ]]
-                        ,page: true
+                        , page: true
                     });
 
                     //监听行工具事件
-                    table.on('tool(test)', function(obj){
+                    table.on('tool(test)', function (obj) {
                         var data = obj.data;
 
-                        if(obj.event === 'do'){
+                        if (obj.event === 'do') {
                             doWork(data.wId, data.ranking, data.wsId, data.wsName, data.wsdesc);
                             index = layer.open({
                                 type: 1,
@@ -79,10 +91,15 @@
                                 shade: 0.4,
                                 skin: 'layui-layer-rim',
                                 content: $("#tmpContent"),
-                                end: function(index, layero){
+                                end: function (index, layero) {
                                     $("#tmpContent").html("");
                                 }
                             });
+                        } else if (obj.event === 'down') {
+                            const a = document.createElement('a');
+                            a.setAttribute('href', "/work/download?path=" + data.wFile);    //a.href='文件链接'
+                            a.setAttribute('download', data.fName);   //a.download='文件名'
+                            a.click();
                         }
                     });
 
@@ -138,7 +155,7 @@
             url: "/work",
             type: "put",
             data: $(".layui-form").serialize(),
-            success: function() {
+            success: function () {
                 showWorkStep();
                 layer.close(index);
             }

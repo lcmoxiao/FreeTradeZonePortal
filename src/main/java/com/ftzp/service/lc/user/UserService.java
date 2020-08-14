@@ -1,10 +1,8 @@
-package com.ftzp.service.lc;
+package com.ftzp.service.lc.user;
 
 import com.ftzp.Sha256Util;
-import com.ftzp.mapper.lc.RoleMapper;
-import com.ftzp.mapper.lc.UserMapper;
-import com.ftzp.pojo.lc.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.ftzp.mapper.lc.user.UserMapper;
+import com.ftzp.pojo.lc.user.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

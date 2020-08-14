@@ -1,6 +1,7 @@
-package com.ftzp.pojo.lc;
+package com.ftzp.pojo.lc.workflow;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class WorkStep {
@@ -12,7 +13,25 @@ public class WorkStep {
     Integer wId;   // 对应的Work的ID
     Integer wfId;   // 对应的Work的ID
     Integer ranking;    //对应的执行次序
-    String wsdesc;    //对应的执行次序
+    String wsdesc;    //工作步骤描述
+    Date wLastDoTime;
+    Date wPostTime;
+
+    public Date getwLastDoTime() {
+        return wLastDoTime;
+    }
+
+    public void setwLastDoTime(Date wLastDoTime) {
+        this.wLastDoTime = wLastDoTime;
+    }
+
+    public Date getwPostTime() {
+        return wPostTime;
+    }
+
+    public void setwPostTime(Date wPostTime) {
+        this.wPostTime = wPostTime;
+    }
 
     //数据库没有此字段，传给前端用的
     String wFile;

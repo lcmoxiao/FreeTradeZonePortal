@@ -31,13 +31,13 @@
 
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
-<div id="tmpContent" style='text-align: center' ></div>
+<div id="tmpContent" style='text-align: center'></div>
 
 
 <script>
     let index;
 
-    layui.use('element', function(){
+    layui.use('element', function () {
         let element = layui.element;
     });
 
@@ -49,35 +49,35 @@
             url: "/role",
             method: "get",
             success: function (res) {
-                layui.use('table', function(){
+                layui.use('table', function () {
                     let table = layui.table;
                     table.render({
                         elem: '#test'
-                        ,data: res
-                        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-                        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                        , data: res
+                        , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                             title: '提示'
-                            ,layEvent: 'LAYTABLE_TIPS'
-                            ,icon: 'layui-icon-tips'
+                            , layEvent: 'LAYTABLE_TIPS'
+                            , icon: 'layui-icon-tips'
                         }]
-                        ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                        ,cols: [[
-                            {field:'rId',  title: '角色ID', sort: true}
-                            ,{field:'rName', title: '角色名'}
-                            ,{field:'rPermission', title: '权限串', sort: true}
-                            ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:160}
+                        , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        , cols: [[
+                            {field: 'rId', title: '角色ID', sort: true}
+                            , {field: 'rName', title: '角色名'}
+                            , {field: 'rPermission', title: '权限串', sort: true}
+                            , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 160}
                         ]]
-                        ,page: true
+                        , page: true
                     });
 
                     //监听行工具事件
-                    table.on('tool(test)', function(obj){
+                    table.on('tool(test)', function (obj) {
                         var data = obj.data;
 
-                        if(obj.event === 'del'){
+                        if (obj.event === 'del') {
                             deleteRole(data.rId);
                             obj.del();
-                        } else if(obj.event === 'edit'){
+                        } else if (obj.event === 'edit') {
                             showUpdateRole(data.rId);
                             index = layer.open({
                                 type: 1,
@@ -89,11 +89,11 @@
                                 shade: 0.4,
                                 skin: 'layui-layer-rim',
                                 content: $("#tmpContent"),
-                                end: function(index, layero){
+                                end: function (index, layero) {
                                     $("#tmpContent").html("");
                                 }
                             });
-                        } else if(obj.event === 'show'){
+                        } else if (obj.event === 'show') {
                             showRole(data.rId, data.rName, data.rPermission);
                             index = layer.open({
                                 type: 1,
@@ -105,7 +105,7 @@
                                 shade: 0.4,
                                 skin: 'layui-layer-rim',
                                 content: $("#tmpContent"),
-                                end: function(index, layero){
+                                end: function (index, layero) {
                                     $("#tmpContent").html("");
                                 }
                             });
@@ -113,8 +113,8 @@
                     });
 
                     //头工具栏事件
-                    table.on('toolbar(test)', function(obj){
-                        if(obj.event === 'add'){
+                    table.on('toolbar(test)', function (obj) {
+                        if (obj.event === 'add') {
                             showInsertRole()
                             index = layer.open({
                                 type: 1,
@@ -126,7 +126,7 @@
                                 shade: 0.4,
                                 skin: 'layui-layer-rim',
                                 content: $("#tmpContent"),
-                                end: function(index, layero){
+                                end: function (index, layero) {
                                     $("#tmpContent").html("");
                                 }
                             });
@@ -233,9 +233,11 @@
             method: "get",
             success: function (res) {
                 let tmp = "";
+
                 for (let i = 0; i < res.length; i++) {
                     tmp += "<input type=\"checkbox\" value='" + res[i]['pId'] + "' name=\"permissions\" title=\"" + res[i]['pName'] + "\">";
                 }
+
                 $("#permissionTB").html(tmp);
                 flushLayUi();
             }
@@ -246,7 +248,7 @@
             "  </div>" +
             "\t\t\t<input type=\"button\" onclick='putRole()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"更新\"><br>\n" +
             "\t\t</form>";
-         $("#tmpContent").html(tmp);
+        $("#tmpContent").html(tmp);
         flushLayUi();
     }
 
@@ -263,7 +265,7 @@
             url: "/role",
             type: "post",
             data: $(".layui-form").serialize(),
-            success:function (){
+            success: function () {
                 showRoleManager();
                 closeTmpWindow();
             }
@@ -275,7 +277,7 @@
             url: "/role/",
             type: "put",
             data: $(".layui-form").serialize(),
-            success:function (){
+            success: function () {
                 showRoleManager();
                 closeTmpWindow();
             }

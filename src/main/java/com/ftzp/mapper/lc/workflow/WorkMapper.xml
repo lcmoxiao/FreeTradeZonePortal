@@ -3,7 +3,7 @@
 <!--命名空间应该是对应接口的包名+接口名 -->
 <mapper namespace="com.ftzp.mapper.lc.workflow.WorkMapper">
 
-    <select id="getWork" resultType="com.ftzp.pojo.lc.Work">
+    <select id="getWork" resultType="com.ftzp.pojo.lc.workflow.Work">
         select *
         from work
         <where>
@@ -11,15 +11,15 @@
         </where>
     </select>
 
-    <select id="getWorkByUId" resultType="com.ftzp.pojo.lc.Work">
+    <select id="getWorkByUId" resultType="com.ftzp.pojo.lc.workflow.Work">
         select *
         from work
         where uId = #{uId}
     </select>
 
     <insert id="insertWork" useGeneratedKeys="true" keyProperty="wId">
-        insert into work(wfId, ranking, wdesc, wFile, wLength, uId)
-        values (#{wfId}, 1, #{wdesc}, #{wFile}, #{wLength}, #{uId})
+        insert into work(wfId, ranking, wdesc, wFile, wLength, uId ,wPostTime,wLastDoTime)
+        values (#{wfId}, 1, #{wdesc}, #{wFile}, #{wLength}, #{uId},#{wPostTime},#{wLastDoTime})
     </insert>
 
     <delete id="deleteWork">
@@ -31,7 +31,8 @@
     <update id="updateWork">
         update work
         set ranking = #{ranking},
-            wFile   = #{wFile}
+            wFile   = #{wFile},
+            wLastDoTime = #{wLastDoTime}
         where wId = #{wId}
     </update>
 
