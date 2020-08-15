@@ -42,7 +42,9 @@ public class WorkController {
     @ResponseBody
     String initWork(@RequestParam("wfLength") Integer wfLength, @RequestParam("wfId") Integer wfId,
                     @RequestParam(value = "uploadFile", required = false) MultipartFile file,
-                    @RequestParam("wdesc") String wdesc, HttpServletRequest request, HttpSession session) throws Exception {
+                    @RequestParam("wdesc") String wdesc,
+                    @RequestParam("wContent") String wContent,
+                    HttpServletRequest request, HttpSession session) throws Exception {
         String uploadPath = request.getServletContext().getRealPath("/worksUpload");
         File dir = new File(uploadPath);
         Work w = new Work();
@@ -55,6 +57,7 @@ public class WorkController {
         }
         String IP = getRemoteIP(request);
         User u = (User) redisObjCache.getValue(IP + "u");
+        w.setwContent(wContent);
         w.setuId(u.getuId());
         w.setWfId(wfId);
         w.setwLength(wfLength);
@@ -97,10 +100,12 @@ public class WorkController {
     @RequestMapping(method = RequestMethod.PUT)
     @ResponseBody
     String commitWork(@RequestParam("wId") Integer wId, @RequestParam("ranking") Integer ranking,
+                      @RequestParam("wContent") String wContent,
                       @RequestParam(value = "uploadFile", required = false) MultipartFile file,
                       HttpServletRequest request) throws Exception {
         String uploadPath = request.getServletContext().getRealPath("/worksUpload");
         Work w = workService.getWork(wId).get(0);
+        w.setwContent(wContent);
         if (w.getwLength().equals(ranking)) {
             workService.deleteWork(w);
         } else {
@@ -154,6 +159,8 @@ public class WorkController {
                         ws.setwId(w.getwId());
                         ws.setwLastDoTime(w.getwLastDoTime());
                         ws.setwPostTime(w.getwPostTime());
+                        ws.setwContent(w.getwContent());
+                        ws.setWdesc(w.getWdesc());
                         res.add(ws);
                     }
                 }

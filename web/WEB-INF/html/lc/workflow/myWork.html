@@ -56,17 +56,19 @@
                         , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                         , cols: [[
                             {field: 'wId', title: '工作ID', sort: true}
-                            , {field: 'wsId', title: '事务ID', sort: true}
-                            , {field: 'wsName', title: '事务名称'}
-                            , {field: 'wsdesc', title: '事务描述'}
-                            , {field: 'wFile', title: '附件', sort: true}
+                            ,{field: 'wdesc', title: '工作描述'}
+                            ,{field: 'wContent', title: '工作提示'}
+                            , {field: 'wsId', title: '步骤ID', sort: true}
+                            , {field: 'wsName', title: '步骤名称'}
+                            , {field: 'wsdesc', title: '步骤描述'}
+                            , {field: 'wFile', title: '附件'}
                             , {
-                                field: 'wLastDoTime', title: '上一次更新时间',
+                                field: 'wLastDoTime', title: '上一次更新时间', sort: true,
                                 templet: function (d) {
                                     return dateToStr(d.wLastDoTime);
                                 }
                             }
-                            , {field: 'wPostTime', title: '发布时间',
+                            , {field: 'wPostTime', title: '发布时间', sort: true,
                                 templet: function (d) {
                                     return dateToStr(d.wPostTime);
                                 }}

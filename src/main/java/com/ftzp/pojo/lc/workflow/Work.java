@@ -13,6 +13,15 @@ public class Work {
     Integer uId;
     Date wLastDoTime;
     Date wPostTime;
+    String wContent;
+
+    public String getwContent() {
+        return wContent;
+    }
+
+    public void setwContent(String wContent) {
+        this.wContent = wContent;
+    }
 
     public Integer getuId() {
         return uId;

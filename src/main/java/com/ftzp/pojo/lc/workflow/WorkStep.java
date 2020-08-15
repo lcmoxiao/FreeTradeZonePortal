@@ -16,6 +16,24 @@ public class WorkStep {
     String wsdesc;    //工作步骤描述
     Date wLastDoTime;
     Date wPostTime;
+    String wContent;
+    String wdesc;
+
+    public String getWdesc() {
+        return wdesc;
+    }
+
+    public void setWdesc(String wdesc) {
+        this.wdesc = wdesc;
+    }
+
+    public String getwContent() {
+        return wContent;
+    }
+
+    public void setwContent(String wContent) {
+        this.wContent = wContent;
+    }
 
     public Date getwLastDoTime() {
         return wLastDoTime;

@@ -18,6 +18,8 @@ function showNavigator() {
         "            <li class=\"layui-nav-item\"><a href='/roleManagement'>角色管理</a></li>\n" +
         "            <li class=\"layui-nav-item\"><a href='/permissionManagement'>权限管理</a></li>\n" +
         "            <li class=\"layui-nav-item\"><a href='/modelManagement'>模板管理</a></li>\n" +
+        "            <li class=\"layui-nav-item\"><a href='/main'>内容管理</a></li>\n" +
+        "            <li class=\"layui-nav-item\"><a href='/loginStatistic'>访问分析</a></li>\n" +
         "        </ul>\n" +
         "        <ul class=\"layui-nav layui-layout-right\">\n" +
         "            <li class=\"layui-nav-item\"><a href=\"/logout\">注销</a></li>\n" +
