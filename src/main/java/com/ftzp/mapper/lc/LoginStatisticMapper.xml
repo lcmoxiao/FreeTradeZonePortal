@@ -34,7 +34,7 @@
 
     <insert id="insertLoginStatistic">
         insert into loginstatistic(loginIp, loginTime, uId)
-        values (#{loginIP}, #{loginTime}, #{uId})
+        values (#{loginIp}, #{loginTime}, #{uId})
     </insert>
 
 

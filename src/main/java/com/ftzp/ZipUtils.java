@@ -18,7 +18,8 @@ public class ZipUtils {
 
     /**
      * 创建ZIP文件
-     * @param sourcePath 目标文件或文件夹路径
+     *
+     * @param sourcePath      目标文件或文件夹路径
      * @param filePathAndName 生成的zip文件存在路径（包括文件名）
      */
     public static void createZip(String sourcePath, String filePathAndName) {
@@ -36,14 +37,14 @@ public class ZipUtils {
 //            httpResponse.setHeader("Content-disposition", "attachment; filename="+fileNameUnEncode+".zip");
             writeZip(new File(sourcePath), "", zos);
         } catch (FileNotFoundException e) {
-            log.error("创建ZIP文件失败",e);
+            log.error("创建ZIP文件失败", e);
         } finally {
             try {
                 if (zos != null) {
                     zos.close();
                 }
             } catch (IOException e) {
-                log.error("创建ZIP文件失败",e);
+                log.error("创建ZIP文件失败", e);
             }
 
         }
@@ -53,46 +54,43 @@ public class ZipUtils {
      * 压缩zip,循环压缩子目录文件
      */
     private static void writeZip(File file, String parentPath, ZipOutputStream zos) {
-        if(file.exists()){
-            if(file.isDirectory()){//处理文件夹
-                parentPath+=file.getName()+File.separator;
-                File [] files=file.listFiles();
-                if(files.length != 0)
-                {
-                    for(File f:files){
+        if (file.exists()) {
+            if (file.isDirectory()) {//处理文件夹
+                parentPath += file.getName() + File.separator;
+                File[] files = file.listFiles();
+                if (files.length != 0) {
+                    for (File f : files) {
                         writeZip(f, parentPath, zos);
                     }
-                }
-                else
-                {       //空目录则创建当前目录
+                } else {       //空目录则创建当前目录
                     try {
                         zos.putNextEntry(new ZipEntry(parentPath));
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
-            }else{
-                FileInputStream fis=null;
+            } else {
+                FileInputStream fis = null;
                 try {
-                    fis=new FileInputStream(file);
+                    fis = new FileInputStream(file);
                     ZipEntry ze = new ZipEntry(parentPath + file.getName());//创建压缩文件
                     zos.putNextEntry(ze);//添加压缩文件
-                    byte [] content=new byte[1024];
+                    byte[] content = new byte[1024];
                     int len;
-                    while((len=fis.read(content))!=-1){
-                        zos.write(content,0,len);
+                    while ((len = fis.read(content)) != -1) {
+                        zos.write(content, 0, len);
                         zos.flush();
                     }
 
                 } catch (IOException e) {
-                    log.error("创建ZIP文件失败",e);
-                } finally{
+                    log.error("创建ZIP文件失败", e);
+                } finally {
                     try {
-                        if(fis!=null){
+                        if (fis != null) {
                             fis.close();
                         }
-                    }catch(IOException e){
-                        log.error("创建ZIP文件失败",e);
+                    } catch (IOException e) {
+                        log.error("创建ZIP文件失败", e);
                     }
                 }
             }
@@ -100,6 +98,6 @@ public class ZipUtils {
     }
 
     public static void main(String[] args) {
-        createZip("C:\\2016-2017上半学期原始成绩","E:\\java压缩包.zip");
+        createZip("C:\\2016-2017上半学期原始成绩", "E:\\java压缩包.zip");
     }
 }

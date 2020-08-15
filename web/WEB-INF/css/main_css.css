@@ -1,0 +1,155 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+/*整体*/
+html, body {
+    height: auto;
+    min-height: 100%
+}
+
+.main_content {
+    width: 100%;
+}
+
+/*头部*/
+.top {
+    width: 100%;
+    height: 100px;
+    background-color: blue;
+}
+
+.top h2 {
+    text-align: center;
+    color: azure;
+    padding-top: 30px;
+}
+
+.showTop{
+    width: 100%;
+    height: 74px;
+    background-color: #23262e;
+    color: #009688;
+    text-align: center;
+}
+
+/*左侧导航*/
+.navigation {
+    width: 20%;
+    float: left;
+    color: #bdbec1;
+    background-color: #23262e;
+    height: 1500px;
+}
+
+.navigation h4 {
+    margin-left: 20px;
+}
+
+.navigation ul {
+    margin-left: 20px;
+}
+
+#ul_out, #ul_out_2, #ul_out_3, #ul_out_4, #ul_out_5 {
+}
+
+#ul_in, #ul_in_2, #ul_in_3, #ul_in_4, #ul_in_5, #ul_in_6, #ul_in_7, #ul_in_8, #ul_in_9 {
+    display: none;
+    background-color: #545c71;
+    margin-left: -6%;
+    padding-left: 14%;
+}
+
+.lmgl {
+    float: right;
+    width: 50px;
+    margin-right: 14px;
+    margin-top: 6px;
+    height: 26px;
+    text-align: center;
+    font-size: 10px;
+    color: white;
+    border-radius: 3px;
+    background-color: #ff5722;
+    border: 1px solid white;
+}
+
+.bjCon {
+    width: 30px;
+    margin-right: 14px;
+    margin-top: 6px;
+    height: 26px;
+    text-align: center;
+    font-size: 10px;
+    color: white;
+    border-radius: 3px;
+    background-color: #ff5722;
+    border: 1px solid white;
+}
+
+.scCon {
+    width: 30px;
+    margin-right: 14px;
+    margin-top: 6px;
+    height: 26px;
+    text-align: center;
+    font-size: 10px;
+    color: white;
+    border-radius: 3px;
+    background-color: #009688;
+    border: 1px solid white;
+}
+
+.fbnr {
+    float: right;
+    width: 50px;
+    margin-right: 14px;
+    margin-top: 6px;
+    height: 36px;
+    text-align: center;
+    font-size: 10px;
+    color: white;
+    border-radius: 3px;
+    background-color: #009688;
+    border: 1px solid white;
+}
+
+.bjC {
+    width: 30px;
+    margin-right: 6px;
+    margin-top: 6px;
+    height: 26px;
+    text-align: center;
+    font-size: 10px;
+    color: white;
+    border-radius: 3px;
+    background-color: #ff5722;
+    border: 1px solid white;
+}
+
+.scC {
+    width: 30px;
+    margin-right: 14px;
+    margin-top: 6px;
+    height: 26px;
+    text-align: center;
+    font-size: 10px;
+    color: white;
+    border-radius: 3px;
+    background-color: #009688;
+    border: 1px solid white;
+}
+
+.ckCon {
+    width: 30px;
+    margin-left: 10px;
+    margin-top: 6px;
+    height: 26px;
+    text-align: center;
+    font-size: 10px;
+    color: white;
+    border-radius: 3px;
+    background-color: #ffb800;
+    border: 1px solid white;
+}

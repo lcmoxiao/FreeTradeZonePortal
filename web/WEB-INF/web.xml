@@ -30,14 +30,11 @@
         <url-pattern>/</url-pattern>
     </servlet-mapping>
 
-
-    <!-- 3. 数据库配置 -->
-    <!-- （1）参数文件位置 -->
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>/WEB-INF/config/mybatis-config.xml</param-value>
+        <param-value></param-value>
     </context-param>
-    <!-- （2）加载参数文件的监听器 -->
+
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
     </listener>
@@ -48,7 +45,7 @@
         <init-param>
             <param-name>ignores</param-name>
             <param-value>/js,/css,/index,/favicon,/layui,/html
-                ,/logout,/login,/error
+                ,/logout,/login,/error,/visit
             </param-value>
         </init-param>
     </filter>

@@ -58,18 +58,14 @@ public class LoginController {
     @ResponseBody
     String login(User user, HttpServletRequest re) {
         User u = userService.checkUser(user);
-        Role r = roleService.getRole(u.getrId()).get(0);
-        ArrayList<Permission> permission = permissionService.getPermission(r.getrPermission());
         if (u != null) {
-//            String sId = session.getId();
-//            redisObjCache.setValue(sId + "u", u);
-//            Role r = roleService.getRole(u.getrId()).get(0);
-//            String rP = r.getrPermission();
-//            ArrayList<Permission> permission = permissionService.getPermission(rP);
-//            redisObjCache.setValue(sId + "p", permission);
+            //通过IP，缓存用户信息和用户权限信息，
             String IP = getRemoteIP(re);
+            Role r = roleService.getRole(u.getrId()).get(0);
+            ArrayList<Permission> permission = permissionService.getPermission(r.getrPermission());
             redisObjCache.setValue(IP + "u", u);
             redisObjCache.setValue(IP + "p", permission);
+            //记录登录信息
             LoginStatistic loginStatistic = new LoginStatistic();
             loginStatistic.setLoginIp(IP);
             loginStatistic.setLoginTime(nowTime());
@@ -82,6 +78,7 @@ public class LoginController {
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
     String logout(HttpServletRequest re) {
+        //通过IP，清除缓存的用户信息和用户权限信息，
         String IP = getRemoteIP(re);
         redisObjCache.delValue(IP + "u");
         redisObjCache.delValue(IP + "p");
