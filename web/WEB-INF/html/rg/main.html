@@ -1,0 +1,618 @@
+<!DOCTYPE html >
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>内容管理主页</title>
+    <link href="/css/main_css.css" rel="stylesheet"/>
+    <!--网上链接应用JQ
+        <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">5
+        </script>-->
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="./js/navigator.js"></script>
+    <script charset="utf-8" src="./layui/layui.js"></script>
+    <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+</head>
+<body class="layui-layout-body">
+<div id="navigator"></div>
+<script>
+    layui.use('element', function () {
+        let element = layui.element;
+    });
+    $.ready(showNavigator());
+</script>
+<style type="text/css">
+    .lmgl {
+        float: right;
+        width: 50px;
+        margin-right: 14px;
+        margin-top: 6px;
+        height: 26px;
+        text-align: center;
+        font-size: 10px;
+        color: white;
+        border-radius: 3px;
+        background-color: #009688;
+        border: 1px solid white;
+    }
+
+    .bjCon {
+        width: 30px;
+        margin-right: 6px;
+        margin-top: 6px;
+        height: 26px;
+        text-align: center;
+        font-size: 10px;
+        color: white;
+        border-radius: 3px;
+        background-color: #ff5722;
+        border: 1px solid white;
+    }
+
+    .scCon {
+        width: 30px;
+        margin-right: 14px;
+        margin-top: 6px;
+        height: 26px;
+        text-align: center;
+        font-size: 10px;
+        color: white;
+        border-radius: 3px;
+        background-color: #009688;
+        border: 1px solid white;
+    }
+
+    .fbnr {
+        float: right;
+        width: 50px;
+        margin-right: 14px;
+        margin-top: 6px;
+        height: 36px;
+        text-align: center;
+        font-size: 10px;
+        color: white;
+        border-radius: 3px;
+        background-color: #009688;
+        border: 1px solid white;
+    }
+</style>
+<div class="main_content" style="">
+    <div style="margin-top: 11px">
+    </div>
+    <div class="navigation">
+        <h4 style="float: left;margin-top: 6px;color: #009688"><b>内容导航</b></h4>
+        <button class="lmgl" style="" value="栏目管理" onclick="navigationManag()">栏目管理
+        </button>
+        <br/>
+        <br/>
+        <ul id="ul_out">
+        </ul>
+        <ul id="ul_in">
+        </ul>
+        <ul id="ul_out_2">
+        </ul>
+        <ul id="ul_in_2">
+        </ul>
+        <ul id="ul_out_3">
+        </ul>
+        <ul id="ul_in_3">
+        </ul>
+        <ul id="ul_out_4">
+        </ul>
+        <ul id="ul_in_4">
+        </ul>
+        <ul id="ul_out_5">
+        </ul>
+        <ul id="ul_in_5">
+        </ul>
+        <ul id="ul_out_6">
+        </ul>
+        <ul id="ul_in_6">
+        </ul>
+        <ul id="ul_out_7">
+        </ul>
+        <ul id="ul_in_7">
+        </ul>
+        <ul id="ul_out_8">
+        </ul>
+        <ul id="ul_in_8">
+        </ul>
+        <ul id="ul_out_9">
+        </ul>
+        <ul id="ul_in_9">
+        </ul>
+    </div>
+    <div class="content_r"
+         style="width: 80%;float: right;color: black;background-color: white;height: auto;text-align: center;">
+        <div style="width: 100%;background-color: #f2f2f2;height: 48px">
+            <h3 style="float: left;margin-top: 12px;margin-left: 8px">内容信息</h3>
+            <h3 class="publishMess" style="float: right">
+                <button class="fbnr"  style="background-color: #ff5722" type="button" onclick="xxjs()">信息检索
+                </button>
+            </h3>
+            <h3 class="publishMess" style="float: right">
+                <button class="fbnr" style="" type="button" onclick="add()">发布内容
+                </button>
+            </h3>
+        </div>
+        <div style="color:#666666;width: 92%;margin-left: 4%;height: 100%">
+            <ul id="contentPage">
+            </ul>
+        </div>
+    </div>
+</div>
+
+<script>
+    var chanId1 = 1;
+    var chanId2 = 2;
+    var chanId3 = 3;
+    var chanId4 = 4;
+    var chanId5 = 5;
+    var chanId6 = 6;
+    var chanId7 = 7;
+    var chanId8 = 8;
+    var chanId9 = 9;
+
+    //    频道1
+    $.ajax({
+
+        url: "/channels",
+        type: "GET",
+        dataType: "JSON",
+        success: function (channelList) {
+            $("#ul_out").html('');
+
+            $.each(channelList, function (index, item) {
+                //循环获取数据
+                if (channelList[index].channelId == chanId1) {
+                    var channelName = channelList[index].channelName;
+                    $("#ul_out").html($("#ul_out").html() + "<br/>" + channelName);
+                }
+            });
+        }
+    })
+    $.ajax({
+        url: "/columns",
+        type: "GET",
+        dataType: "JSON",
+        success: function (columnList) {
+            $("#ul_in").html('');
+
+            $.each(columnList, function (index, item) {
+                if (columnList[index].channelId == chanId1) {
+                    var columnName = columnList[index].columnsName;
+                    var columnId = columnList[index].columnId;
+                    $("#ul_in").html($("#ul_in").html() + "<br/>" + "<span style='margin-left: 12px;' id='cName" + columnId + "'>" + columnName
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>" + "</div>")
+
+                }
+            })
+        }
+    })
+
+    //频道2
+    $.ajax({
+        url: "/channels",
+        type: "GET",
+        dataType: "JSON",
+        success: function (channelList) {
+            $("#ul_out_2").html('');
+
+            $.each(channelList, function (index, item) {
+                //循环获取数据
+                if (channelList[index].channelId == chanId2) {
+                    var channelName = channelList[index].channelName;
+                    $("#ul_out_2").html($("#ul_out_2").html() + "<br/>" + channelName);
+                }
+            });
+        }
+    })
+    $.ajax({
+        url: "/columns",
+        type: "GET",
+        dataType: "JSON",
+        success: function (columnList) {
+            $("#ul_in_2").html('');
+
+            $.each(columnList, function (index, item) {
+                if (columnList[index].channelId == chanId2) {
+                    var columnName = columnList[index].columnsName;
+                    var columnId = columnList[index].columnId;
+                    $("#ul_in_2").html($("#ul_in_2").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
+                }
+            })
+        }
+    })
+    //频道3
+    $.ajax({
+        url: "/channels",
+        type: "GET",
+        dataType: "JSON",
+        success: function (channelList) {
+            $("#ul_out_3").html('');
+
+            $.each(channelList, function (index, item) {
+                //循环获取数据
+                if (channelList[index].channelId == chanId3) {
+                    var channelName = channelList[index].channelName;
+                    $("#ul_out_3").html($("#ul_out_3").html() + "<br/>" + channelName);
+                }
+            });
+        }
+    })
+    $.ajax({
+        url: "/columns",
+        type: "GET",
+        dataType: "JSON",
+        success: function (columnList) {
+            $("#ul_in_3").html('');
+
+            $.each(columnList, function (index, item) {
+                if (columnList[index].channelId == chanId3) {
+                    var columnName = columnList[index].columnsName;
+                    var columnId = columnList[index].columnId;
+                    $("#ul_in_3").html($("#ul_in_3").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
+                }
+            })
+        }
+    })
+    //频道4
+    $.ajax({
+        url: "/channels",
+        type: "GET",
+        dataType: "JSON",
+        success: function (channelList) {
+            $("#ul_out_4").html('');
+
+            $.each(channelList, function (index, item) {
+                //循环获取数据
+                if (channelList[index].channelId == chanId4) {
+                    var channelName = channelList[index].channelName;
+                    $("#ul_out_4").html($("#ul_out_4").html() + "<br/>" + channelName);
+                }
+            });
+        }
+    })
+    $.ajax({
+        url: "/columns",
+        type: "GET",
+        dataType: "JSON",
+        success: function (columnList) {
+            $("#ul_in_4").html('');
+
+            $.each(columnList, function (index, item) {
+                if (columnList[index].channelId == chanId4) {
+                    var columnName = columnList[index].columnsName;
+                    var columnId = columnList[index].columnId;
+                    $("#ul_in_4").html($("#ul_in_4").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
+                }
+            })
+        }
+    })
+    //频道5
+    $.ajax({
+        url: "/channels",
+        type: "GET",
+        dataType: "JSON",
+        success: function (channelList) {
+            $("#ul_out_5").html('');
+
+            $.each(channelList, function (index, item) {
+                //循环获取数据
+                if (channelList[index].channelId == chanId5) {
+                    var channelName = channelList[index].channelName;
+                    $("#ul_out_5").html($("#ul_out_5").html() + "<br/>" + channelName);
+                }
+            });
+        }
+    })
+    $.ajax({
+        url: "/columns",
+        type: "GET",
+        dataType: "JSON",
+        success: function (columnList) {
+            $("#ul_in_5").html('');
+
+            $.each(columnList, function (index, item) {
+                if (columnList[index].channelId == chanId5) {
+                    var columnName = columnList[index].columnsName;
+                    var columnId = columnList[index].columnId;
+                    $("#ul_in_5").html($("#ul_in_5").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
+                }
+            })
+        }
+    })
+    //频道6
+    $.ajax({
+        url: "/channels",
+        type: "GET",
+        dataType: "JSON",
+        success: function (channelList) {
+            $("#ul_out_6").html('');
+
+            $.each(channelList, function (index, item) {
+                //循环获取数据
+                if (channelList[index].channelId == chanId6) {
+                    var channelName = channelList[index].channelName;
+                    $("#ul_out_6").html($("#ul_out_6").html() + "<br/>" + channelName);
+                }
+            });
+        }
+    })
+    $.ajax({
+        url: "/columns",
+        type: "GET",
+        dataType: "JSON",
+        success: function (columnList) {
+            $("#ul_in_6").html('');
+
+            $.each(columnList, function (index, item) {
+                if (columnList[index].channelId == chanId6) {
+                    var columnName = columnList[index].columnsName;
+                    var columnId = columnList[index].columnId;
+                    $("#ul_in_6").html($("#ul_in_6").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
+                }
+            })
+        }
+    })
+    //频道7
+    $.ajax({
+        url: "/channels",
+        type: "GET",
+        dataType: "JSON",
+        success: function (channelList) {
+            $("#ul_out_7").html('');
+
+            $.each(channelList, function (index, item) {
+                //循环获取数据
+                if (channelList[index].channelId == chanId7) {
+                    var channelName = channelList[index].channelName;
+                    $("#ul_out_7").html($("#ul_out_7").html() + "<br/>" + channelName);
+                }
+            });
+        }
+    })
+    $.ajax({
+        url: "/columns",
+        type: "GET",
+        dataType: "JSON",
+        success: function (columnList) {
+            $("#ul_in_7").html('');
+
+            $.each(columnList, function (index, item) {
+                if (columnList[index].channelId == chanId7) {
+                    var columnName = columnList[index].columnsName;
+                    var columnId = columnList[index].columnId;
+                    $("#ul_in_7").html($("#ul_in_7").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
+                }
+            })
+        }
+    })
+    //频道8
+    $.ajax({
+        url: "/channels",
+        type: "GET",
+        dataType: "JSON",
+        success: function (channelList) {
+            $("#ul_out_8").html('');
+
+            $.each(channelList, function (index, item) {
+                //循环获取数据
+                if (channelList[index].channelId == chanId8) {
+                    var channelName = channelList[index].channelName;
+                    $("#ul_out_8").html($("#ul_out_8").html() + "<br/>" + channelName);
+                }
+            });
+        }
+    })
+    $.ajax({
+        url: "/columns",
+        type: "GET",
+        dataType: "JSON",
+        success: function (columnList) {
+            $("#ul_in_8").html('');
+
+            $.each(columnList, function (index, item) {
+                if (columnList[index].channelId == chanId8) {
+                    var columnName = columnList[index].columnsName;
+                    var columnId = columnList[index].columnId;
+                    $("#ul_in_8").html($("#ul_in_8").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
+                }
+            })
+        }
+    })
+    //频道9
+    $.ajax({
+        url: "/channels",
+        type: "GET",
+        dataType: "JSON",
+        success: function (channelList) {
+            $("#ul_out_9").html('');
+
+            $.each(channelList, function (index, item) {
+                //循环获取数据
+                if (channelList[index].channelId == chanId9) {
+                    var channelName = channelList[index].channelName;
+                    $("#ul_out_9").html($("#ul_out_9").html() + "<br/>" + channelName);
+                }
+            });
+        }
+    })
+    $.ajax({
+        url: "/columns",
+        type: "GET",
+        dataType: "JSON",
+        success: function (columnList) {
+            $("#ul_in_9").html('');
+
+            $.each(columnList, function (index, item) {
+                if (columnList[index].channelId == chanId9) {
+                    var columnName = columnList[index].columnsName;
+                    var columnId = columnList[index].columnId;
+                    $("#ul_in_9").html($("#ul_in_9").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
+                }
+            })
+        }
+    })
+
+    //1
+    $(document).ready(function () {
+        $("#ul_out").click(function () {
+            $("#ul_in").slideToggle("slow");
+        });
+    });
+    //2
+    $(document).ready(function () {
+        $("#ul_out_2").click(function () {
+            $("#ul_in_2").slideToggle("slow");
+        });
+    });
+    //3
+    $(document).ready(function () {
+        $("#ul_out_3").click(function () {
+            $("#ul_in_3").slideToggle("slow");
+        });
+    });
+    //4
+    $(document).ready(function () {
+        $("#ul_out_4").click(function () {
+            $("#ul_in_4").slideToggle("slow");
+        });
+    });
+    //5
+    $(document).ready(function () {
+        $("#ul_out_5").click(function () {
+            $("#ul_in_5").slideToggle("slow");
+        });
+    });//6
+    $(document).ready(function () {
+        $("#ul_out_6").click(function () {
+            $("#ul_in_6").slideToggle("slow");
+        });
+    });//7
+    $(document).ready(function () {
+        $("#ul_out_7").click(function () {
+            $("#ul_in_7").slideToggle("slow");
+        });
+    });//8
+    $(document).ready(function () {
+        $("#ul_out_8").click(function () {
+            $("#ul_in_8").slideToggle("slow");
+        });
+    });//9
+    $(document).ready(function () {
+        $("#ul_out_9").click(function () {
+            $("#ul_in_9").slideToggle("slow");
+        });
+    });
+
+
+    //内容
+    $(document).ready(function () {
+        for (var i = 1; i <= 30; i++) {
+            me(i);
+        }
+        ;
+    })
+
+    //时间
+
+
+    function me(i) {
+        $("ul").on("click", "#" + "cName" + i + "", function () {
+
+            (function (k) {
+                $.ajax({
+                    url: "/contents",
+                    type: "GET",
+                    dataType: "JSON",
+                    success: function (contentList) {
+                        $("#contentPage").html('');
+
+                        $.each(contentList, function (index, item) {
+                            var contentId = contentList[index].contentId;
+                            var contentName = contentList[index].contentName;
+                            var birth = contentList[index].birth;
+                            var columnId1 = contentList[index].columnId1;
+                            var columnId2 = contentList[index].columnId2;
+                            var columnId3 = contentList[index].columnId3;
+                            var flagCheck=contentList[index].flagCheck;
+                            var messa;
+                            if (flagCheck===1){
+                                messa="已审阅";
+                            }else {
+                                messa="未审阅";
+                            }
+
+                            if (columnId1 == k || columnId2 == k || columnId3 == k) {
+                                $("#contentPage").html($("#contentPage").html() + "<br/>" + "<br/>" +
+                                    "<div style='border: #e6e6e6 1px solid;border-bottom: none;line-height: 24px;'>" + "<span style='float: left;'>" + "文章名字：" + "</span>" + "<span style='padding-left: 26px'>"+contentName +"</span>"+
+                                    "<span style='float: right;font-size: 6px'>" + messa+ "</span>"  + "</div>"
+                                    + "<div id='date" + contentId + "' style='border: #e6e6e6 1px solid;border-bottom: none;line-height: 24px'>" + "<span style='float: left'>" + "发布时间：" + "</span>" + "<span>" + birth + "</span>" + "</div>"
+                                    + "<div style='border: #e6e6e6 1px solid;line-height: 24px'>" + "<span style='float: left'>" + "文章操作：" + "</span>" +
+                                    "<button type='button' class='scCon' onclick='delContent(" + contentId + ")'>" + "删除" + "</button>" +
+                                    "<button type='button' class='bjCon' onclick='editContent(" + contentId + ")'>" + "编辑" + "</button>" +
+                                    "<button id='sumAdd" + contentId + "' type='button' class='ckCon' onclick='viewContent(" + contentId + ")'>" + "查看" + "</button>" +
+                                    "</div>")
+                            }
+                        })
+                    }
+                })
+            }(i))
+            $("#contentPage").slideToggle("slow");
+        })
+    }
+
+    //删除内容
+    function delContent(contentId) {
+        $.ajax({
+            url: "/content/" + contentId,
+            type: "DELETE",
+            success: function (flag) {
+                if (flag == "success") {
+                    alert("删除成功！");
+                    window.location.reload();
+                } else {
+                    alert("删除失败！");
+                }
+            }
+        })
+    }
+
+
+    //查看内容
+    function viewContent(contentId) {
+        $.ajax({
+            url: "/contentss/" + contentId,
+            type: "POST",
+        })
+        window.location.href = "/viewCon?contentId=" + contentId;
+    }
+
+    //修改内容
+    function editContent(contentId) {
+        window.location.href = "/edit?contentId=" + contentId;
+    }
+
+    function xxjs() {
+        window.location.href = "/xxjs";
+    }
+
+    //发布内容
+    function add() {
+        window.location.href = "/publish"
+    }
+
+    function navigationManag() {
+        window.location.href = "/naviManag"
+    }
+</script>
+</body>
+</html>

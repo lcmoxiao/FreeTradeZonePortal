@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改栏目</title>
+    <link href="/css/main_css.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="./js/navigator.js"></script>
+    <script charset="utf-8" src="./layui/layui.js"></script>
+    <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+</head>
+<body class="layui-layout-body">
+<div id="navigator"></div>
+<script>
+    layui.use('element', function () {
+        let element = layui.element;
+    });
+    $.ready(showNavigator());
+</script>
+<style type="text/css">
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .tjAn {
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        font-size: 12px;
+        color: black;
+        line-height: 1.428571429;
+        border-radius: 6px;
+        background-color: yellow;
+        border: 1px solid white;
+    }
+</style>
+<div style="margin-top: 11px">
+</div>
+<div class="navigation">
+    <button class="fbnr" type="button" style="float: left;margin-left: 14px" value="栏目管理" onclick="backChannelManag()">
+        <h3>返回栏目管理</h3>
+    </button>
+</div>
+
+<div style="text-align: center;width: 80%;float: right;color: black;background-color: white;height: 700px;text-align: center;">
+    <div style="float: left;width: 100%;background-color: #f2f2f2;height: 48px">
+        <h3 style="float: left;margin-top: 12px;margin-left: 8px">更新频道信息</h3>
+    </div>
+    <div style="margin-top: 100px">
+        <form id="channelForm" role="form" style="margin-top: 6px;">
+            <h4>频道名字：<input type="text" name="channelName">
+                <input type="button" class="scC" id="subChannel" value="提交"/></h4>
+        </form>
+    </div>
+    <script>
+        function backChannelManag() {
+            window.location.href = "/naviManag"
+        }
+
+        var channelId;
+        $(function () {
+            var url = window.location.search;
+            if (url.indexOf("?") != -1) {
+                channelId = url.substr(url.indexOf("=") + 1);
+            }
+            if (channelId != "") {
+                $.ajax({
+                    url: "/channel/" + channelId,
+                    type: "GET",
+                    success(res) {
+                        $("input[name='channelName']").val(res.channelName)
+                    }
+                })
+            }
+        })
+
+        $("#subChannel").click(function () {
+            $.ajax({
+                url: "/channel/" + channelId,
+                type: "POST",
+                data: $("#channelForm").serialize(),
+                async: false,
+
+                success(result) {
+
+                    if (result == "success") {
+                        alert("修改成功！");
+                        window.location.href = "/naviManag";
+                    } else {
+                        alert("修改失败！");
+                    }
+                }
+
+            })
+        })
+
+    </script>
+</body>
+</html>

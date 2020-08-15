@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftzp.mapper.rg.ChannelMapper">
+
+    <select id="findChannels" resultType="com.ftzp.pojo.rg.Channel">
+        select channelId,channelName from channel
+    </select>
+
+
+    <delete id="delChannel">
+       delete from channel where channelId=#{channelId}
+    </delete>
+
+    <update id="updateChannel">
+        update channel
+        set channelName=#{channelName} where channelId=#{channelId}
+    </update>
+
+    <select id="findChannelById" resultType="com.ftzp.pojo.rg.Channel">
+        select * from channel where channelId=#{channelId}
+    </select>
+
+    <insert id="addChannel">
+        insert into channel(channelName)
+        value(#{channelName})
+    </insert>
+</mapper>

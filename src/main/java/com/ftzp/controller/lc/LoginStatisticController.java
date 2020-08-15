@@ -49,7 +49,7 @@ public class LoginStatisticController {
             c.add(Calendar.DATE, -30);
             start = c.getTime();
         } else {
-            dataFormat = "'%Y'";
+            dataFormat = "'%Y-%m'";
             c.add(Calendar.YEAR, -1);
             start = c.getTime();
         }

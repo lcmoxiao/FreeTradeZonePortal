@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftzp.mapper.rg.ContentMapper">
+
+    <select id="findContents" resultType="com.ftzp.pojo.rg.Content">
+        select * from content
+    </select>
+
+    <delete id="delContent">
+       delete from content where contentId=#{contentId}
+    </delete>
+
+    <update id="updateContent">
+        update content
+        set contentName=#{contentName},content=#{content} where contentId=#{contentId}
+    </update>
+
+    <select id="findContentById" resultType="com.ftzp.pojo.rg.Content">
+        select * from content where contentId=#{contentId};
+    </select>
+
+    <insert id="addContent">
+        insert into content(contentName,content,birth,columnId1,columnId2,columnId3,sumCon,flagCheck)
+        value(#{contentName},#{content},#{birth},#{columnId1},#{columnId2},#{columnId3},#{sumCon},#{flagCheck})
+    </insert>
+
+    <update id="addSum">
+        update content
+        set sumCon=sumCon+1 where contentId=#{contentId}
+    </update>
+
+    <select id="findContentsByMess" resultType="com.ftzp.pojo.rg.Content">
+        SELECT * FROM content WHERE contentName LIKE #{messages}"%" OR content LIKE #{messages}"%"
+    </select>
+
+    <select id="findContentss" resultType="com.ftzp.pojo.rg.Content">
+        select * from content where flagCheck=1
+    </select>
+</mapper>

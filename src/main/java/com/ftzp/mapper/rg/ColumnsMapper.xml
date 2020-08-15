@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftzp.mapper.rg.ColumnsMapper">
+
+    <select id="findColumns" resultType="com.ftzp.pojo.rg.Columns">
+        select columnId,columnsName,channelId from columns
+    </select>
+
+    <delete id="delColumns">
+       delete from columns where columnId=#{columntId}
+    </delete>
+
+    <update id="updateColumns">
+        update columns
+        set columnsName=#{columnsName} where columnId=#{columnId}
+    </update>
+
+    <select id="findColumnsById" resultType="com.ftzp.pojo.rg.Columns">
+        select * from columns where columnId=#{columntId}
+    </select>
+
+    <insert id="addColumns">
+        insert into columns(columnsName,channelId)
+        value(#{columnsName},#{channelId})
+    </insert>
+
+</mapper>

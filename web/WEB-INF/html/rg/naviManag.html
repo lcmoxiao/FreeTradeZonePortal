@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>栏目管理页面</title>
+    <link href="/css/main_css.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="./js/navigator.js"></script>
+    <script charset="utf-8" src="./layui/layui.js"></script>
+    <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+</head>
+<body class="layui-layout-body" style="">
+<div id="navigator"></div>
+<script>
+    layui.use('element', function () {
+        let element = layui.element;
+    });
+    $.ready(showNavigator());
+</script>
+<style type="text/css">
+    * {
+        padding: 0;
+        margin: 0;
+    }
+
+    .addColumn, .addChannel {
+        float: right;
+        width: 50px;
+        margin-right: 14px;
+        margin-top: 6px;
+        height: 36px;
+        text-align: center;
+        font-size: 10px;
+        color: white;
+        border-radius: 3px;
+        background-color: #009688;
+        border: 1px solid white;
+    }
+
+    .uru {
+        border: #e6e6e6 1px solid;
+        margin-left: 1px;
+        margin-bottom: 1px;
+        float: left;
+        width: 300px;
+        height: 200px;
+    }
+
+    .urzt {
+        margin-left: 12%;
+    }
+
+    #ulout, #ulout_2, #ulout_3, #ulout_4, #ulout_5, #ulout_6, #ulout_8, #ulout_9, #ulout_9 {
+        border-bottom: #e6e6e6 1px solid;
+    }
+</style>
+<div>
+    <div style="margin-top: 11px">
+    </div>
+    <div class="navigation">
+        <button class="fbnr" type="button" style="float: left;margin-left: 14px" value="栏目管理" onclick="backMain()"><h3>
+            返回主页</h3>
+        </button>
+    </div>
+    <div style="width: 80%;float: left;color: black;background-color: white;height: 700px;text-align: center;">
+        <div style="float: left;width: 100%;background-color: #f2f2f2;height: 48px">
+            <h3 style="float: left;margin-top: 12px;margin-left: 8px">频道栏目信息</h3>
+            <h3 style="float: right">
+                <button style="" class="addChannel" type="button" onclick="addChannel()">添加频道</button>
+            </h3>
+            <h3 style="float: right">
+                <button style="" class="addColumn" type="button" onclick="addColumn()">添加栏目</button>
+            </h3>
+        </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <div class="urzt">
+            <div class="uru">
+                <ul id="ulout">
+                </ul>
+                <ul id="ulin">
+                </ul>
+            </div>
+            <div class="uru">
+                <ul id="ulout_2">
+                </ul>
+                <ul id="ulin_2">
+                </ul>
+            </div>
+            <div class="uru">
+                <ul id="ulout_3">
+                </ul>
+                <ul id="ulin_3">
+                </ul>
+            </div>
+            <div class="uru">
+                <ul id="ulout_4">
+                </ul>
+                <ul id="ulin_4">
+                </ul>
+            </div>
+            <div class="uru">
+                <ul id="ulout_5">
+                </ul>
+                <ul id="ulin_5">
+                </ul>
+            </div>
+            <div class="uru">
+                <ul id="ulout_6">
+                </ul>
+                <ul id="ulin_6">
+                </ul>
+            </div>
+            <div class="uru">
+                <ul id="ulout_7">
+                </ul>
+                <ul id="ulin_7">
+                </ul>
+            </div>
+            <div class="uru">
+                <ul id="ulout_8">
+                </ul>
+                <ul id="ulin_8">
+                </ul>
+            </div>
+            <div class="uru">
+                <ul id="ulout_9">
+                </ul>
+                <ul id="ulin_9">
+                </ul>
+            </div>
+        </div>
+    </div>
+    <script>
+
+        var chanId1 = 1;
+        var chanId2 = 2;
+        var chanId3 = 3;
+        var chanId4 = 4;
+        var chanId5 = 5;
+        var chanId6 = 6;
+        var chanId7 = 7;
+        var chanId8 = 8;
+        var chanId9 = 9;
+        // 频道1
+        $.ajax({
+            url: "/channels",
+            type: "GET",
+            dataType: "JSON",
+            success: function (channelList) {
+                $("#ulout").html('');
+
+                $.each(channelList, function (index, item) {
+//循环获取数据
+                    if (channelList[index].channelId == chanId1) {
+                        var channelName = channelList[index].channelName;
+                        var channelId = channelList[index].channelId;
+                        $("#ulout").html($("#ulout").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editChannel(" + channelId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        );
+                    }
+                });
+            }
+        })
+        $.ajax({
+            url: "/columns",
+            type: "GET",
+            dataType: "JSON",
+            success: function (columnList) {
+                $("#ulin").html('');
+
+                $.each(columnList, function (index, item) {
+                    if (columnList[index].channelId == chanId1) {
+                        var columnName = columnList[index].columnsName;
+                        var columnId = columnList[index].columnId;
+                        $("#ulin").html($("#ulin").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "栏目管理：" + "<span id='chName" + columnId + "'>" + columnName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delColumn(" + columnId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editColumn(" + columnId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        )
+
+                    }
+                })
+            }
+        })
+
+        //频道2
+        $.ajax({
+            url: "/channels",
+            type: "GET",
+            dataType: "JSON",
+            success: function (channelList) {
+                $("#ulout_2").html('');
+
+                $.each(channelList, function (index, item) {
+//循环获取数据
+                    if (channelList[index].channelId == chanId2) {
+                        var channelName = channelList[index].channelName;
+                        var channelId = channelList[index].channelId;
+                        $("#ulout_2").html($("#ulout_2").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editChannel(" + channelId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        );
+                    }
+                });
+            }
+        })
+        $.ajax({
+            url: "/columns",
+            type: "GET",
+            dataType: "JSON",
+            success: function (columnList) {
+                $("#ulin_2").html('');
+
+                $.each(columnList, function (index, item) {
+                    if (columnList[index].channelId == chanId2) {
+                        var columnName = columnList[index].columnsName;
+                        var columnId = columnList[index].columnId;
+                        $("#ulin_2").html($("#ulin_2").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "栏目管理：" + "<span id='chName" + columnId + "'>" + columnName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delColumn(" + columnId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editColumn(" + columnId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        )
+                    }
+                })
+            }
+        })
+        //频道3
+        $.ajax({
+            url: "/channels",
+            type: "GET",
+            dataType: "JSON",
+            success: function (channelList) {
+                $("#ulout_3").html('');
+
+                $.each(channelList, function (index, item) {
+//循环获取数据
+                    if (channelList[index].channelId == chanId3) {
+                        var channelName = channelList[index].channelName;
+                        var channelId = channelList[index].channelId;
+                        $("#ulout_3").html($("#ulout_3").html() +"<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
+                                +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editChannel(" + channelId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        );
+                    }
+                });
+            }
+        })
+        $.ajax({
+            url: "/columns",
+            type: "GET",
+            dataType: "JSON",
+            success: function (columnList) {
+                $("#ulin_3").html('');
+
+                $.each(columnList, function (index, item) {
+                    if (columnList[index].channelId == chanId3) {
+                        var columnName = columnList[index].columnsName;
+                        var columnId = columnList[index].columnId;
+                        $("#ulin_3").html($("#ulin_3").html() +"<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "栏目管理：" + "<span id='chName" + columnId + "'>" + columnName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delColumn(" + columnId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editColumn(" + columnId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        )
+                    }
+                })
+            }
+        })
+        //频道4
+        $.ajax({
+            url: "/channels",
+            type: "GET",
+            dataType: "JSON",
+            success: function (channelList) {
+                $("#ulout_4").html('');
+
+                $.each(channelList, function (index, item) {
+//循环获取数据
+                    if (channelList[index].channelId == chanId4) {
+                        var channelName = channelList[index].channelName;
+                        var channelId = channelList[index].channelId;
+                        $("#ulout_4").html($("#ulout_4").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editChannel(" + channelId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        );
+                    }
+                });
+            }
+        })
+        $.ajax({
+            url: "/columns",
+            type: "GET",
+            dataType: "JSON",
+            success: function (columnList) {
+                $("#ulin_4").html('');
+
+                $.each(columnList, function (index, item) {
+                    if (columnList[index].channelId == chanId4) {
+                        var columnName = columnList[index].columnsName;
+                        var columnId = columnList[index].columnId;
+                        $("#ulin_4").html($("#ulin_4").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "栏目管理：" + "<span id='chName" + columnId + "'>" + columnName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delColumn(" + columnId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editColumn(" + columnId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        )
+                    }
+                })
+            }
+        })
+        //频道5
+        $.ajax({
+            url: "/channels",
+            type: "GET",
+            dataType: "JSON",
+            success: function (channelList) {
+                $("#ulout_5").html('');
+
+                $.each(channelList, function (index, item) {
+//循环获取数据
+                    if (channelList[index].channelId == chanId5) {
+                        var channelName = channelList[index].channelName;
+                        var channelId = channelList[index].channelId;
+                        $("#ulout_5").html($("#ulout_5").html() +"<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editChannel(" + channelId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        );
+                    }
+                });
+            }
+        })
+        $.ajax({
+            url: "/columns",
+            type: "GET",
+            dataType: "JSON",
+            success: function (columnList) {
+                $("#ulin_5").html('');
+
+                $.each(columnList, function (index, item) {
+                    if (columnList[index].channelId == chanId5) {
+                        var columnName = columnList[index].columnsName;
+                        var columnId = columnList[index].columnId;
+                        $("#ulin_5").html($("#ulin_5").html() +"<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "栏目管理：" + "<span id='chName" + columnId + "'>" + columnName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delColumn(" + columnId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editColumn(" + columnId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        )
+                    }
+                })
+            }
+        })
+        //频道6
+        $.ajax({
+            url: "/channels",
+            type: "GET",
+            dataType: "JSON",
+            success: function (channelList) {
+                $("#ulout_6").html('');
+
+                $.each(channelList, function (index, item) {
+//循环获取数据
+                    if (channelList[index].channelId == chanId6) {
+                        var channelName = channelList[index].channelName;
+                        var channelId = channelList[index].channelId;
+                        $("#ulout_6").html($("#ulout_6").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editChannel(" + channelId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        );
+                    }
+                });
+            }
+        })
+        $.ajax({
+            url: "/columns",
+            type: "GET",
+            dataType: "JSON",
+            success: function (columnList) {
+                $("#ulin_6").html('');
+
+                $.each(columnList, function (index, item) {
+                    if (columnList[index].channelId == chanId6) {
+                        var columnName = columnList[index].columnsName;
+                        var columnId = columnList[index].columnId;
+                        $("#ulin_6").html($("#ulin_6").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "栏目管理：" + "<span id='chName" + columnId + "'>" + columnName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delColumn(" + columnId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editColumn(" + columnId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        )
+                    }
+                })
+            }
+        })
+        //频道7
+        $.ajax({
+            url: "/channels",
+            type: "GET",
+            dataType: "JSON",
+            success: function (channelList) {
+                $("#ulout_7").html('');
+
+                $.each(channelList, function (index, item) {
+//循环获取数据
+                    if (channelList[index].channelId == chanId7) {
+                        var channelName = channelList[index].channelName;
+                        var channelId = channelList[index].channelId;
+                        $("#ulout_7").html($("#ulout_7").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editChannel(" + channelId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        );
+                    }
+                });
+            }
+        })
+        $.ajax({
+            url: "/columns",
+            type: "GET",
+            dataType: "JSON",
+            success: function (columnList) {
+                $("#ulin_7").html('');
+
+                $.each(columnList, function (index, item) {
+                    if (columnList[index].channelId == chanId7) {
+                        var columnName = columnList[index].columnsName;
+                        var columnId = columnList[index].columnId;
+                        $("#ulin_7").html($("#ulin_7").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "栏目管理：" + "<span id='chName" + columnId + "'>" + columnName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delColumn(" + columnId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editColumn(" + columnId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        )
+                    }
+                })
+            }
+        })
+        //频道8
+        $.ajax({
+            url: "/channels",
+            type: "GET",
+            dataType: "JSON",
+            success: function (channelList) {
+                $("#ulout_8").html('');
+
+                $.each(channelList, function (index, item) {
+//循环获取数据
+                    if (channelList[index].channelId == chanId8) {
+                        var channelName = channelList[index].channelName;
+                        var channelId = channelList[index].channelId;
+                        $("#ulout_8").html($("#ulout_8").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editChannel(" + channelId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        );
+                    }
+                });
+            }
+        })
+        $.ajax({
+            url: "/columns",
+            type: "GET",
+            dataType: "JSON",
+            success: function (columnList) {
+                $("#ulin_8").html('');
+
+                $.each(columnList, function (index, item) {
+                    if (columnList[index].channelId == chanId8) {
+                        var columnName = columnList[index].columnsName;
+                        var columnId = columnList[index].columnId;
+                        $("#ulin_8").html($("#ulin_8").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "栏目管理：" + "<span id='chName" + columnId + "'>" + columnName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delColumn(" + columnId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editColumn(" + columnId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        )
+                    }
+                })
+            }
+        })
+        //频道9
+        $.ajax({
+            url: "/channels",
+            type: "GET",
+            dataType: "JSON",
+            success: function (channelList) {
+                $("#ulout_9").html('');
+
+                $.each(channelList, function (index, item) {
+//循环获取数据
+                    if (channelList[index].channelId == chanId9) {
+                        var channelName = channelList[index].channelName;
+                        var channelId = channelList[index].channelId;
+                        $("#ulout_9").html($("#ulout_9").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editChannel(" + channelId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        );
+                    }
+                });
+            }
+        })
+        $.ajax({
+            url: "/columns",
+            type: "GET",
+            dataType: "JSON",
+            success: function (columnList) {
+                $("#ulin_9").html('');
+
+                $.each(columnList, function (index, item) {
+                    if (columnList[index].channelId == chanId9) {
+                        var columnName = columnList[index].columnsName;
+                        var columnId = columnList[index].columnId;
+                        $("#ulin_9").html($("#ulin_9").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                            "栏目管理：" + "<span id='chName" + columnId + "'>" + columnName + "</span>"
+                            +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
+                            + "<button type='button' class='scC' onclick='delColumn(" + columnId + ")'>" + "删除" + "</button>" +
+                            "<button type='button'  class='bjC'  onclick='editColumn(" + columnId + ")'>" + "编辑" + "</button>" +"</span>"+"</div>"+ "<br/>"
+                        )
+                    }
+                })
+            }
+        })
+
+        //删除频道
+        function delChannel(channelsId) {
+            var flagg = 1;
+            $.ajax({
+                url: "/columns",
+                type: "GET",
+                dataType: "JSON",
+                async: false,
+                success: function (contentList) {
+                    $("#contentPage").html('');
+
+                    $.each(contentList, function (index, item) {
+                        var columnId = contentList[index].columnId;
+                        var columnsName = contentList[index].columnsName;
+                        var channelId = contentList[index].channelId;
+
+                        if (channelsId == channelId) {
+                            flagg = 0;
+                            alert("频道中还有内容，无法删除！")
+                            return false;
+                        }
+
+                    })
+                }
+            })
+            if (flagg == 1) {
+                $.ajax({
+                    url: "/channel/" + channelsId,
+                    type: "DELETE",
+                    success(flag) {
+                        if (flag == "success") {
+                            alert("删除成功！");
+                            window.location.reload();
+                        } else {
+                            alert("删除失败！");
+                        }
+                    }
+                })
+            }
+            if (flagg == 0) {
+                flagg = 1;
+            }
+        }
+
+        //删除栏目
+        function delColumn(columnId) {
+            var flagg = 1;
+            $.ajax({
+                url: "/contents",
+                type: "GET",
+                dataType: "JSON",
+                async: false,
+                success: function (contentList) {
+                    $("#contentPage").html('');
+
+                    $.each(contentList, function (index, item) {
+                        var contentId = contentList[index].contentId;
+                        var contentName = contentList[index].contentName;
+                        var content = contentList[index].content;
+                        var columnId1 = contentList[index].columnId1;
+                        var columnId2 = contentList[index].columnId2;
+                        var columnId3 = contentList[index].columnId3;
+
+                        if (columnId1 == columnId || columnId2 == columnId || columnId3 == columnId) {
+                            flagg = 0;
+                            alert("栏目中还有内容，无法删除！")
+                            return false;
+                        }
+
+                    })
+                }
+            })
+            if (flagg == 1) {
+                $.ajax({
+                    url: "/columns/" + columnId,
+                    type: "DELETE",
+                    success(flag) {
+                        if (flag == "success") {
+                            alert("删除成功！");
+                            window.location.reload();
+                        } else {
+                            alert("删除失败！");
+                        }
+                    }
+                })
+            }
+            if (flagg == 0) {
+                flagg = 1;
+            }
+        }
+
+        //修改栏目
+        function editColumn(columnId) {
+            window.location.href = "/editCol?columnId=" + columnId;
+        }
+
+        function addColumn() {
+            window.location.href = "/addCol"
+        }
+
+        //修改频道
+        function editChannel(channelId) {
+            window.location.href = "/editChannel?channelId=" + channelId;
+        }
+
+        function addChannel() {
+            window.location.href = "/addChannel"
+        }
+
+        function backMain() {
+            window.location.href = "/main"
+        }
+
+    </script>
+</body>
+</html>
