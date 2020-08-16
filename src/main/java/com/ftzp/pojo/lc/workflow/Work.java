@@ -14,6 +14,15 @@ public class Work {
     Date wLastDoTime;
     Date wPostTime;
     String wContent;
+    Integer wUncheckedContentId;
+
+    public Integer getwUncheckedContentId() {
+        return wUncheckedContentId;
+    }
+
+    public void setwUncheckedContentId(Integer wUncheckedContentId) {
+        this.wUncheckedContentId = wUncheckedContentId;
+    }
 
     public String getwContent() {
         return wContent;

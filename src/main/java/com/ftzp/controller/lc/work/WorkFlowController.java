@@ -110,6 +110,7 @@ public class WorkFlowController {
                             case "ranking" -> ws.setRanking(Integer.parseInt(ee.getStringValue()));
                             case "rId" -> ws.setrId(Integer.parseInt(ee.getStringValue()));
                             case "desc" -> ws.setWsdesc(ee.getStringValue());
+                            case "wsType" -> ws.setWsType(ee.getStringValue());
                         }
                     }
                     workStepService.insertWorkStep(ws);

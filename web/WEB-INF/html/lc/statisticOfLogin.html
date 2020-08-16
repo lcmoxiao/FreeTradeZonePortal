@@ -27,11 +27,10 @@
             appearance: none;
             -moz-appearance: none;
             -webkit-appearance: none;
-            /*添加下拉三角图标*/
-            }
+        }
+
     </style>
 </head>
-
 
 <body class="layui-layout-body" onload="dayLine()">
 
@@ -46,9 +45,12 @@
 
 <div id="tmpContent" style='text-align: center'></div>
 
-
 <script>
     let index;//关闭弹窗用的
+
+    layui.use('element', function () {
+        let element = layui.element;
+    });
 
     $.ready(showNavigator());
 </script>
@@ -104,21 +106,41 @@
                 url: "/statistic/getDays?model=day",
                 method: "get",
                 success: function (data) {
-                    var labels = ["0：00", "1：00", "2：00", "3：00", "4：00", "5：00", "6:00", "7:00", "8:00", "9:00", "10:00",
-                        "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22.00", "23:00"];
+                    /*                    var labels = ["0：00", "1：00", "2：00", "3：00", "4：00", "5：00", "6:00", "7:00", "8:00", "9:00", "10:00",
+                                            "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22.00", "23:00"];*/
+                    var labels = [];
                     if (data != null) {
+                        console.log(data);
                         var dayData = new Array(24).fill(0);
+                        var nowDate = new Date();
+                        var nowTime = nowDate.getHours();
+                        var nowDay = nowDate.getDate();
+                        console.log(nowTime);
+                        for (var i = 0; i < 24; i++) {
+                            let time = nowTime - i;
+                            if (time >= 0) {
+                                labels[i] = time;
+                            } else {
+                                labels[i] = time + 24;
+                            }
+                        }
+                        labels.reverse();
+                        var labels1 = [];
+                        for (i = 0; i < labels.length; i++) {
+                            labels1[i] = labels[i] + ':00';
+                        }
+
                         for (var i = 0; i < data.length; i++) {
                             let array = data[i]['time'];
                             let hour = parseInt(array.slice(12, 15));
                             for (var j = 0; j < array.length; j++) {
-                                if (j === hour) {
+                                if (labels[j] === hour) {
                                     dayData[j] = data[i].num;
                                 }
                             }
                         }
                     }
-                    line(dayData, labels);
+                    line(dayData, labels1);
                 }
             }
         )
@@ -150,7 +172,6 @@
                                 }
                             }
                         }
-
                     }
                     //反转一下
                     var relLabels = labels.reverse();
@@ -239,13 +260,6 @@
                 }]
             },
             options: {
-                // legend: {
-                //     position: "right",
-                //     display: true,
-                //     labels: {
-                //         fontColor: "rgb(255, 99, 132)"
-                //     }
-                // },
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -306,7 +320,7 @@
         if (mon === '01' || mon === '03' || mon === '05' || mon === '07' || mon === '08' || mon === '10' || mon === '12') {
             return 31;
         } else if (mon === '02') {
-            while (year != 0) {
+            while (year !== 0) {
                 if (year % 4 === '0' && year % 100 !== '0' || year % 400 === '0') {
                     return 28;
                 } else {
@@ -318,23 +332,6 @@
         }
     }
 
-    //添加数据
-    function addData(chart, label, data) {
-        chart.data.labels.push(label);
-        chart.data.datasets.forEach(dataset => {
-            dataset.data.push(data);
-        });
-        chart.update();
-    }
-
-    //移除数据
-    function removeData(chart) {
-        chart.data.labels.pop();
-        chart.data.datasets.forEach(dataset => {
-            dataset.data.pop();
-        });
-        chart.update();
-    }
 
 </script>
 </body>

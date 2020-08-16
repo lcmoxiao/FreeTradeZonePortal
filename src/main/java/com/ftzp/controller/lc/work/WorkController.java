@@ -161,6 +161,7 @@ public class WorkController {
                         ws.setwPostTime(w.getwPostTime());
                         ws.setwContent(w.getwContent());
                         ws.setWdesc(w.getWdesc());
+                        ws.setwUncheckedContentId(w.getwUncheckedContentId());
                         res.add(ws);
                     }
                 }

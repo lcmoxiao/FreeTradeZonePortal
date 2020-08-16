@@ -9,6 +9,7 @@ public class WorkStep {
 
     Integer wsId;   //WorkStep的唯一ID
     String wsName;  //WorkStep的名字
+    String wsType;
     Integer rId;    //所需要的Role的权限ID
     Integer wId;   // 对应的Work的ID
     Integer wfId;   // 对应的Work的ID
@@ -18,6 +19,33 @@ public class WorkStep {
     Date wPostTime;
     String wContent;
     String wdesc;
+    //数据库没有此字段，传给前端用的
+    String wFile;
+    Integer wUncheckedContentId;
+
+    public static List<WorkStep> getWss() {
+        return wss;
+    }
+
+    public static void setWss(List<WorkStep> wss) {
+        WorkStep.wss = wss;
+    }
+
+    public Integer getwUncheckedContentId() {
+        return wUncheckedContentId;
+    }
+
+    public void setwUncheckedContentId(Integer wUncheckedContentId) {
+        this.wUncheckedContentId = wUncheckedContentId;
+    }
+
+    public String getWsType() {
+        return wsType;
+    }
+
+    public void setWsType(String wsType) {
+        this.wsType = wsType;
+    }
 
     public String getWdesc() {
         return wdesc;
@@ -51,9 +79,6 @@ public class WorkStep {
         this.wPostTime = wPostTime;
     }
 
-    //数据库没有此字段，传给前端用的
-    String wFile;
-
     public String getwFile() {
         return wFile;
     }
@@ -68,14 +93,6 @@ public class WorkStep {
 
     public void setWsdesc(String wsdesc) {
         this.wsdesc = wsdesc;
-    }
-
-    public static List<WorkStep> getWss() {
-        return wss;
-    }
-
-    public static void setWss(List<WorkStep> wss) {
-        WorkStep.wss = wss;
     }
 
     public Integer getWfId() {

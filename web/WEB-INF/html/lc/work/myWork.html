@@ -18,7 +18,7 @@
 <div id="navigator"></div>
 
 <script type="text/html" id="barDemo">
-    <a class="layui-btn layui-btn-xs" lay-event="do">执行</a>
+    <a class="layui-btn layui-btn-xs" lay-event="do">详细</a>
     <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="down">下载附件</a>
 </script>
 
@@ -38,6 +38,7 @@
             url: "/work/needDoing",
             method: "get",
             success: function (res) {
+                console.log(res);
                 layui.use('table', function () {
                     var table = layui.table;
                     table.render({
@@ -53,7 +54,7 @@
                         , cols: [[
                             {field: 'wId', title: '工作ID', sort: true}
                             , {field: 'wdesc', title: '工作描述'}
-                            , {field: 'wContent', title: '工作提示'}
+                            , {field: 'wContent', title: '工作留言'}
                             , {field: 'wsId', title: '步骤ID', sort: true}
                             , {field: 'wsName', title: '步骤名称'}
                             , {field: 'wsdesc', title: '步骤描述'}
@@ -80,7 +81,13 @@
                         var data = obj.data;
 
                         if (obj.event === 'do') {
-                            doWork(data.wId, data.ranking, data.wsId, data.wsName, data.wsdesc);
+                            doWork(data.wId,
+                                data.ranking,
+                                data.wsId,
+                                data.wsName,
+                                data.wsdesc,
+                                data.wsType,
+                                data.wUncheckedContentId);
                             index = layer.open({
                                 type: 1,
                                 title: "工作表单",
@@ -109,7 +116,7 @@
         })
     }
 
-    function doWork(wId, ranking, wsId, wsName, desc) {
+    function doWork(wId, ranking, wsId, wsName, desc, wsType, wUncheckedContentId) {
         let str = "<form class=\"layui-form\" enctype=\"multipart/form-data\">\n" +
             "<input type=\"hidden\" value=" + wId + " name=\"wId\">\n" +
             "<input type=\"hidden\" value=" + ranking + " name=\"ranking\">\n" +
@@ -140,9 +147,9 @@
 
             "</div>" +
             "  <div class=\"layui-form-item\">\n" +
-            "    <label class=\"layui-form-label\">本次工作描述:</label>\n" +
+            "    <label class=\"layui-form-label\">留言:</label>\n" +
             "    <div class=\"layui-input-block\">\n" +
-            "      <input type=\"text\" name='cContent' lay-verify=\"required\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "      <input type=\"text\" name='wContent' lay-verify=\"required\" autocomplete=\"off\" class=\"layui-input\">\n" +
             "    </div>\n" +
             "  </div>" +
 
@@ -151,16 +158,35 @@
             "    <div class=\"layui-input-block\">\n" +
             "       <input type=\"file\" name=\"uploadFile\">\n" +
             "    </div>\n" +
-            "  </div>" +
-
-            "\t\t\t\t\t<input class=\"layui-btn layui-btn-warm layui-btn-sm\" type=\"button\" onclick='putW()' value=\"提交\">\n" +
-            "\t\t\t\t</form>";
+            "  </div>";
+        if (wsType === "normal")
+            str +=
+                "\t\t\t\t\t<input class=\"layui-btn layui-btn-warm layui-btn-sm\" type=\"button\" onclick='putW()' value=\"提交\">\n" +
+                "\t\t\t\t</form>";
+        else if (wsType === "check")
+            str +=
+                "\t\t\t\t\t<input class=\"layui-btn layui-btn-normal layui-btn-sm\" type=\"button\" onclick='checkC(" + wUncheckedContentId + ")' value=\"审核\">\n" +
+                "\t\t\t\t</form>";
         $("#tmpContent").html(str);
     }
 
     function putW() {
         $.post({
             url: "/work",
+            type: "put",
+            data: $(".layui-form").serialize(),
+            success: function () {
+                showWorkStep();
+                layer.close(index);
+            }
+        });
+    }
+
+    function checkC(wUncheckedContentId) {
+        console.log("fuck"+wUncheckedContentId);
+        $.post({
+            //TODO 执行后台的内容审核方法
+            url: "/???",
             type: "put",
             data: $(".layui-form").serialize(),
             success: function () {

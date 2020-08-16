@@ -10,8 +10,8 @@
     </select>
 
     <insert id="insertWorkStep" keyProperty="wsId" useGeneratedKeys="true">
-        insert into workstep(wsName, wfId, ranking, rId, wsdesc)
-        VALUES (#{wsName}, #{wfId}, #{ranking}, #{rId}, #{wsdesc})
+        insert into workstep(wsName, wfId, ranking, rId, wsdesc ,wsType)
+        VALUES (#{wsName}, #{wfId}, #{ranking}, #{rId}, #{wsdesc}, #{wsType})
     </insert>
 
     <delete id="deleteWorkStep">

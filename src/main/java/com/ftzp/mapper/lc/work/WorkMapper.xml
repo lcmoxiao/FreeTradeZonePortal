@@ -18,8 +18,12 @@
     </select>
 
     <insert id="insertWork" useGeneratedKeys="true" keyProperty="wId">
-        insert into work(wfId, ranking, wdesc, wFile, wLength, uId, wPostTime, wLastDoTime, wContent)
-        values (#{wfId}, 1, #{wdesc}, #{wFile}, #{wLength}, #{uId}, #{wPostTime}, #{wLastDoTime}, #{wContent})
+        insert into work(wfId, ranking, wdesc, wFile, wLength, uId, wPostTime, wLastDoTime, wContent
+        <if test="wUncheckedContentId!=null">,wUncheckedContentId</if>
+        )
+        values (#{wfId}, 1, #{wdesc}, #{wFile}, #{wLength}, #{uId}, #{wPostTime}, #{wLastDoTime}, #{wContent}
+        <if test="wUncheckedContentId!=null">,#{wUncheckedContentId}</if>
+        )
     </insert>
 
     <delete id="deleteWork">
@@ -30,10 +34,11 @@
 
     <update id="updateWork">
         update work
-        set ranking     = #{ranking},
-            wFile       = #{wFile},
-            wLastDoTime = #{wLastDoTime},
-            wContent    = #{wContent}
+        set ranking = #{ranking},
+        wFile = #{wFile},
+        wLastDoTime = #{wLastDoTime},
+        wContent = #{wContent}
+        <if test="wUncheckedContentId!=null">,#{wUncheckedContentId}</if>
         where wId = #{wId}
     </update>
 
