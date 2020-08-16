@@ -57,7 +57,6 @@ public class GoRgController {
     }
 
 
-
     @RequestMapping("/ckMess")
     String ckMess() {
         return "/rg/ckMess";

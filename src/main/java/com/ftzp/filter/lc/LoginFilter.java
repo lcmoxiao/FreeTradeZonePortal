@@ -3,6 +3,8 @@ package com.ftzp.filter.lc;
 import com.ftzp.cache.RedisBeanFactory;
 import com.ftzp.cache.RedisObjCache;
 import com.ftzp.pojo.lc.user.Permission;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.web.context.support.WebApplicationContextUtils;
 
@@ -16,6 +18,8 @@ import static com.ftzp.controller.lc.LoginController.getRemoteIP;
 
 public class LoginFilter implements Filter {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);
+
     List<String> prefixIignores = new ArrayList<>();
 
     RedisObjCache redisObjCache;
@@ -28,7 +32,6 @@ public class LoginFilter implements Filter {
         for (String s : ignoreArray) {
             prefixIignores.add(cp + s);
         }
-
         ServletContext servletContext = config.getServletContext();
         ApplicationContext ctx = WebApplicationContextUtils.getWebApplicationContext(servletContext);
         assert ctx != null;
@@ -45,19 +48,19 @@ public class LoginFilter implements Filter {
 
         String targetUrl = hsr.getRequestURI();
         if (canIgnore(targetUrl)) {
-            System.out.println(hsr.getRequestURI() + "不会被过滤哦");
             filterChain.doFilter(re, servletResponse);
         } else {
             String IP = getRemoteIP(hsr);
-            System.out.println(redisObjCache);
             if (redisObjCache.getValue(IP + "u") == null) {
-                System.out.println("没登录，没权限，去登录吧");
+                logger.info(IP + "尝试进入" + hsr.getRequestURI() + ",但未登录");
                 hsr.getRequestDispatcher("/index").forward(re, servletResponse);
             } else {
-                System.out.println("已经登陆了,再验证一下权限");
                 List<Permission> ps = (ArrayList<Permission>) redisObjCache.getValue(IP + "p");
                 if (authoricationCheck(targetUrl, ps)) filterChain.doFilter(re, servletResponse);
-                else hsr.getRequestDispatcher("/error").forward(re, servletResponse);
+                else {
+                    logger.info(IP + "已经登陆，但无权限进入" + hsr.getRequestURI());
+                    hsr.getRequestDispatcher("/error").forward(re, servletResponse);
+                }
             }
         }
     }
@@ -66,22 +69,18 @@ public class LoginFilter implements Filter {
     private boolean canIgnore(String targetUrl) {
         for (String ignore : prefixIignores) {
             if (targetUrl.startsWith(ignore)) {
-                System.out.println(targetUrl + "不会被过滤哦");
                 return true;
             }
         }
-        System.out.println(targetUrl + "需要检测权限才给访问");
         return false;
     }
 
     private boolean authoricationCheck(String targetUrl, List<Permission> ps) {
         for (Permission ignore : ps) {
             if (targetUrl.startsWith(ignore.getpSrc())) {
-                System.out.println(targetUrl + "你有权限");
                 return true;
             }
         }
-        System.out.println(targetUrl + "你没权限");
         return false;
     }
 

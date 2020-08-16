@@ -9,6 +9,8 @@ import com.ftzp.service.lc.LoginStatisticService;
 import com.ftzp.service.lc.user.PermissionService;
 import com.ftzp.service.lc.user.RoleService;
 import com.ftzp.service.lc.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +26,7 @@ import static com.ftzp.TimeUtils.nowTime;
 @Controller
 public class LoginController {
 
+    private static final Logger logger = LoggerFactory.getLogger(LoginController.class);
     @Resource(name = "redisObjCache")
     RedisObjCache redisObjCache;
     @Resource(name = "userService")
@@ -58,9 +61,9 @@ public class LoginController {
     @ResponseBody
     String login(User user, HttpServletRequest re) {
         User u = userService.checkUser(user);
+        String IP = getRemoteIP(re);
         if (u != null) {
             //通过IP，缓存用户信息和用户权限信息，
-            String IP = getRemoteIP(re);
             Role r = roleService.getRole(u.getrId()).get(0);
             ArrayList<Permission> permission = permissionService.getPermission(r.getrPermission());
             redisObjCache.setValue(IP + "u", u);
@@ -71,8 +74,10 @@ public class LoginController {
             loginStatistic.setLoginTime(nowTime());
             loginStatistic.setuId(u.getuId());
             loginStatisticService.insertStatistic(loginStatistic);
+            logger.info(IP + "的" + u.getuName() + "登录成功");
             return "loginSuccess";
         }
+        logger.info(IP + "登录失败");
         return "loginFailed";
     }
 
@@ -82,6 +87,7 @@ public class LoginController {
         String IP = getRemoteIP(re);
         redisObjCache.delValue(IP + "u");
         redisObjCache.delValue(IP + "p");
+        logger.info(IP + "已注销");
         return "redirect:/index";
     }
 
