@@ -36,10 +36,6 @@
 <script>
     let index;
 
-    layui.use('element', function(){
-        let element = layui.element;
-    });
-
     $.ready(showNavigator());
     $.ready(showWorkFlow());
 
@@ -181,6 +177,14 @@
             "    <label class=\"layui-form-label\">工作描述</label>\n" +
             "    <div class=\"layui-input-block\">\n" +
             "      <input type=\"text\" name=\"wdesc\" required  lay-verify=\"required\" placeholder=\"工作描述\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "</div>" +
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">追加工作描述</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"wContent\" required  lay-verify=\"required\" placeholder=\"追加工作描述\" autocomplete=\"off\" class=\"layui-input\">\n" +
             "    </div>\n" +
             "  </div>" +
 

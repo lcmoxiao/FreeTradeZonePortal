@@ -30,10 +30,6 @@
 <script>
     let index;//关闭弹窗用的
 
-    layui.use('element', function () {
-        let element = layui.element;
-    });
-
     $.ready(showNavigator());
     $.ready(showWorkStep());
 
@@ -56,8 +52,8 @@
                         , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
                         , cols: [[
                             {field: 'wId', title: '工作ID', sort: true}
-                            ,{field: 'wdesc', title: '工作描述'}
-                            ,{field: 'wContent', title: '工作提示'}
+                            , {field: 'wdesc', title: '工作描述'}
+                            , {field: 'wContent', title: '工作提示'}
                             , {field: 'wsId', title: '步骤ID', sort: true}
                             , {field: 'wsName', title: '步骤名称'}
                             , {field: 'wsdesc', title: '步骤描述'}
@@ -68,10 +64,12 @@
                                     return dateToStr(d.wLastDoTime);
                                 }
                             }
-                            , {field: 'wPostTime', title: '发布时间', sort: true,
+                            , {
+                                field: 'wPostTime', title: '发布时间', sort: true,
                                 templet: function (d) {
                                     return dateToStr(d.wPostTime);
-                                }}
+                                }
+                            }
                             , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
                         ]]
                         , page: true
@@ -137,6 +135,14 @@
             "    <label class=\"layui-form-label\">事务描述:</label>\n" +
             "    <div class=\"layui-input-block\">\n" +
             "      <input type=\"text\" disabled='disabled'  lay-verify=\"required\" value=" + desc + " autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "</div>" +
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">本次工作描述:</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name='cContent' lay-verify=\"required\" autocomplete=\"off\" class=\"layui-input\">\n" +
             "    </div>\n" +
             "  </div>" +
 

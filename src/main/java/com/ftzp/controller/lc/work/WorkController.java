@@ -1,12 +1,12 @@
-package com.ftzp.controller.lc.workflow;
+package com.ftzp.controller.lc.work;
 
 import com.ftzp.ZipUtils;
 import com.ftzp.cache.RedisObjCache;
 import com.ftzp.pojo.lc.user.User;
 import com.ftzp.pojo.lc.workflow.Work;
 import com.ftzp.pojo.lc.workflow.WorkStep;
-import com.ftzp.service.lc.workflow.WorkService;
-import com.ftzp.service.lc.workflow.WorkStepService;
+import com.ftzp.service.lc.work.WorkService;
+import com.ftzp.service.lc.work.WorkStepService;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;

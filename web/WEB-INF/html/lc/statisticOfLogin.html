@@ -14,7 +14,7 @@
     <style>
         .com-sel {
             line-height: 5rem;
-            cursor: pointer;        /*鼠标上移变成小手*/
+            cursor: pointer; /*鼠标上移变成小手*/
         }
 
         .com-opt {
@@ -24,13 +24,11 @@
             border: none;
             outline: none;
             /*去掉默认的下拉三角*/
-            appearance:none;
-            -moz-appearance:none;
-            -webkit-appearance:none;
+            appearance: none;
+            -moz-appearance: none;
+            -webkit-appearance: none;
             /*添加下拉三角图标*/
-            background: url("/images/20180903162108698.jpg") no-repeat right center transparent;
-        }
-
+            }
     </style>
 </head>
 
@@ -52,10 +50,6 @@
 <script>
     let index;//关闭弹窗用的
 
-    layui.use('element', function () {
-        let element = layui.element;
-    });
-
     $.ready(showNavigator());
 </script>
 <div style="width: 90%; float: left">
@@ -74,29 +68,37 @@
 
 </div>
 <script>
-    function GetVal(obj){
+    function GetVal(obj) {
         //代表的是选中项的index索引
         var index = obj.selectedIndex;
         //代表的是选中项的的值
         var val = obj.options[index].value;
         $("#myChart").remove();
         newCanvas();
-        switch(val){
-            case "1":dayLine();break;
-            case "2":weekLine();break;
-            case "3":monLine();break;
-            case "4":yearLine();break;
+        switch (val) {
+            case "1":
+                dayLine();
+                break;
+            case "2":
+                weekLine();
+                break;
+            case "3":
+                monLine();
+                break;
+            case "4":
+                yearLine();
+                break;
         }
 
     }
-    
+
     function newCanvas() {
         var canvas = "<canvas id=\"myChart\" width=\"\" height=\"\"></canvas>";
         $(".bar-chart").append(canvas);
     }
 
     //日表
-    function dayLine(){
+    function dayLine() {
         $.ajax(
             {
                 url: "/statistic/getDays?model=day",
@@ -104,46 +106,46 @@
                 success: function (data) {
                     var labels = ["0：00", "1：00", "2：00", "3：00", "4：00", "5：00", "6:00", "7:00", "8:00", "9:00", "10:00",
                         "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22.00", "23:00"];
-                    if(data!=null){
+                    if (data != null) {
                         var dayData = new Array(24).fill(0);
-                        for (var i = 0;i < data.length;i++){
+                        for (var i = 0; i < data.length; i++) {
                             let array = data[i]['time'];
-                            let hour = parseInt(array.slice(12,15));
-                            for (var j = 0; j < array.length;j++){
-                                if(j === hour){
+                            let hour = parseInt(array.slice(12, 15));
+                            for (var j = 0; j < array.length; j++) {
+                                if (j === hour) {
                                     dayData[j] = data[i].num;
                                 }
                             }
                         }
                     }
-                    line(dayData,labels);
+                    line(dayData, labels);
                 }
             }
         )
     }
 
     //周表
-    function weekLine(){
+    function weekLine() {
         $.ajax(
             {
                 url: "/statistic/getDays?model=sevenDay",
                 method: "get",
                 success: function (data) {
-                    if(data!=null){
+                    if (data != null) {
                         var weekData = new Array(7).fill(0);
                         var myDate = new Date();
-                        var today = format(myDate,"yyyy-MM-dd");
+                        var today = format(myDate, "yyyy-MM-dd");
                         var labels = [];
-                        for (var i = 0; i < 7;i++){
-                            let a = new Date(myDate-i*24*60*60*1000);
-                            let b = format(a,"yyyy-MM-dd")
+                        for (var i = 0; i < 7; i++) {
+                            let a = new Date(myDate - i * 24 * 60 * 60 * 1000);
+                            let b = format(a, "yyyy-MM-dd")
                             labels[i] = b;
                         }
-                        for (var i = 0; i < data.length;i++){
-                            var d = data[i].time.slice(1,11);
-                            let daysBet = daysBetween(today,d);
-                            for (var j = 0; j < 7; j++){
-                                if (j === daysBet){
+                        for (var i = 0; i < data.length; i++) {
+                            var d = data[i].time.slice(1, 11);
+                            let daysBet = daysBetween(today, d);
+                            for (var j = 0; j < 7; j++) {
+                                if (j === daysBet) {
                                     weekData[j] += data[i].num;
                                 }
                             }
@@ -152,44 +154,45 @@
                     }
                     //反转一下
                     var relLabels = labels.reverse();
-                    line(weekData,relLabels);
+                    line(weekData, relLabels);
                 }
             }
         )
     }
 
     //月表
-    function monLine(){
+    function monLine() {
         $.ajax(
             {
                 url: "/statistic/getDays?model=month",
                 method: "get",
                 success: function (data) {
-                    if(data!=null){
-                        var mon = data[0].time.slice(6,8);//获取传来的月份
+                    if (data != null) {
+                        var mon = data[0].time.slice(6, 8);//获取传来的月份
                         var howManyDays = howMayDaysThisMon(mon);
                         var monData = new Array(howManyDays).fill(0);
                         var monDays = new Array();
-                        for(var i = 0; i < howManyDays;i++){
-                            monDays[i] = i+1;
+                        for (var i = 0; i < howManyDays; i++) {
+                            monDays[i] = i + 1;
                         }
-                        for (var i = 0; i < data.length;i++){
-                            let d = data[i].time.slice(9,11);
-                            for (var j = 0; j < monData.length; j++){;
-                                if (j === parseInt(d)){
-                                    monData[j-1] += data[i].num;
+                        for (var i = 0; i < data.length; i++) {
+                            let d = data[i].time.slice(9, 11);
+                            for (var j = 0; j < monData.length; j++) {
+                                ;
+                                if (j === parseInt(d)) {
+                                    monData[j - 1] += data[i].num;
                                 }
                             }
                         }
                     }
-                    line(monData,monDays);
+                    line(monData, monDays);
                 }
             }
         )
     }
 
     //年表
-    function yearLine(){
+    function yearLine() {
         $.ajax(
             {
                 url: "/statistic/getDays?model=year",
@@ -197,26 +200,27 @@
                 success: function (data) {
                     console.log(data);
                     var labels = ['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月'];
-                    if(data!=null){
-                        var year = data[0].time.slice(1,5);//获取传来的年份
+                    if (data != null) {
+                        var year = data[0].time.slice(1, 5);//获取传来的年份
                         var yearData = new Array(12).fill(0);
-                        for (var i = 0; i < data.length;i++){
-                            let mon = data[i].time.slice(6,8);
-                            for (var j = 0; j < yearData.length; j++){;
-                                if (j === parseInt(mon)){
-                                    yearData[j-1] += data[i].num;
+                        for (var i = 0; i < data.length; i++) {
+                            let mon = data[i].time.slice(6, 8);
+                            for (var j = 0; j < yearData.length; j++) {
+                                ;
+                                if (j === parseInt(mon)) {
+                                    yearData[j - 1] += data[i].num;
                                 }
                             }
                         }
                     }
-                    line(yearData,labels);
+                    line(yearData, labels);
                 }
             }
         )
     }
 
     //表
-    function line(Data,Labels) {
+    function line(Data, Labels) {
         var ctx = document.getElementById("myChart");
         var myChart = new Chart(ctx, {
             type: 'line',
@@ -235,6 +239,13 @@
                 }]
             },
             options: {
+                // legend: {
+                //     position: "right",
+                //     display: true,
+                //     labels: {
+                //         fontColor: "rgb(255, 99, 132)"
+                //     }
+                // },
                 scales: {
                     yAxes: [{
                         ticks: {
@@ -247,11 +258,13 @@
     }
 
     //更改日期格式为yyyy-MM-dd调用format(myDate,"yyyy-MM-dd")
-    var format = function(time, format){
+    var format = function (time, format) {
         var t = new Date(time);
-        var tf = function(i){return (i < 10 ? '0' : '') + i};
-        return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function(a){
-            switch(a){
+        var tf = function (i) {
+            return (i < 10 ? '0' : '') + i
+        };
+        return format.replace(/yyyy|MM|dd|HH|mm|ss/g, function (a) {
+            switch (a) {
                 case 'yyyy':
                     return tf(t.getFullYear());
                     break;
@@ -273,35 +286,35 @@
             }
         })
     }
+
     //查看两天之间的间隔都得是yyyy-MM-dd格式
-    function daysBetween(DateOne,DateTwo)
-    {
-        var OneMonth = DateOne.substring(5,DateOne.lastIndexOf ('-'));
-        var OneDay = DateOne.substring(DateOne.length,DateOne.lastIndexOf ('-')+1);
-        var OneYear = DateOne.substring(0,DateOne.indexOf ('-'));
+    function daysBetween(DateOne, DateTwo) {
+        var OneMonth = DateOne.substring(5, DateOne.lastIndexOf('-'));
+        var OneDay = DateOne.substring(DateOne.length, DateOne.lastIndexOf('-') + 1);
+        var OneYear = DateOne.substring(0, DateOne.indexOf('-'));
 
-        var TwoMonth = DateTwo.substring(5,DateTwo.lastIndexOf ('-'));
-        var TwoDay = DateTwo.substring(DateTwo.length,DateTwo.lastIndexOf ('-')+1);
-        var TwoYear = DateTwo.substring(0,DateTwo.indexOf ('-'));
+        var TwoMonth = DateTwo.substring(5, DateTwo.lastIndexOf('-'));
+        var TwoDay = DateTwo.substring(DateTwo.length, DateTwo.lastIndexOf('-') + 1);
+        var TwoYear = DateTwo.substring(0, DateTwo.indexOf('-'));
 
-        var cha=((Date.parse(OneMonth+'/'+OneDay+'/'+OneYear)- Date.parse(TwoMonth+'/'+TwoDay+'/'+TwoYear))/86400000);
+        var cha = ((Date.parse(OneMonth + '/' + OneDay + '/' + OneYear) - Date.parse(TwoMonth + '/' + TwoDay + '/' + TwoYear)) / 86400000);
         return Math.abs(cha);
     }
 
     //这个月最多有多少天
-    function howMayDaysThisMon(mon){
+    function howMayDaysThisMon(mon) {
         if (mon === '01' || mon === '03' || mon === '05' || mon === '07' || mon === '08' || mon === '10' || mon === '12') {
             return 31;
         } else if (mon === '02') {
             while (year != 0) {
                 if (year % 4 === '0' && year % 100 !== '0' || year % 400 === '0') {
-                    return  28;
+                    return 28;
                 } else {
-                    return  29;
+                    return 29;
                 }
             }
         } else {
-            return  30;
+            return 30;
         }
     }
 

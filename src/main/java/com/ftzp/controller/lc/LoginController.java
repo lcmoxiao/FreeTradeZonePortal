@@ -50,7 +50,7 @@ public class LoginController {
     @RequestMapping("/index")
     String index(HttpServletRequest re) {
         String IP = getRemoteIP(re);
-        if (redisObjCache.getValue(IP + "u") != null) return "redirect:/myWork";
+        if (redisObjCache.getValue(IP + "u") != null) return "redirect:/workOfMine";
         else return "/index";
     }
 
@@ -82,7 +82,6 @@ public class LoginController {
         String IP = getRemoteIP(re);
         redisObjCache.delValue(IP + "u");
         redisObjCache.delValue(IP + "p");
-        System.out.println(redisObjCache.getValue(IP + "u"));
         return "redirect:/index";
     }
 

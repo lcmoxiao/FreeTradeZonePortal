@@ -1,10 +1,10 @@
-package com.ftzp.controller.lc.workflow;
+package com.ftzp.controller.lc.work;
 
 import com.ftzp.pojo.lc.workflow.WorkFlow;
 import com.ftzp.pojo.lc.workflow.WorkStep;
 import com.ftzp.service.lc.user.UserService;
-import com.ftzp.service.lc.workflow.WorkFlowService;
-import com.ftzp.service.lc.workflow.WorkStepService;
+import com.ftzp.service.lc.work.WorkFlowService;
+import com.ftzp.service.lc.work.WorkStepService;
 import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;

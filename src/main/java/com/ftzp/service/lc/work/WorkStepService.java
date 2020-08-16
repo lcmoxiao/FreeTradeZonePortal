@@ -1,6 +1,6 @@
-package com.ftzp.service.lc.workflow;
+package com.ftzp.service.lc.work;
 
-import com.ftzp.mapper.lc.workflow.WorkStepMapper;
+import com.ftzp.mapper.lc.work.WorkStepMapper;
 import com.ftzp.pojo.lc.workflow.WorkStep;
 import org.springframework.stereotype.Service;
 

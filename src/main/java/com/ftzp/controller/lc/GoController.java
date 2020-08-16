@@ -27,19 +27,19 @@ public class GoController {
         return "/lc/user/permissionManager";
     }
 
-    @RequestMapping("/myWork")
+    @RequestMapping("/workOfMine")
     String workManagement() {
-        return "/lc/workflow/myWork";
+        return "/lc/work/myWork";
     }
 
-    @RequestMapping("/myPost")
+    @RequestMapping("/workOfMyPost")
     String myPost() {
-        return "/lc/workflow/myPosted";
+        return "/lc/work/myPosted";
     }
 
     @RequestMapping("/workflowManagement")
     String workflowManagement() {
-        return "/lc/workflow/workFlowManager";
+        return "/lc/work/workFlowManager";
     }
 
     @RequestMapping("/modelManagement")
@@ -47,9 +47,9 @@ public class GoController {
         return "/lc/modelManager.";
     }
 
-    @RequestMapping("/loginStatistic")
+    @RequestMapping("/statisticOfLogin")
     String loginStatistic() {
-        return "/lc/loginStatistic";
+        return "/lc/statisticOfLogin";
     }
 
 }

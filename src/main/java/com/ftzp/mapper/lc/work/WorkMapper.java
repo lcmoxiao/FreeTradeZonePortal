@@ -1,4 +1,4 @@
-package com.ftzp.mapper.lc.workflow;
+package com.ftzp.mapper.lc.work;
 
 import com.ftzp.pojo.lc.workflow.Work;
 

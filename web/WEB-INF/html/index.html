@@ -47,7 +47,7 @@
             data: $(".form").serialize(),
             type: "post",
             success: function (res) {
-                if (res === "loginSuccess") window.location.href = "/myWork";
+                if (res === "loginSuccess") window.location.href = "/workOfMine";
                 else $("#error").html(res+"，请重试");
             }
         });

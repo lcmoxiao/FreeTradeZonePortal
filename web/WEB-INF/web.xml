@@ -45,7 +45,7 @@
         <init-param>
             <param-name>ignores</param-name>
             <param-value>/js,/css,/index,/favicon,/layui,/html
-                ,/logout,/login,/error,/visit
+                ,/logout,/login,/error,/visit,/permission/mine
             </param-value>
         </init-param>
     </filter>
