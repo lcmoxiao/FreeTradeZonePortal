@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftzp.mapper.rg.CheckContentMapper">
+
+    <select id="findCheckContent" resultType="com.ftzp.pojo.rg.Content">
+        select * from onCheckContent
+        where contentId=#{contentId}
+    </select>
+
+    <delete id="delCheckContent">
+       delete from onCheckContent where contentId=#{contentId}
+    </delete>
+
+    <insert id="addCheckContent" useGeneratedKeys="true" keyProperty="contentId">
+        insert into onCheckContent(contentName,content,birth,columnId1,columnId2,columnId3,sumCon,flagCheck)
+        value(#{contentName},#{content},#{birth},#{columnId1},#{columnId2},#{columnId3},#{sumCon},#{flagCheck})
+    </insert>
+
+    <update id="updateFlagCheck">
+        update onCheckContent
+        set flagCheck=flagCheck+1 where contentId=#{contentId}
+    </update>
+
+</mapper>

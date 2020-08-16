@@ -67,10 +67,6 @@ public class ContentController {
     @RequestMapping(value = "content", method = RequestMethod.POST)
     @ResponseBody
     public String addContent(Content content) {
-        //TODO 增加审核环节
-
-        
-
         Integer isAdd = contentService.addContent(content);
         if (isAdd == 1) {
             return "success";

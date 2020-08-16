@@ -61,6 +61,7 @@ public class WorkController {
         w.setuId(u.getuId());
         w.setWfId(wfId);
         w.setwLength(wfLength);
+        w.setRanking(1);
         w.setWdesc(wdesc);
         workService.insertWork(w);
         return "redirect:/workManagement";
@@ -161,7 +162,7 @@ public class WorkController {
                         ws.setwPostTime(w.getwPostTime());
                         ws.setwContent(w.getwContent());
                         ws.setWdesc(w.getWdesc());
-                        ws.setwUncheckedContentId(w.getwUncheckedContentId());
+                        ws.setwUnCheckedContentId(w.getwUnCheckedContentId());
                         res.add(ws);
                     }
                 }

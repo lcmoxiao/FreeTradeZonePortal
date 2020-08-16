@@ -81,7 +81,7 @@ color: black;background-color: white;height: 700px;text-align: center;">
 
         $("#subMessage2").click(function () {
             $.ajax({
-                url: "/content",
+                url: "/checkContent",
                 type: "POST",
                 data: $("#addForm").serialize(),
                 async: false,

@@ -14,14 +14,14 @@ public class Work {
     Date wLastDoTime;
     Date wPostTime;
     String wContent;
-    Integer wUncheckedContentId;
+    Integer wUnCheckedContentId;
 
-    public Integer getwUncheckedContentId() {
-        return wUncheckedContentId;
+    public Integer getwUnCheckedContentId() {
+        return wUnCheckedContentId;
     }
 
-    public void setwUncheckedContentId(Integer wUncheckedContentId) {
-        this.wUncheckedContentId = wUncheckedContentId;
+    public void setwUnCheckedContentId(Integer wUnCheckedContentId) {
+        this.wUnCheckedContentId = wUnCheckedContentId;
     }
 
     public String getwContent() {

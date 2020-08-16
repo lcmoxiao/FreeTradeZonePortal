@@ -18,11 +18,13 @@
     </select>
 
     <insert id="insertWork" useGeneratedKeys="true" keyProperty="wId">
-        insert into work(wfId, ranking, wdesc, wFile, wLength, uId, wPostTime, wLastDoTime, wContent
-        <if test="wUncheckedContentId!=null">,wUncheckedContentId</if>
+        insert into work(wfId, wdesc, wFile, wLength, uId, wPostTime, wLastDoTime, wContent
+        <if test="ranking!=null">,ranking</if>
+        <if test="wUnCheckedContentId!=null">,wUnCheckedContentId</if>
         )
-        values (#{wfId}, 1, #{wdesc}, #{wFile}, #{wLength}, #{uId}, #{wPostTime}, #{wLastDoTime}, #{wContent}
-        <if test="wUncheckedContentId!=null">,#{wUncheckedContentId}</if>
+        values (#{wfId}, #{wdesc}, #{wFile}, #{wLength}, #{uId}, #{wPostTime}, #{wLastDoTime}, #{wContent}
+        <if test="ranking!=null">,#{ranking}</if>
+        <if test="wUnCheckedContentId!=null">,#{wUnCheckedContentId}</if>
         )
     </insert>
 

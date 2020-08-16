@@ -87,7 +87,7 @@
                                 data.wsName,
                                 data.wsdesc,
                                 data.wsType,
-                                data.wUncheckedContentId);
+                                data.wUnCheckedContentId);
                             index = layer.open({
                                 type: 1,
                                 title: "工作表单",
@@ -165,7 +165,7 @@
                 "\t\t\t\t</form>";
         else if (wsType === "check")
             str +=
-                "\t\t\t\t\t<input class=\"layui-btn layui-btn-normal layui-btn-sm\" type=\"button\" onclick='checkC(" + wUncheckedContentId + ")' value=\"审核\">\n" +
+                "\t\t\t\t\t<input class=\"layui-btn layui-btn-normal layui-btn-sm\" type=\"button\" onclick='checkC(" + wUncheckedContentId+","+wId + ")' value=\"审核\">\n" +
                 "\t\t\t\t</form>";
         $("#tmpContent").html(str);
     }
@@ -182,12 +182,11 @@
         });
     }
 
-    function checkC(wUncheckedContentId) {
+    function checkC(wUncheckedContentId,wId) {
         console.log("fuck"+wUncheckedContentId);
         $.post({
-            //TODO 执行后台的内容审核方法
-            url: "/???",
-            type: "put",
+            url: "/checkContent/"+wUncheckedContentId+"/"+wId,
+            type: "post",
             data: $(".layui-form").serialize(),
             success: function () {
                 showWorkStep();

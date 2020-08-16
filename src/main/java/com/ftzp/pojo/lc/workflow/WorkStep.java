@@ -21,7 +21,7 @@ public class WorkStep {
     String wdesc;
     //数据库没有此字段，传给前端用的
     String wFile;
-    Integer wUncheckedContentId;
+    Integer wUnCheckedContentId;
 
     public static List<WorkStep> getWss() {
         return wss;
@@ -31,12 +31,12 @@ public class WorkStep {
         WorkStep.wss = wss;
     }
 
-    public Integer getwUncheckedContentId() {
-        return wUncheckedContentId;
+    public Integer getwUnCheckedContentId() {
+        return wUnCheckedContentId;
     }
 
-    public void setwUncheckedContentId(Integer wUncheckedContentId) {
-        this.wUncheckedContentId = wUncheckedContentId;
+    public void setwUnCheckedContentId(Integer wUnCheckedContentId) {
+        this.wUnCheckedContentId = wUnCheckedContentId;
     }
 
     public String getWsType() {
