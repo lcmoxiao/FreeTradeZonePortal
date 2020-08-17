@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改内容</title>
+    <link href="/css/main_css.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+</head>
+<body class="layui-layout-body" >
+<div id="navigator"></div>
+<script>
+    layui.use('element', function () {
+        let element = layui.element;
+    });
+    $.ready(showNavigator());
+</script>
+<style type="text/css">
+    * {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+<div style="margin-top: 11px">
+</div>
+<div class="navigation">
+    <button class="fbnr" type="button" style="float: left;margin-left: 14px" value="栏目管理" onclick="backContentManag()">
+        <h3>返回主页</h3>
+    </button>
+</div>
+<div class="content_r"
+     style="width: 80%;float: right;color: black;background-color: white;height: 700px;text-align: center;">
+    <div style="width: 100%;background-color: #f2f2f2;height: 48px">
+        <h3 style="float: left;margin-top: 12px;margin-left: 8px">留言信息</h3>
+    </div>
+    <div style="color:#666666;width: 92%;margin-left: 4%">
+        <ul id="messageShow" style="margin-left: 4%">
+
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    function backContentManag() {
+        window.location.href = "/webContent/main"
+    }
+
+    $.ajax({
+        url: "/webContent/message",
+        type: "GET",
+        dataType: "JSON",
+        success: function (messageList) {
+            $("#messageShow").html('');
+
+            $.each(messageList, function (index, item) {
+                var messageId = messageList[index].messageId;
+                var messageContent = messageList[index].messageContent;
+                var submitUserIp = messageList[index].submitUserIp;
+                var submitTime = messageList[index].submitTime;
+
+                $("#messageShow").html($("#messageShow").html() + "<br/>" +
+                    "<div style='border: #e6e6e6 1px solid;border-bottom: none;line-height: 24px;'>" +
+                    "<span style='float: left'>"+submitUserIp + "："+"</span>"+"<br/>"+"<div style='border-top: #e6e6e6 1px solid;'>"+
+                    "<span style='float: left'>" + "留言信息：" + "</span>" +
+                    "<span style=''>" + messageContent+ "</span>"  +"</div>"+ "</div>"
+                    + "<div  style='border: #e6e6e6 1px solid;border-bottom: none;line-height: 24px'>"
+                    + "<span style='float: left'>" + "发布时间：" + "</span>" + "<span>" + dateToStr(submitTime) + "</span>" + "</div>"
+                    + "<div style='border: #e6e6e6 1px solid;line-height: 24px'>" + "<span style='float: left'>" + "留言操作：" + "</span>" +
+                    "<button type='button' class='scCon' onclick='delMessage(" + messageId + ")'>" + "删除" + "</button>" +
+                    "<button type='button' class='bjCon' onclick='editMessage(" + messageId + ")'>" + "编辑" + "</button>" +
+                    "</div>"
+                )
+            })
+        }
+    })
+
+    function delMessage(messageId) {
+        $.ajax({
+            url: "/webContent/message/" + messageId,
+            type: "DELETE",
+            success: function (flag) {
+                if (flag == "success") {
+                    alert("删除成功！");
+                    window.location.reload();
+                } else {
+                    alert("删除失败！");
+                }
+            }
+        })
+    }
+
+    //修改留言
+    function editMessage(messageId) {
+        window.location.href = "/webContent/editMessage?messageId=" + messageId;
+    }
+
+
+</script>
+</body>
+</html>

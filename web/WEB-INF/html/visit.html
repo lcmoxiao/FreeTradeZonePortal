@@ -79,6 +79,10 @@
          style="width: 80%;float: right;color: black;background-color: white;height: auto;text-align: center;">
         <div style="width: 100%;background-color: #f2f2f2;height: 48px">
             <h3 style="float: left;margin-top: 12px;margin-left: 8px">内容信息</h3>
+            <h3 class="publishMess" style="float: right">
+                <button class="fbnr" style="" type="button" onclick="submintMessage()">站内留言
+                </button>
+            </h3>
         </div>
         <div style="color:#666666;width: 92%;margin-left: 4%;height: 100%">
             <ul id="contentPage">
@@ -88,6 +92,11 @@
 </div>
 
 <script>
+
+    function submintMessage() {
+        window.location.href = "/webContent/submitMessage";
+    }
+
     var chanId1 = 1;
     var chanId2 = 2;
     var chanId3 = 3;
@@ -101,7 +110,7 @@
     //    频道1
     $.ajax({
 
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -117,7 +126,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -137,7 +146,7 @@
 
     //频道2
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -153,7 +162,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -171,7 +180,7 @@
     })
     //频道3
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -187,7 +196,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -205,7 +214,7 @@
     })
     //频道4
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -221,7 +230,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -239,7 +248,7 @@
     })
     //频道5
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -255,7 +264,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -273,7 +282,7 @@
     })
     //频道6
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -289,7 +298,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -307,7 +316,7 @@
     })
     //频道7
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -323,7 +332,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -341,7 +350,7 @@
     })
     //频道8
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -357,7 +366,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -375,7 +384,7 @@
     })
     //频道9
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -391,7 +400,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -476,7 +485,7 @@
 
             (function (k) {
                 $.ajax({
-                    url: "/visit/content",
+                    url: "/webContent/contents",
                     type: "GET",
                     dataType: "JSON",
                     success: function (contentList) {
@@ -509,10 +518,10 @@
     //查看内容
     function viewContent(contentId) {
         $.ajax({
-            url: "/contentss/" + contentId,
+            url: "/webContent/contentss/" + contentId,
             type: "POST",
         })
-        window.location.href = "/ckMess?contentId=" + contentId;
+        window.location.href = "/webContent/ckMess?contentId=" + contentId;
     }
 </script>
 </body>

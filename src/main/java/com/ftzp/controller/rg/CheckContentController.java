@@ -7,6 +7,8 @@ import com.ftzp.pojo.rg.Content;
 import com.ftzp.service.lc.work.WorkService;
 import com.ftzp.service.rg.CheckContentService;
 import com.ftzp.service.rg.ContentService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -20,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import static com.ftzp.controller.lc.LoginController.getRemoteIP;
 
 @Controller
+@RequestMapping("/webContent")
 public class CheckContentController {
     @Autowired
     private CheckContentService checkContentService;
@@ -30,13 +33,17 @@ public class CheckContentController {
     @Autowired
     ContentService contentService;
 
+    private static final Logger logger = LoggerFactory.getLogger(CheckContentController.class);
+
     @RequestMapping(value = "/checkContent", method = RequestMethod.POST)
     @ResponseBody
     public String addCheckContent(Content checkContent,HttpServletRequest request) {
+
+        User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
+        logger.info(u.getuName() + "增加了待审核的内容channelId：" + checkContent.getContentId());
+
         Integer isAdd = checkContentService.addCheckContent(checkContent);
         Work w = new Work();
-        String IP = getRemoteIP(request);
-        User u = (User) redisObjCache.getValue(IP + "u");
         //是前端所显示的需要审核的内容
         w.setwContent(checkContent.getContentName()+"\n"+checkContent.getContent());
         w.setuId(u.getuId());
@@ -56,7 +63,11 @@ public class CheckContentController {
     @ResponseBody
     @RequestMapping(value = "/checkContent/{contentId}/{wId}", method = RequestMethod.POST)
     public String checkContent(@PathVariable("contentId") Integer contentID,
-                               @PathVariable("wId") Integer wId) {
+                               @PathVariable("wId") Integer wId,HttpServletRequest request) {
+
+        User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
+        logger.info(u.getuName() + "审核了的内容channelId：" + contentID);
+
         Content checkContent = checkContentService.getCheckContent(contentID).get(0);
         checkContent.setFlagCheck(1);
         System.out.println(checkContent);

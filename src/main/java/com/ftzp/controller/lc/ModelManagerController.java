@@ -1,6 +1,10 @@
 package com.ftzp.controller.lc;
 
 import com.ftzp.ZipUtils;
+import com.ftzp.cache.RedisObjCache;
+import com.ftzp.pojo.lc.user.User;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -9,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
+import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -20,11 +25,16 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.ftzp.controller.lc.LoginController.getRemoteIP;
 import static org.apache.commons.io.FileUtils.deleteDirectory;
 
 @Controller
 @RequestMapping("/model")
 public class ModelManagerController {
+
+    private static final Logger logger = LoggerFactory.getLogger(ModelManagerController.class);
+    @Resource(name = "redisObjCache")
+    RedisObjCache redisObjCache;
 
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
@@ -42,7 +52,6 @@ public class ModelManagerController {
         } else {
             for (String filename : children) {
                 paths.add(new FileAndModel(filename));
-                System.out.println(filename);
             }
         }
         return paths;
@@ -53,6 +62,9 @@ public class ModelManagerController {
     String postModelPaths(@RequestParam(value = "fileFolder") MultipartFile[] files
             , @RequestParam(value = "nowPath") String nowPath
             , HttpServletRequest request) throws IOException {
+        String IP = getRemoteIP(request);
+        User u = (User) redisObjCache.getValue(IP + "u");
+        logger.info(u.getuName() + "提交了新的模板内容");
         String uploadPath = request.getServletContext().getRealPath("/modelsUpload");
         //判断存储的文件夹是否存在
         File dir = new File(uploadPath);
@@ -61,21 +73,33 @@ public class ModelManagerController {
             if (!file.isEmpty()) {
                 String wFileName = ((CommonsMultipartFile) file).getFileItem().getName();
                 file.transferTo(new File(uploadPath + nowPath + File.separator + wFileName));
+                System.out.println(uploadPath + File.separator + wFileName);
             }
         }
+
         return "ok";
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
     @ResponseBody
     void deleteFile(@RequestParam("path") String path, HttpServletRequest request) throws IOException {
+        String IP = getRemoteIP(request);
+        User u = (User) redisObjCache.getValue(IP + "u");
+        logger.info(u.getuName() + "删除了模板内容path:" + path);
         String uploadPath = request.getServletContext().getRealPath("/modelsUpload");
-        deleteDirectory(new File(uploadPath + File.separator + path));
+        System.out.println(uploadPath + File.separator + path);
+        File f = new File(uploadPath + File.separator + path);
+        if (f.isDirectory()) deleteDirectory(f);
+        else f.delete();
     }
 
     @RequestMapping(value = "/download", method = RequestMethod.GET)
     @ResponseBody
     void downloadFile(@RequestParam("path") String path, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        String IP = getRemoteIP(request);
+        User u = (User) redisObjCache.getValue(IP + "u");
+        logger.info(u.getuName() + "下载一个模板内容path:" + path);
+
         String uploadPath = request.getServletContext().getRealPath("/modelsUpload");
         String sourceName = uploadPath + File.separator + path;
         String resName = sourceName + "tmp.zip";

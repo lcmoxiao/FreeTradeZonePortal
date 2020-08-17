@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>提交留言</title>
+    <link href="/css/main_css.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+</head>
+<body>
+<div style="height: 100%">
+    <div class="showTop">
+        <h2 style="padding-top: 20px">自贸区门户网站</h2>
+    </div>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+    </style>
+    <div style="width: 100%;fcolor: black;background-color: white;height: 700px;text-align: center;">
+        <div style="width: 100%;background-color: #f2f2f2;height: 48px">
+            <h3 style="float:left;margin-top: 12px;margin-left: 49%">留言</h3>
+            <button class="fbnr" type="button" style="float: right;margin-left: 14px" value="栏目管理"
+                    onclick="backCkMess2()">
+                <h3>返回主页</h3>
+            </button>
+        </div>
+        <div style="width: 80%;margin-left: 10%">
+            <ul id="showMessage">
+            </ul>
+        </div>
+        <div style="margin-top: 40px;">
+            <div style="margin-left: -77%;">留言：</div>
+            <div>
+                <form id="subMessage" role="form">
+                    <textarea name="messageContent" style="width: 80%;border: #e6e6e6 1px solid; "></textarea><br/>
+                    <input type="button" class="fbnr" style="margin-right: 48%;" id="submitMessageContent" value="提交"/>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    function backCkMess2() {
+        window.location.href = "/visit"
+    }
+
+    $("#submitMessageContent").click(function () {
+        $.ajax({
+            url: "/webContent/message",
+            type: "POST",
+            data: $("#subMessage").serialize(),
+            async: false,
+
+            success(result) {
+
+                if (result == "success") {
+                    alert("留言成功！");
+                    window.location.href = "/webContent/submitMessage";
+                } else {
+                    alert("留言失败！");
+                }
+            }
+
+        })
+    })
+
+    $(function () {
+        $.ajax({
+            url: "/webContent/message",
+            type: "GET",
+            dataType: "JSON",
+            success: function (messageList) {
+                $("#showMessage").html('');
+
+                $.each(messageList, function (index, item) {
+                    var messageId = messageList[index].messageId;
+                    var messageContent = messageList[index].messageContent;
+                    var submitUserIp = messageList[index].submitUserIp;
+                    var submitTime = messageList[index].submitTime;
+
+                    $("#showMessage").html($("#showMessage").html() + "<br/>" + "<br/>" +
+                        "<div style='border: #e6e6e6 1px solid;border-bottom: none;text-align: center'>" + "<span style='float: left'>"
+                        + submitUserIp + "：" + "</span>" + "<br/>" + "</div>" + "<div style='border-right:#e6e6e6 1px solid;border-left: #e6e6e6 1px solid '>" + "<br/>" + "</div>"
+                        + "<span style='float: right;font-size: 12px'>" + "留言时间：" + dateToStr(submitTime) + "</span>"
+                        + "<div style='border: #e6e6e6 1px solid;border-top: none;text-align: center'>" + "<span style='float: left'>"
+                        + "留言内容：" + "</span>" + "<div style='margin-left: 30%;width: 500px;text-align: center;'>" + messageContent + "</div>"
+                        + "</div>")
+                })
+            }
+        })
+    })
+
+
+</script>
+</body>
+</html>

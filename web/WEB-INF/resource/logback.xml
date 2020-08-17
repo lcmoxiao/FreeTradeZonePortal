@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <configuration scan="true" scanPeriod="60 seconds" debug="false">
     <!-- 定义日志文件 输入位置,注意此处的/ -->
     <property name="log_dir" value="D:/logs"/>

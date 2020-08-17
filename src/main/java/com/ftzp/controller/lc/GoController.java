@@ -52,4 +52,9 @@ public class GoController {
         return "/lc/statisticOfLogin";
     }
 
+    @RequestMapping("/logging")
+    String logging() {
+        return "/lc/logging";
+    }
+
 }

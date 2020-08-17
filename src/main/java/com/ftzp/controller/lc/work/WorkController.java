@@ -2,11 +2,14 @@ package com.ftzp.controller.lc.work;
 
 import com.ftzp.ZipUtils;
 import com.ftzp.cache.RedisObjCache;
+import com.ftzp.controller.lc.user.UserController;
 import com.ftzp.pojo.lc.user.User;
 import com.ftzp.pojo.lc.workflow.Work;
 import com.ftzp.pojo.lc.workflow.WorkStep;
 import com.ftzp.service.lc.work.WorkService;
 import com.ftzp.service.lc.work.WorkStepService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -30,6 +33,8 @@ import static com.ftzp.controller.lc.LoginController.getRemoteIP;
 @Controller
 public class WorkController {
 
+    private static final Logger logger = LoggerFactory.getLogger(WorkController.class);
+
     @Resource(name = "workService")
     WorkService workService;
     @Resource(name = "workStepService")
@@ -43,9 +48,13 @@ public class WorkController {
     String initWork(@RequestParam("wfLength") Integer wfLength, @RequestParam("wfId") Integer wfId,
                     @RequestParam(value = "uploadFile", required = false) MultipartFile file,
                     @RequestParam("wdesc") String wdesc,
-                    @RequestParam("wContent") String wContent,
-                    HttpServletRequest request, HttpSession session) throws Exception {
-        String uploadPath = request.getServletContext().getRealPath("/worksUpload");
+                    HttpServletRequest re,
+                    @RequestParam("wContent") String wContent) throws Exception {
+
+        User u = (User) redisObjCache.getValue(getRemoteIP(re) + "u");
+        logger.info(u.getuName() + "初始化了工作，使用的工作流ID为：" + wfId);
+
+        String uploadPath = re.getServletContext().getRealPath("/worksUpload");
         File dir = new File(uploadPath);
         Work w = new Work();
         if (!dir.exists()) {
@@ -55,8 +64,7 @@ public class WorkController {
             String wFileName = saveWorkFile(file, uploadPath);
             w.setwFile(wFileName);
         }
-        String IP = getRemoteIP(request);
-        User u = (User) redisObjCache.getValue(IP + "u");
+        String IP = getRemoteIP(re);
         w.setwContent(wContent);
         w.setuId(u.getuId());
         w.setWfId(wfId);
@@ -69,7 +77,11 @@ public class WorkController {
 
     @RequestMapping(value = "/download", method = RequestMethod.GET)
     @ResponseBody
-    void downloadFile(@RequestParam("path") String path, HttpServletRequest request, HttpServletResponse response) throws IOException {
+    void downloadFile(@RequestParam("path") String path, HttpServletRequest request, HttpServletResponse response) {
+
+        User u = (User) redisObjCache.getValue(getRemoteIP(request) + "p");
+        logger.info(u.getuName() + "下载了工作附件path：" + path);
+
         String uploadPath = request.getServletContext().getRealPath("/worksUpload");
         String sourceName = uploadPath + File.separator + path;
 
@@ -104,6 +116,10 @@ public class WorkController {
                       @RequestParam("wContent") String wContent,
                       @RequestParam(value = "uploadFile", required = false) MultipartFile file,
                       HttpServletRequest request) throws Exception {
+
+        User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
+        logger.info(u.getuName() + "提交了工作，工作ID为：" + wId);
+
         String uploadPath = request.getServletContext().getRealPath("/worksUpload");
         Work w = workService.getWork(wId).get(0);
         w.setwContent(wContent);
@@ -128,7 +144,10 @@ public class WorkController {
 
     @RequestMapping(value = "/{wId}", method = RequestMethod.DELETE)
     @ResponseBody
-    String deleteWorkFlow(@PathVariable Integer wId) {
+    String deleteWorkFlow(@PathVariable Integer wId,HttpServletRequest request) {
+        User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
+        logger.info(u.getuName() + "提交了工作，工作ID为：" + wId);
+
         Work w = new Work();
         w.setwId(wId);
         workService.deleteWork(w);

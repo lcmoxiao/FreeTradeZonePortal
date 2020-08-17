@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftzp.mapper.rg.MessageMapper">
+
+    <select id="findMessage" resultType="com.ftzp.pojo.rg.Message">
+        select * from message
+    </select>
+
+    <delete id="delMessage">
+       delete from message where messageId=#{messageId}
+    </delete>
+
+    <update id="updateMessage">
+        update message
+        set messageContent=#{messageContent} where messageId=#{messageId}
+    </update>
+
+    <insert id="addMessage">
+        insert into message(messageContent,submitUserIp,submitTime)
+        value(#{messageContent},#{submitUserIp},#{submitTime})
+    </insert>
+</mapper>

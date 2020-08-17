@@ -110,13 +110,13 @@
                                             "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22.00", "23:00"];*/
                     var labels = [];
                     if (data != null) {
+                        let i;
                         console.log(data);
                         var dayData = new Array(24).fill(0);
                         var nowDate = new Date();
                         var nowTime = nowDate.getHours();
-                        var nowDay = nowDate.getDate();
                         console.log(nowTime);
-                        for (var i = 0; i < 24; i++) {
+                        for (i = 0; i < 24; i++) {
                             let time = nowTime - i;
                             if (time >= 0) {
                                 labels[i] = time;
@@ -129,11 +129,10 @@
                         for (i = 0; i < labels.length; i++) {
                             labels1[i] = labels[i] + ':00';
                         }
-
-                        for (var i = 0; i < data.length; i++) {
-                            let array = data[i]['time'];
-                            let hour = parseInt(array.slice(12, 15));
-                            for (var j = 0; j < array.length; j++) {
+                        console.log(labels1);
+                        for (i = 0; i < data.length; i++) {
+                            let hour = parseInt(data[i]['time'].slice(12, 14));
+                            for (var j = 0; j < 24; j++) {
                                 if (labels[j] === hour) {
                                     dayData[j] = data[i].num;
                                 }

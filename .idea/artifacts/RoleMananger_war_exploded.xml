@@ -46,7 +46,6 @@
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-annotations:2.11.1" />
           <element id="library" level="project" name="Maven: com.fasterxml.jackson.core:jackson-databind:2.11.1" />
           <element id="library" level="project" name="Maven: org.slf4j:slf4j-api:1.7.30" />
-          <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.3.2.RELEASE" />
           <element id="library" level="project" name="Maven: org.springframework.boot:spring-boot-starter-logging:2.3.0.RELEASE" />
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-classic:1.2.3" />
           <element id="library" level="project" name="Maven: ch.qos.logback:logback-core:1.2.3" />

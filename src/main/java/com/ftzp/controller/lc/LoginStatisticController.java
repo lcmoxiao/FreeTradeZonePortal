@@ -25,6 +25,7 @@ public class LoginStatisticController {
     List<LoginStatistic> getLoginStatistic(
             @RequestParam(value = "start", required = false) Date start
             , @RequestParam(value = "end", required = false) Date end) {
+
         return loginStatisticService.getStatistic(start, end);
     }
 
@@ -32,6 +33,7 @@ public class LoginStatisticController {
     @ResponseBody
     List<LoginStatistic> getLoginStatisticToDayNum(@RequestParam(value = "model", required = false) String model) {
         Calendar c = Calendar.getInstance();
+        c.add(Calendar.HOUR, +1);
         Date end = c.getTime();
         Date start;
         String dataFormat;

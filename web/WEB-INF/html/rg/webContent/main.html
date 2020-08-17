@@ -8,9 +8,9 @@
         <script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js">5
         </script>-->
     <script src="/js/jquery-3.5.1.min.js"></script>
-    <script src="./js/navigator.js"></script>
-    <script charset="utf-8" src="./layui/layui.js"></script>
-    <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 </head>
 <body class="layui-layout-body">
 <div id="navigator"></div>
@@ -128,6 +128,10 @@
                 </button>
             </h3>
             <h3 class="publishMess" style="float: right">
+                <button class="fbnr" style="background-color: #ffb800;" type="button" onclick="messageSituation()">留言情况
+                </button>
+            </h3>
+            <h3 class="publishMess" style="float: right">
                 <button class="fbnr" style="" type="button" onclick="add()">发布内容
                 </button>
             </h3>
@@ -140,6 +144,10 @@
 </div>
 
 <script>
+    function messageSituation(){
+        window.location.href="/webContent/viewMessage"
+    }
+
     var chanId1 = 1;
     var chanId2 = 2;
     var chanId3 = 3;
@@ -153,7 +161,7 @@
     //    频道1
     $.ajax({
 
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -169,7 +177,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -189,7 +197,7 @@
 
     //频道2
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -205,7 +213,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -223,7 +231,7 @@
     })
     //频道3
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -239,7 +247,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -257,7 +265,7 @@
     })
     //频道4
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -273,7 +281,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -291,7 +299,7 @@
     })
     //频道5
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -307,7 +315,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -325,7 +333,7 @@
     })
     //频道6
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -341,7 +349,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -359,7 +367,7 @@
     })
     //频道7
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -375,7 +383,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -393,7 +401,7 @@
     })
     //频道8
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -409,7 +417,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -427,7 +435,7 @@
     })
     //频道9
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success: function (channelList) {
@@ -443,7 +451,7 @@
         }
     })
     $.ajax({
-        url: "/columns",
+        url: "/webContent/columns",
         type: "GET",
         dataType: "JSON",
         success: function (columnList) {
@@ -517,7 +525,6 @@
         for (var i = 1; i <= 30; i++) {
             me(i);
         }
-        ;
     })
 
     //时间
@@ -528,7 +535,7 @@
 
             (function (k) {
                 $.ajax({
-                    url: "/contents",
+                    url: "/webContent/contents",
                     type: "GET",
                     dataType: "JSON",
                     success: function (contentList) {
@@ -537,7 +544,7 @@
                         $.each(contentList, function (index, item) {
                             var contentId = contentList[index].contentId;
                             var contentName = contentList[index].contentName;
-                            var birth = contentList[index].birth;
+                            var birth = dateToStr(contentList[index].birth);
                             var columnId1 = contentList[index].columnId1;
                             var columnId2 = contentList[index].columnId2;
                             var columnId3 = contentList[index].columnId3;
@@ -571,7 +578,7 @@
     //删除内容
     function delContent(contentId) {
         $.ajax({
-            url: "/content/" + contentId,
+            url: "/webContent/content/" + contentId,
             type: "DELETE",
             success: function (flag) {
                 if (flag == "success") {
@@ -588,28 +595,28 @@
     //查看内容
     function viewContent(contentId) {
         $.ajax({
-            url: "/contentss/" + contentId,
+            url: "/webContent/contentss/" + contentId,
             type: "POST",
         })
-        window.location.href = "/viewCon?contentId=" + contentId;
+        window.location.href = "/webContent/viewCon?contentId=" + contentId;
     }
 
     //修改内容
     function editContent(contentId) {
-        window.location.href = "/edit?contentId=" + contentId;
+        window.location.href = "/webContent/edit?contentId=" + contentId;
     }
 
     function xxjs() {
-        window.location.href = "/xxjs";
+        window.location.href = "/webContent/xxjs";
     }
 
     //发布内容
     function add() {
-        window.location.href = "/publish"
+        window.location.href = "/webContent/publish"
     }
 
     function navigationManag() {
-        window.location.href = "/naviManag"
+        window.location.href = "/webContent/naviManag"
     }
 </script>
 </body>

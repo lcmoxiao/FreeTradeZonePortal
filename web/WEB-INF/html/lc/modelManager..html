@@ -118,7 +118,7 @@
             url: "/model?path=" + fname,
             type: "delete",
             success: function () {
-                console.log("delete"+fname)
+                console.log("delete" + fname)
             }
         });
     }
@@ -141,18 +141,20 @@
             "  </div>" +
             "</div>" +
 
-            "\t\t\t<input type=\"button\" onclick='submit' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"添加\"><br>\n" +
+            "\t\t\t<input type=\"button\" onclick='submitModel()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"添加\"><br>\n" +
             "\t\t</form>";
         $("#tmpContent").html(tmp);
     }
 
-    function submit() {
+    function submitModel() {
+        console.log(
+            $("#mf").serialize()
+        )
+        alert("??");
         $.post({
             url: "/model",
-            type: "post",
             data: $("#mf").serialize(),
             success: function () {
-                showUserManager();
                 layer.close(index);
             }
         });

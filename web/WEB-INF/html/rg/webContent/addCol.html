@@ -5,9 +5,9 @@
     <title>发布内容页面</title>
     <link href="/css/main_css.css" rel="stylesheet"/>
     <script src="/js/jquery-3.5.1.min.js"></script>
-    <script src="./js/navigator.js"></script>
-    <script charset="utf-8" src="./layui/layui.js"></script>
-    <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 </head>
 <body class="layui-layout-body">
 <div id="navigator"></div>
@@ -48,12 +48,12 @@
 
 <script>
     function backNaviManag2() {
-        window.location.href = "/naviManag"
+        window.location.href = "/webContent/naviManag"
     }
 
     $("#subMessage3").click(function () {
         $.ajax({
-            url: "/columns",
+            url: "/webContent/columns",
             type: "POST",
             data: $("#addForm2").serialize(),
             async: false,
@@ -62,7 +62,7 @@
 
                 if (result == "success") {
                     alert("添加成功！");
-                    window.location.href = "/naviManag";
+                    window.location.href = "/webContent/naviManag";
                 } else {
                     alert("添加失败！");
                 }
@@ -72,7 +72,7 @@
     })
 
     $.ajax({
-        url: "/channels",
+        url: "/webContent/channels",
         type: "GET",
         dataType: "JSON",
         success(channelList) {

@@ -74,6 +74,19 @@ html, body {
     background-color: #ff5722;
     border: 1px solid white;
 }
+.lyqk {
+    float: right;
+    width: 50px;
+    margin-right: 14px;
+    margin-top: 6px;
+    height: 36px;
+    text-align: center;
+    font-size: 10px;
+    color: white;
+    border-radius: 3px;
+    background-color: #ffb800;
+    border: 1px solid white;
+}
 
 .bjCon {
     width: 30px;

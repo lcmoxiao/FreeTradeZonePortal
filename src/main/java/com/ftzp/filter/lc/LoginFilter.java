@@ -16,6 +16,7 @@ import java.util.List;
 
 import static com.ftzp.controller.lc.LoginController.getRemoteIP;
 
+
 public class LoginFilter implements Filter {
 
     private static final Logger logger = LoggerFactory.getLogger(LoginFilter.class);

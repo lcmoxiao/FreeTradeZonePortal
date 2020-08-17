@@ -13,7 +13,7 @@ public class MybatisConfig {
     BasicDataSource initBasicDataSource() {
         BasicDataSource bds = new BasicDataSource();
         bds.setDriverClassName("com.mysql.cj.jdbc.Driver");
-        bds.setUrl("jdbc:mysql://localhost:3306/db_ftz?useSSL=true&serverTimezone=UTC&useUnicode=true&characterEncoding=utf-8");
+        bds.setUrl("jdbc:mysql://localhost:3306/db_ftz?useSSL=true&serverTimezone=GMT%2B8&useUnicode=true&characterEncoding=utf-8");
         bds.setUsername("root");
         bds.setPassword("123");
         bds.setInitialSize(5);

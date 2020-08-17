@@ -5,9 +5,9 @@
     <title>发布内容页面</title>
     <link href="/css/main_css.css" rel="stylesheet"/>
     <script src="/js/jquery-3.5.1.min.js"></script>
-    <script src="./js/navigator.js"></script>
-    <script charset="utf-8" src="./layui/layui.js"></script>
-    <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
 </head>
 <body class="layui-layout-body">
 <div id="navigator"></div>
@@ -65,25 +65,23 @@
 
 
     $("#subMessage5").click(function () {
-        var messages=$("#messa").val();
+        var messages = $("#messa").val();
         $.ajax({
-            url: "/contentss/"+messages,
+            url: "/webContent/contentss/" + messages,
             type: "GET",
             data: $("#addForm3").serialize(),
             async: false,
 
             success(result) {
                 $("#xxccs").html('');
-
                 $.each(result, function (index, item) {
-
                     var contentId = result[index].contentId;
                     var contentName = result[index].contentName;
                     var birth = result[index].birth;
                     var columnId1 = result[index].columnId1;
                     var columnId2 = result[index].columnId2;
                     var columnId3 = result[index].columnId3;
-                    if ( 1==1){
+                    if (1 == 1) {
                         $("#xxccs").html($("#xxccs").html() + "<br/>" + "<br/>" +
                             "<div style='border: #e6e6e6 1px solid;border-bottom: none;line-height: 24px'>" + "<span style='float: left'>" + "文章名字：" + "</span>" + contentName + "</div>"
                             + "<div id='date" + contentId + "' style='border: #e6e6e6 1px solid;border-bottom: none;line-height: 24px'>" + "<span style='float: left'>" + "发布时间：" + "</span>" + "<span>" + birth + "</span>" + "</div>"
@@ -91,7 +89,8 @@
                             "<button type='button' class='scCon' onclick='delContents(" + contentId + ")'>" + "删除" + "</button>" +
                             "<button type='button' class='bjCon' onclick='editContents(" + contentId + ")'>" + "编辑" + "</button>" +
                             "<button style='margin-left: -2px' id='sumAdd" + contentId + "' type='button' class='ckCon' onclick='viewContents(" + contentId + ")'>" + "查看" + "</button>" +
-                            "</div>")}
+                            "</div>")
+                    }
 
                 })
             }
@@ -102,7 +101,7 @@
     //删除内容
     function delContents(contentId) {
         $.ajax({
-            url: "/content/" + contentId,
+            url: "/webContent/content/" + contentId,
             type: "DELETE",
             success: function (flag) {
                 if (flag == "success") {
@@ -115,19 +114,18 @@
         })
     }
 
-
     //查看内容
     function viewContents(contentId) {
         $.ajax({
-            url: "/contentss/" + contentId,
+            url: "/webContent/contentss/" + contentId,
             type: "POST",
         })
-        window.location.href = "/viewCon?contentId=" + contentId;
+        window.location.href = "/webContent/viewCon?contentId=" + contentId;
     }
 
     //修改内容
     function editContents(contentId) {
-        window.location.href = "/edit?contentId=" + contentId;
+        window.location.href = "/webContent/edit?contentId=" + contentId;
     }
 
 </script>

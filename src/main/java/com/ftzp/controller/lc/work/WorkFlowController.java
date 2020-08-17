@@ -1,5 +1,8 @@
 package com.ftzp.controller.lc.work;
 
+import com.ftzp.cache.RedisObjCache;
+import com.ftzp.controller.lc.LoginController;
+import com.ftzp.pojo.lc.user.User;
 import com.ftzp.pojo.lc.workflow.WorkFlow;
 import com.ftzp.pojo.lc.workflow.WorkStep;
 import com.ftzp.service.lc.user.UserService;
@@ -9,21 +12,30 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.List;
 import java.util.UUID;
 
+import static com.ftzp.controller.lc.LoginController.getRemoteIP;
+
 @Controller
 @RequestMapping("/workflow")
 public class WorkFlowController {
 
+    private static final Logger logger = LoggerFactory.getLogger(WorkFlowController.class);
+    @Resource(name = "redisObjCache")
+    RedisObjCache redisObjCache;
     WorkStepService workStepService;
     UserService userService;
     WorkFlowService workFlowService;
@@ -45,12 +57,15 @@ public class WorkFlowController {
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
-    String addWorkFlow(@RequestParam("uploadXML") MultipartFile multipartFile) {
+    String addWorkFlow(@RequestParam("uploadXML") MultipartFile multipartFile, HttpServletRequest request) {
+
         File file;
         try {
             file = File.createTempFile(String.valueOf(UUID.randomUUID()), ".xml");
             multipartFile.transferTo(file);
             Integer wfId = parseXmlAndSaveWorkFlow(file);
+            User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
+            logger.info(u.getuName() + "提交了工作流，生成的工作流ID为：" + wfId);
             file.deleteOnExit();
         } catch (IOException | DocumentException e) {
             e.printStackTrace();
@@ -75,7 +90,11 @@ public class WorkFlowController {
 
     @RequestMapping(value = "/{wfId}", method = RequestMethod.DELETE)
     @ResponseBody
-    String deleteWorkFlow(@PathVariable Integer wfId) {
+    String deleteWorkFlow(@PathVariable Integer wfId,HttpServletRequest re) {
+
+        User u = (User) redisObjCache.getValue(getRemoteIP(re) + "u");
+        logger.info(u.getuName() + "删除了工作流wfId：" + wfId);
+
         workFlowService.deleteWorkFlow(wfId);
         workStepService.deleteWorkStep(wfId);
         return "redirect:/workflowManagement";
