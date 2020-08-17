@@ -36,6 +36,7 @@ public class ModelManagerController {
     @Resource(name = "redisObjCache")
     RedisObjCache redisObjCache;
 
+
     @RequestMapping(method = RequestMethod.GET)
     @ResponseBody
     List<FileAndModel> getModelPaths(@RequestParam("path") String path, HttpServletRequest request) {
@@ -57,27 +58,52 @@ public class ModelManagerController {
         return paths;
     }
 
+
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
     String postModelPaths(@RequestParam(value = "fileFolder") MultipartFile[] files
             , @RequestParam(value = "nowPath") String nowPath
-            , HttpServletRequest request) throws IOException {
+            , HttpServletRequest request) {
         String IP = getRemoteIP(request);
         User u = (User) redisObjCache.getValue(IP + "u");
         logger.info(u.getuName() + "提交了新的模板内容");
-        String uploadPath = request.getServletContext().getRealPath("/modelsUpload");
+        String uploadPath = request.getServletContext().getRealPath("/modelsUpload") + File.separator + nowPath;
+        logger.info("父路径为" + uploadPath);
         //判断存储的文件夹是否存在
         File dir = new File(uploadPath);
-        if (!dir.exists()) dir.mkdirs();
-        for (MultipartFile file : files) {
-            if (!file.isEmpty()) {
-                String wFileName = ((CommonsMultipartFile) file).getFileItem().getName();
-                file.transferTo(new File(uploadPath + nowPath + File.separator + wFileName));
-                System.out.println(uploadPath + File.separator + wFileName);
-            }
+        if (!dir.exists()) {
+            logger.info("新建" + dir.getName());
+            logger.info("新建文件夹结果" + dir.mkdirs());
         }
 
-        return "ok";
+        try {
+            for (MultipartFile file : files) {
+                if (!file.isEmpty()) {
+                    String wFileName = ((CommonsMultipartFile) file).getFileItem().getName();
+
+                    //初始化没有的目录
+                    StringBuilder directoryPath = new StringBuilder(uploadPath);
+                    String regex = "/";
+                    String[] tail = wFileName.split(regex);
+                    int size = tail.length;
+                    for (int i = 0; i < size - 1; i++) {
+                        directoryPath.append(File.separator).append(tail[i]);
+                        File d = new File(String.valueOf(directoryPath));
+                        if (!d.exists()) {
+                            logger.info("新建" + directoryPath);
+                            logger.info("新建文件夹结果" + d.mkdirs());
+                        }
+                    }
+                    File f = new File(uploadPath + File.separator + wFileName);
+                    file.transferTo(f);
+                }
+            }
+            return "ok";
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "error";
+        }
+
     }
 
     @RequestMapping(method = RequestMethod.DELETE)

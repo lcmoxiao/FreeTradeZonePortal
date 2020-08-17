@@ -126,35 +126,31 @@
 
     function showInsertModel() {
         let tmp =
-            "\t\t<form id='mf' class=\"layui-form\">\n" +
+            "<form id='fm' class='layui-form' enctype='multipart/form-data'>" +
             "<input type='hidden' name='nowPath' value='" + nowPath + "'>" +
-            "  <div class=\"layui-form-item\">\n" +
-            "    <label class=\"layui-form-label\">上传模板</label>\n" +
-            "    <div class=\"layui-input-block\">\n" +
-            "      <input id=\"fileFolder\" name=\"fileFolder\" type=\"file\" webkitdirectory>" +
-            "    </div>\n" +
-            "  </div>";
-
-        tmp +=
-            "      </select>\n" +
-            "    </div>\n" +
+            "  <div class='layui-form-item'>" +
+            "    <label class='layui-form-label'>上传模板</label>" +
+            "    <div class='layui-input-block'>" +
+            "      <input id='fileFolder' name='fileFolder' type='file' webkitdirectory>" +
+            "    </div>" +
             "  </div>" +
             "</div>" +
 
-            "\t\t\t<input type=\"button\" onclick='submitModel()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"添加\"><br>\n" +
-            "\t\t</form>";
+            "<input type='button' onclick='submitModel()' class='layui-btn layui-btn-warm layui-btn-sm' value='添加'><br>" +
+            "</form>";
         $("#tmpContent").html(tmp);
     }
 
     function submitModel() {
-        console.log(
-            $("#mf").serialize()
-        )
-        alert("??");
+        let data = new FormData(document.getElementById("fm"))
+        console.log(data)
         $.post({
             url: "/model",
-            data: $("#mf").serialize(),
+            processData: false,
+            contentType: false,
+            data: data,
             success: function () {
+                showModelManager();
                 layer.close(index);
             }
         });

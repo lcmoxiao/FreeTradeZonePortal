@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 
+import java.util.Arrays;
+
 import static com.ftzp.controller.lc.LoginController.getRemoteIP;
 
 @Controller
@@ -25,5 +27,13 @@ public class VisitController {
         return "/visit";
     }
 
+    public static void main(String[] args) {
+        String str="C:\\Users\\LICHEN\\IdeaProjects\\RoleMananger\\out\\artifacts\\RoleMananger_war_exploded\\modelsUpload\\\\cmd/cmd/PhysicalDataModel_14.cdb";
+        System.out.println(str);
+        String regex = "\\\\\\\\";
+        System.out.println(regex);
+        String[] tail = str.split(regex);
+        System.out.println(Arrays.toString(tail));
+    }
 
 }
