@@ -38,6 +38,7 @@ public class VoteController {
     获取所有的投票信息
     */
     @RequestMapping(value = "/vote", method = RequestMethod.GET)
+    @ResponseBody
     public List<Vote> getVotes() {
         return vs.getVote(null);
     }
