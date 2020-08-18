@@ -5,6 +5,15 @@ public class VoteOption {
     Integer oId;
     String odesc;
     Integer oCount;
+    Integer ovId;
+
+    public Integer getOvId() {
+        return ovId;
+    }
+
+    public void setOvId(Integer ovId) {
+        this.ovId = ovId;
+    }
 
     public Integer getoId() {
         return oId;

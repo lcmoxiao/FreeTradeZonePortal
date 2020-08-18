@@ -3,11 +3,7 @@
 <!--命名空间应该是对应接口的包名+接口名 -->
 <mapper namespace="com.ftzp.mapper.lc.vote.VotingMapper">
 
-    <select id="getOIdsFromVotingByVId" resultType="java.lang.Integer">
-        select *
-        from voting
-        where vId = #{vId}
-    </select>
+
 
     <select id="getOIdFromVotingByVIdAndVuIP" resultType="java.lang.Integer">
         select oId

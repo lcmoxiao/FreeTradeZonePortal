@@ -7,7 +7,6 @@ import java.util.List;
 public interface VotingMapper {
 
 
-    List<Integer> getOIdsByVId(Integer vId);
 
     Integer getOIdFromVotingByVIdAndVuIP(Voting vt);
 

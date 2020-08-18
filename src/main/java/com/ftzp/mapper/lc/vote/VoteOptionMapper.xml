@@ -3,20 +3,26 @@
 <!--命名空间应该是对应接口的包名+接口名 -->
 <mapper namespace="com.ftzp.mapper.lc.vote.VoteOptionMapper">
 
+    <select id="getOIdsByVId" resultType="java.lang.Integer">
+        select oId
+        from voteoptions
+        where ovId = #{vId}
+    </select>
+
     <select id="getVoteOptions" resultType="com.ftzp.pojo.lc.vote.VoteOption">
         select *
         from voteoptions
         <where>
-            in oId
-            <foreach collection="list" close=")" open="(" separator="," item="tmpoId">
+            oId in
+            <foreach collection="list" open="(" separator="," close=")" item="tmpoId">
                 #{tmpoId}
             </foreach>
         </where>
     </select>
 
     <insert id="insertVoteOptions" useGeneratedKeys="true" keyProperty="oId">
-        insert into voteoptions(odesc, oCount)
-        values (#{odesc}, #{oCount})
+        insert into voteoptions(odesc, oCount, ovId)
+        values (#{odesc}, #{oCount}, #{ovId})
     </insert>
 
 

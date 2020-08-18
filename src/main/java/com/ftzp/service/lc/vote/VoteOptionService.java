@@ -13,6 +13,10 @@ public class VoteOptionService {
     @Resource
     VoteOptionMapper voteOptionMapper;
 
+    public List<Integer> getOIdsByVId(Integer vId) {
+        return voteOptionMapper.getOIdsByVId(vId);
+    }
+
     public List<VoteOption> getVoteOptions(List<Integer> oIds) {
         return voteOptionMapper.getVoteOptions(oIds);
     }

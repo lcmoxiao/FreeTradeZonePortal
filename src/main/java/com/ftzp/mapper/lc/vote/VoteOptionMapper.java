@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface VoteOptionMapper {
 
+    List<Integer> getOIdsByVId(Integer vId);
+
     List<VoteOption> getVoteOptions(List<Integer> oIds);
 
     void insertVoteOptions(VoteOption vos);

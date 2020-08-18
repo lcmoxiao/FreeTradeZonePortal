@@ -14,10 +14,6 @@ public class VotingService {
     @Resource
     VotingMapper votingMapper;
 
-    public List<Integer> getOIdsByVId(Integer vId) {
-        return votingMapper.getOIdsByVId(vId);
-    }
-
 
     public Integer getOIdFromVotingByVIdAndVuIP(Voting vt) {
         return votingMapper.getOIdFromVotingByVIdAndVuIP(vt);

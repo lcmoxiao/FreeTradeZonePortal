@@ -69,6 +69,7 @@ public class VoteController {
             VoteOption voteOption = new VoteOption();
             voteOption.setoCount(0);
             voteOption.setOdesc(s);
+            voteOption.setOvId(v.getvId());
             vos.insertVoteOptions(voteOption);
         }
         logger.info("发起了新的投票");
@@ -81,7 +82,7 @@ public class VoteController {
     */
     @RequestMapping(value = "/vote", method = RequestMethod.DELETE)
     public void deleteVote(@RequestParam("vId") Integer vId) {
-        List<Integer> oIds = vis.getOIdsByVId(vId);
+        List<Integer> oIds = vos.getOIdsByVId(vId);
         oIds.forEach(it -> vos.deleteVoteOptions(it));
         vs.deleteVote(vId);
         vis.deleteVotingByVId(vId);
@@ -105,7 +106,7 @@ public class VoteController {
     public List<VoteOption> getVoting(
             @RequestParam("vId") Integer vId
     ) {
-        List<Integer> oIds = vis.getOIdsByVId(vId);
+        List<Integer> oIds = vos.getOIdsByVId(vId);
         return vos.getVoteOptions(oIds);
     }
 
