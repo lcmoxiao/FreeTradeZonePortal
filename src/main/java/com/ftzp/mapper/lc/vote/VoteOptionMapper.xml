@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!--命名空间应该是对应接口的包名+接口名 -->
+<mapper namespace="com.ftzp.mapper.lc.vote.VoteOptionMapper">
+
+    <select id="getVoteOptions" resultType="com.ftzp.pojo.lc.vote.VoteOption">
+        select *
+        from voteoptions
+        <where>
+            in oId
+            <foreach collection="list" close=")" open="(" separator="," item="tmpoId">
+                #{tmpoId}
+            </foreach>
+        </where>
+    </select>
+
+    <insert id="insertVoteOptions" useGeneratedKeys="true" keyProperty="oId">
+        insert into voteoptions(odesc, oCount)
+        values (#{odesc}, #{oCount})
+    </insert>
+
+
+    <update id="addOCount">
+        update voteoptions
+        set oCount=oCount + 1
+        where oId = #{oId};
+    </update>
+
+    <delete id="deleteVoteOptions">
+        delete
+        from voteoptions
+        where oId = #{oId}
+    </delete>
+
+
+</mapper>

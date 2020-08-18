@@ -2,7 +2,6 @@ package com.ftzp.controller.lc.work;
 
 import com.ftzp.ZipUtils;
 import com.ftzp.cache.RedisObjCache;
-import com.ftzp.controller.lc.user.UserController;
 import com.ftzp.pojo.lc.user.User;
 import com.ftzp.pojo.lc.workflow.Work;
 import com.ftzp.pojo.lc.workflow.WorkStep;
@@ -17,7 +16,6 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -144,7 +142,7 @@ public class WorkController {
 
     @RequestMapping(value = "/{wId}", method = RequestMethod.DELETE)
     @ResponseBody
-    String deleteWorkFlow(@PathVariable Integer wId,HttpServletRequest request) {
+    String deleteWorkFlow(@PathVariable Integer wId, HttpServletRequest request) {
         User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
         logger.info(u.getuName() + "提交了工作，工作ID为：" + wId);
 
