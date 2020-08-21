@@ -48,7 +48,6 @@ function showNavigator() {
             flushLayUi();
         }
     });
-
 }
 
 function flushLayUi() {

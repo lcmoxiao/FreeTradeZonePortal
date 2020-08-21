@@ -254,7 +254,11 @@
         $.ajax({
             method: "delete",
             url: "/role/" + rId,
-            success: closeTmpWindow()
+            success: function(){
+                closeTmpWindow()
+                layer.msg('删除ID为'+rId+'的角色成功');
+            }
+
         });
     }
 
@@ -266,6 +270,7 @@
             success: function () {
                 showRoleManager();
                 closeTmpWindow();
+                layer.msg('添加ID为'+rId+'的角色成功');
             }
         });
     }
@@ -278,6 +283,7 @@
             success: function () {
                 showRoleManager();
                 closeTmpWindow();
+                layer.msg('更新ID为'+rId+'的角色成功');
             }
         });
     }

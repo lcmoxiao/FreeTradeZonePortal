@@ -14,8 +14,8 @@ public class WorkStepService implements WorkStepMapper {
     WorkStepMapper workStepMapper;
 
     @Override
-    public List<WorkStep> getWorkStep(int wfId) {
-        return workStepMapper.getWorkStep(wfId);
+    public List<WorkStep> getWorkStepByWfId(int wfId) {
+        return workStepMapper.getWorkStepByWfId(wfId);
     }
 
     @Override
@@ -24,9 +24,18 @@ public class WorkStepService implements WorkStepMapper {
     }
 
     @Override
-    public void deleteWorkStep(Integer wfId) {
-        workStepMapper.deleteWorkStep(wfId);
+    public void updateWorkStep(WorkStep workStep) {
+        workStepMapper.updateWorkStep(workStep);
     }
 
+    @Override
+    public void deleteWorkStepByWfId(Integer wfId) {
+        workStepMapper.deleteWorkStepByWfId(wfId);
+    }
 
+    @Override
+    public void deleteWorkStep(Integer wsId) {
+
+        workStepMapper.deleteWorkStep(wsId);
+    }
 }

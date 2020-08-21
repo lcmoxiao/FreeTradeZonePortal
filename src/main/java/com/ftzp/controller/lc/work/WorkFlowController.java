@@ -36,24 +36,10 @@ public class WorkFlowController {
     private static final Logger logger = LoggerFactory.getLogger(WorkFlowController.class);
     @Resource(name = "redisObjCache")
     RedisObjCache redisObjCache;
+    @Resource(name = "workStepService")
     WorkStepService workStepService;
-    UserService userService;
+    @Resource(name = "workFlowService")
     WorkFlowService workFlowService;
-
-    @Autowired
-    public void setWorkStepService(WorkStepService workStepService) {
-        this.workStepService = workStepService;
-    }
-
-    @Autowired
-    public void setUserService(UserService userService) {
-        this.userService = userService;
-    }
-
-    @Autowired
-    public void setWorkFlowService(WorkFlowService workFlowService) {
-        this.workFlowService = workFlowService;
-    }
 
     @RequestMapping(method = RequestMethod.POST)
     @ResponseBody
@@ -96,7 +82,7 @@ public class WorkFlowController {
         logger.info(u.getuName() + "删除了工作流wfId：" + wfId);
 
         workFlowService.deleteWorkFlow(wfId);
-        workStepService.deleteWorkStep(wfId);
+        workStepService.deleteWorkStepByWfId(wfId);
         return "redirect:/workflowManagement";
     }
 

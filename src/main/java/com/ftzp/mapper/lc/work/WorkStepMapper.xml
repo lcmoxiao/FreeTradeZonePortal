@@ -3,20 +3,37 @@
 <!--命名空间应该是对应接口的包名+接口名 -->
 <mapper namespace="com.ftzp.mapper.lc.work.WorkStepMapper">
 
-    <select id="getWorkStep" resultType="com.ftzp.pojo.lc.workflow.WorkStep">
+    <select id="getWorkStepByWfId" resultType="com.ftzp.pojo.lc.workflow.WorkStep">
         select *
         from workstep
         where wfId = #{wfId}
     </select>
 
     <insert id="insertWorkStep" keyProperty="wsId" useGeneratedKeys="true">
-        insert into workstep(wsName, wfId, ranking, rId, wsdesc ,wsType)
+        insert into workstep(wsName, wfId, ranking, rId, wsdesc, wsType)
         VALUES (#{wsName}, #{wfId}, #{ranking}, #{rId}, #{wsdesc}, #{wsType})
     </insert>
+
+    <update id="updateWorkStep">
+        update workstep
+        set wsName=#{wsName},
+            wfId=#{wfId},
+            ranking=#{ranking},
+            rId=#{rId},
+            wsdesc= #{wsdesc},
+            wsType=#{wsType}
+        where wsId = #{wsId}
+    </update>
+
+    <delete id="deleteWorkStepByWfId">
+        delete
+        from workstep
+        where wfId = #{wfId}
+    </delete>
 
     <delete id="deleteWorkStep">
         delete
         from workstep
-        where wfId = #{wfId}
+        where wsId = #{wsId}
     </delete>
 </mapper>

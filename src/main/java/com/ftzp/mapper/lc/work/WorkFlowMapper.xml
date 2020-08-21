@@ -15,11 +15,12 @@
             <result column="ranking" property="ranking"/>
             <result column="rId" property="rId"/>
             <result column="wsdesc" property="wsdesc"/>
+            <result column="wsType" property="wsType"/>
         </collection>
     </resultMap>
 
     <select id="findWorkFlow" resultMap="workFlowInfo">
-        SELECT f.wfId, wfName,wfLength,wfdesc,wsdesc, wsId, wsName, ranking, rId, 'desc'
+        SELECT f.wfId, wfName,wfLength,wfdesc,wsdesc, wsId, wsName, ranking, rId, 'desc',wsType
         FROM workflow f
         join workstep s on f.wfId = s.wfId
         <where>
@@ -37,7 +38,18 @@
         set wfLength = #{wfLength},
             wfdesc= #{wfdesc}
         where wfId = #{wfId}
+    </update>
 
+    <update id="addWorkFlowLength">
+        update workflow
+        set wfLength = wfLength + 1
+        where wfId = #{wfId}
+    </update>
+
+    <update id="subWorkFlowLength">
+        update workflow
+        set wfLength = wfLength - 1
+        where wfId = #{wfId}
     </update>
 
     <delete id="deleteWorkFlow">

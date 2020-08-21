@@ -63,6 +63,13 @@ public class Work {
                 ", wfId=" + wfId +
                 ", ranking=" + ranking +
                 ", wFile='" + wFile + '\'' +
+                ", wdesc='" + wdesc + '\'' +
+                ", wLength=" + wLength +
+                ", uId=" + uId +
+                ", wLastDoTime=" + wLastDoTime +
+                ", wPostTime=" + wPostTime +
+                ", wContent='" + wContent + '\'' +
+                ", wUnCheckedContentId=" + wUnCheckedContentId +
                 '}';
     }
 

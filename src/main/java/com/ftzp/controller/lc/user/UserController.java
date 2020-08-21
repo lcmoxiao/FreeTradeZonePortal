@@ -1,7 +1,6 @@
 package com.ftzp.controller.lc.user;
 
 import com.ftzp.cache.RedisObjCache;
-import com.ftzp.controller.lc.LoginController;
 import com.ftzp.pojo.lc.user.User;
 import com.ftzp.service.lc.user.UserService;
 import org.slf4j.Logger;

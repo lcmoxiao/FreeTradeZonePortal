@@ -23,18 +23,31 @@
     </div>
 </script>
 
+<script type="text/html" id="wstoolbar">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增</button>
+        <button class="layui-btn layui-btn-warm layui-btn-sm" lay-event="use">使用</button>
+    </div>
+</script>
+
 <script type="text/html" id="barDemo">
     <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
     <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="show">查看</a>
 </script>
 
+<script type="text/html" id="wsBar">
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="update">更新</a>
+</script>
+
 <table class="layui-hide" id="test" lay-filter="test"></table>
 
-<div id="tmpContent" style='text-align: center' ></div>
-
+<div id="tmpContent1" style='text-align: center'></div>
+<div id="tmpContent2" style='text-align: center'></div>
 
 <script>
-    let index;
+    let index1;
+    let index2;
 
     $.ready(showNavigator());
     $.ready(showWorkFlow());
@@ -45,70 +58,69 @@
             method: "get",
             success: function (res) {
 
-                layui.use('table', function(){
+                layui.use('table', function () {
                     let table = layui.table;
                     table.render({
                         elem: '#test'
-                        ,data: res
-                        ,toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
-                        ,defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
+                        , data: res
+                        , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        , defaultToolbar: ['filter', 'exports', 'print', { //自定义头部工具栏右侧图标。如无需自定义，去除该参数即可
                             title: '提示'
-                            ,layEvent: 'LAYTABLE_TIPS'
-                            ,icon: 'layui-icon-tips'
+                            , layEvent: 'LAYTABLE_TIPS'
+                            , icon: 'layui-icon-tips'
                         }]
-                        ,cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
-                        ,cols: [[
-                            {field:'wfId',  title: '工作流ID', sort: true}
-                            ,{field:'wfName', title: '工作流名称'}
-                            ,{field:'wfdesc', title: '工作流描述'}
-                            ,{field:'wfLength', title: '工作流长度', sort: true}
-                            ,{fixed: 'right', title:'操作', toolbar: '#barDemo', width:150}
+                        , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        , cols: [[
+                            {field: 'wfId', title: '工作流ID', sort: true}
+                            , {field: 'wfName', title: '工作流名称'}
+                            , {field: 'wfdesc', title: '工作流描述'}
+                            , {field: 'wfLength', title: '工作流长度', sort: true}
+                            , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 150}
                         ]]
-                        ,page: true
+                        , page: true
                     });
 
                     //监听行工具事件
-                    table.on('tool(test)', function(obj){
+                    table.on('tool(test)', function (obj) {
                         var data = obj.data;
-
-                        if(obj.event === 'del'){
+                        if (obj.event === 'del') {
                             deleteWf(data.wfId);
                             obj.del();
-                        } else if(obj.event === 'show'){
-                            showWorkStep(data.wfId);
-                            index = layer.open({
+                        } else if (obj.event === 'show') {
+                            showWorkStep(data.wfId, data.wfLength);
+                            index1 = layer.open({
                                 type: 1,
                                 title: "详细工作流信息",
-                                area: ['30%', '60%'],
+                                area: ['60%', '60%'],
                                 fix: false,
                                 maxmin: true,
                                 shadeClose: true,
                                 shade: 0.4,
                                 skin: 'layui-layer-rim',
-                                content: $("#tmpContent"),
-                                end: function(index, layero){
-                                    $("#tmpContent").html("");
+                                content: $("#tmpContent1"),
+                                end: function (index, layero) {
+                                    $("#tmpContent1").html("");
                                 }
                             });
                         }
                     });
 
                     //头工具栏事件
-                    table.on('toolbar(test)', function(obj){
-                        if(obj.event === 'add'){
+                    table.on('toolbar(test)', function (obj) {
+                        if (obj.event === 'add') {
                             addWorkFlow();
-                            index = layer.open({
+                            index1 = layer.open({
                                 type: 1,
                                 title: "新增工作流",
-                                area: ['30%', '60%'],
+                                area: ['60%', '60%'],
                                 fix: false,
                                 maxmin: true,
                                 shadeClose: true,
                                 shade: 0.4,
                                 skin: 'layui-layer-rim',
-                                content: $("#tmpContent"),
-                                end: function(index, layero){
-                                    $("#tmpContent").html("");
+                                content: $("#tmpContent1"),
+                                end: function (index, layero) {
+                                    $("#tmpContent1").html("");
                                 }
                             });
                             layui.form.render();
@@ -119,7 +131,8 @@
         })
     }
 
-    function showWorkStep(wfId) {
+
+    function showWorkStep(wfId, wfLength) {
         $.ajax({
             url: "/workflow/" + wfId,
             method: "get",
@@ -127,32 +140,98 @@
                 console.log(rest);
                 let res = rest[0]['wws'];
 
-                let tmp = "<table class=\"layui-table\" >" +
-                    "            <thead>" +
-                    "               <tr>" +
-                    "            <td>步骤序号</td><td>步骤名称</td><td>步骤描述</td><td>步骤权限</td>" +
-                    "               </tr>" +
-                    "            </thead>" +
-                    "            <tbody id=\"tbody\">";
-                for (let i = 0; i < res.length; i++) {
-                    tmp += "<tr>" +
-                        "<td>" + res[i]['ranking'] + "</td>" +
-                        "<td>" + res[i]['wsName'] + "</td>" +
-                        "<td>" + res[i]['wsdesc'] + "</td>" +
-                        "<td>" + res[i]['rId'] + "</td>" +
-                        "</tr>"
-                }
-                tmp += "            </tbody>" +
-                    "<tfoot>" +
-                    "<tr><td colspan='4'>" +
-                    "<button class=\"layui-btn layui-btn-normal layui-btn-sm\"  onclick=deleteWf(" + wfId + ")>删除</button>" +
-                    "<button class=\"layui-btn layui-btn-warm layui-btn-sm\"  onclick=showInitWork(" +
-                    wfId + "," + rest[0]['wfLength'] +
-                    ")>使用</button>" +
-                    "</td></tr>" +
-                    "</tfoot>" +
-                    "        </table>";
-                $("#tmpContent").html(tmp)
+                let str = "<table class=\"layui-hide\" id=\"test1\" lay-filter=\"test1\"></table>";
+                $("#tmpContent1").html(str);
+
+                layui.use('table', function () {
+                    let table = layui.table;
+                    table.render({
+                        elem: '#test1'
+                        , data: res
+                        , toolbar: '#wstoolbar' //开启头部工具栏，并为其绑定左侧模板
+                        , cellMinWidth: 80 //全局定义常规单元格的最小宽度，layui 2.2.1 新增
+                        , cols: [[
+                            {field: 'ranking', title: '步骤序号', sort: true}
+                            , {field: 'wsName', title: '步骤名称'}
+                            , {field: 'wsdesc', title: '步骤描述'}
+                            , {field: 'rId', title: '步骤权限', sort: true}
+                            , {field: 'wsType', title: '步骤类型', sort: true}
+                            , {fixed: 'right', title: '操作', toolbar: '#wsBar', width: 150}
+                        ]]
+                        , page: true
+                    });
+
+                    //监听行工具事件
+                    table.on('tool(test1)', function (obj) {
+                        var data = obj.data;
+                        if (obj.event === 'del') {
+                            deleteWs(data.wsId, wfId);
+                            obj.del();
+                        } else if (obj.event === 'update') {
+                            showUpdateWorkStep(data.wsId, wfId);
+                            index2 = layer.open({
+                                type: 1,
+                                title: "更新工作步骤",
+                                area: ['60%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent2"),
+                                end: function (index, layero) {
+                                    layer.close(index1);
+                                    $("#tmpContent1").html("");
+                                    $("#tmpContent2").html("");
+                                }
+                            });
+                            layui.form.render();
+                        }
+                    });
+
+                    //头工具栏事件
+                    table.on('toolbar(test1)', function (obj) {
+                        if (obj.event === 'add') {
+                            showAddWorkStep(wfId);
+                            index2 = layer.open({
+                                type: 1,
+                                title: "新增工作步骤",
+                                area: ['60%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent2"),
+                                end: function (index, layero) {
+                                    layer.close(index1);
+                                    $("#tmpContent1").html("");
+                                    $("#tmpContent2").html("");
+                                }
+                            });
+                            layui.form.render();
+                        } else if (obj.event === 'use') {
+                            showInitWork(wfId, wfLength);
+                            index2 = layer.open({
+                                type: 1,
+                                title: "初始化工作",
+                                area: ['60%', '60%'],
+                                fix: false,
+                                maxmin: true,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#tmpContent2"),
+                                end: function (index, layero) {
+                                    layer.close(index1);
+                                    $("#tmpContent1").html("");
+                                    $("#tmpContent2").html("");
+                                }
+                            });
+                        }
+                    });
+                });
+
             }
         })
     }
@@ -191,7 +270,7 @@
             "上传所需附件：<input type=\"file\" name='uploadFile'><br><br><br><br>" +
             "<input type=\"button\" value=\"启动\"  class=\"layui-btn layui-btn-warm layui-btn-sm\" onclick='postWork()'><br>" +
             "</form>";
-        $("#tmpContent").html(tmp)
+        $("#tmpContent2").html(tmp)
     }
 
     function addWorkFlow() {
@@ -207,14 +286,159 @@
 
             "\t\t\t<input type=\"button\" onclick='postWf()' class=\"layui-btn layui-btn-warm layui-btn-sm\" value=\"导入\"><br>\n" +
             "\t\t</form>";
-        $("#tmpContent").html(tmp)
+        $("#tmpContent1").html(tmp)
+    }
+
+
+    function showAddWorkStep(wfId) {
+        let tmp = "<div class='contentTitle'>添加工作步骤</div>" +
+            "<form id='fm' class=\"layui-form\">" +
+            "<input type='hidden' name='wfId' value='" + wfId + "'>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">次序</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"ranking\" required  lay-verify=\"required\" placeholder=\"次序\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">工作步名称</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"wsName\" required  lay-verify=\"required\" placeholder=\"工作步名称\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">工作步骤描述</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"wsdesc\" required  lay-verify=\"required\" placeholder=\"工作步骤描述\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">工作类型（normal / check）</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"wsType\" required  lay-verify=\"required\" placeholder=\"工作类型\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">角色权限</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <select name=\"rId\" id='roleSelect'>\n" +
+
+            $.ajax({
+                url: "/role",
+                method: "get",
+                success: function (res) {
+                    let tt = "";
+                    for (let i = 0; i < res.length; i++) {
+                        tt += " <option value='" + res[i]['rId'] + "'>" + res[i]['rName'] + "</option>";
+                    }
+                    $("#roleSelect").html(tt);
+                    layui.use('form', function () {
+                        layui.form.render();
+                    });
+                }
+            });
+
+        tmp +=
+            "      </select>\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "<input type=\"button\" value=\"添加\"  class=\"layui-btn layui-btn-warm layui-btn-sm\" onclick='postWorkStep()'><br>" +
+            "</form>";
+        $("#tmpContent2").html(tmp)
+    }
+
+
+    function showUpdateWorkStep(wsId, wfId) {
+        let tmp = "<div class='contentTitle'>更新工作步骤</div>" +
+            "<form id='fm' class=\"layui-form\">" +
+            "<input type='hidden' name='wsId' value='" + wsId + "'>" +
+            "<input type='hidden' name='wfId' value='" + wfId + "'>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">次序</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"ranking\" required  lay-verify=\"required\" placeholder=\"次序\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">工作步名称</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"wsName\" required  lay-verify=\"required\" placeholder=\"工作步名称\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">工作步骤描述</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"wsdesc\" required  lay-verify=\"required\" placeholder=\"工作步骤描述\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">工作类型（normal / check）</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <input type=\"text\" name=\"wsType\" required  lay-verify=\"required\" placeholder=\"工作类型\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "  <div class=\"layui-form-item\">\n" +
+            "    <label class=\"layui-form-label\">角色权限</label>\n" +
+            "    <div class=\"layui-input-block\">\n" +
+            "      <select name=\"rId\" id='roleSelect'>\n" +
+
+            $.ajax({
+                url: "/role",
+                method: "get",
+                success: function (res) {
+                    let tt = "";
+                    for (let i = 0; i < res.length; i++) {
+                        tt += " <option value='" + res[i]['rId'] + "'>" + res[i]['rName'] + "</option>";
+                    }
+                    $("#roleSelect").html(tt);
+                    layui.use('form', function () {
+                        layui.form.render();
+                    });
+                }
+            });
+
+        tmp +=
+            "      </select>\n" +
+            "    </div>\n" +
+            "  </div>" +
+
+            "<input type=\"button\" value=\"更新\"  class=\"layui-btn layui-btn-warm layui-btn-sm\" onclick='putWorkStep()'><br>" +
+            "</form>";
+        $("#tmpContent2").html(tmp)
     }
 
     function deleteWf(wfId) {
         $.post({
             url: "/workflow/" + wfId,
             type: "delete",
-            success: closeTmpWindow()
+            success: function(){
+                showWorkFlow();
+                layer.close(index1);
+                layer.msg('删除ID为'+wfId+'的工作流成功');
+            }
+        });
+    }
+
+    function deleteWs(wsId, wfId) {
+        $.post({
+            url: "/workstep/" + wsId + "/" + wfId,
+            type: "delete",
+            success: function(){
+                showWorkFlow();
+                layer.close(index2);
+                layer.msg('删除ID为'+wsId+'的工作步骤成功');
+            }
         });
     }
 
@@ -227,9 +451,37 @@
             processData: false,
             contentType: false,
             data: formData,
-            success: function() {
+            success: function () {
                 showWorkFlow();
-                closeTmpWindow();
+                layer.close(index2);
+                layer.msg('启动工作成功');
+            }
+        });
+    }
+
+    function postWorkStep() {
+
+        $.post({
+            url: "/workstep",
+            type: "post",
+            data: $("#fm").serialize(),
+            success: function () {
+                showWorkFlow();
+                layer.close(index2);
+                layer.msg('新增工作步骤成功');
+            }
+        });
+    }
+
+    function putWorkStep() {
+        $.post({
+            url: "/workstep",
+            type: "put",
+            data: $("#fm").serialize(),
+            success: function () {
+                showWorkFlow();
+                layer.close(index2);
+                layer.msg('更新工作步骤成功');
             }
         });
     }
@@ -243,9 +495,10 @@
             processData: false,
             contentType: false,
             data: formData,
-            success: function() {
+            success: function () {
                 showWorkFlow();
-                closeTmpWindow();
+                layer.close(index1);
+                layer.msg('新增工作流成功');
             }
         });
     }

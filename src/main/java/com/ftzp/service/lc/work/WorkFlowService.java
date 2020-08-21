@@ -19,6 +19,16 @@ public class WorkFlowService implements WorkFlowMapper {
     }
 
     @Override
+    public void addWorkFlowLength(Integer wfId) {
+        workFlowMapper.addWorkFlowLength(wfId);
+    }
+
+    @Override
+    public void subWorkFlowLength(Integer wfId) {
+        workFlowMapper.subWorkFlowLength(wfId);
+    }
+
+    @Override
     public void insertWorkFlow(WorkFlow workFlow) {
         workFlowMapper.insertWorkFlow(workFlow);
     }

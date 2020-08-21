@@ -88,7 +88,10 @@
     function deleteWork(wId) {
         $.post({
             url: "/work/" + wId,
-            type: "delete"
+            type: "delete",
+            success:function (){
+                layer.msg('删除ID为'+wId+'的工作成功');
+            }
         });
     }
 

@@ -119,6 +119,7 @@
             type: "delete",
             success: function () {
                 console.log("delete" + fname)
+                layer.msg('删除'+fname+'的模板成功');
             }
         });
     }
@@ -152,6 +153,7 @@
             success: function () {
                 showModelManager();
                 layer.close(index);
+                layer.msg('提交模板成功');
             }
         });
     }

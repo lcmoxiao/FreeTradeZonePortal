@@ -135,6 +135,7 @@ public class WorkController {
                 w.setwFile(wFileName);
             }
             w.setRanking(ranking + 1);
+            System.out.println(w);
             workService.updateWork(w);
         }
         return "redirect:/workManagement";
@@ -169,7 +170,7 @@ public class WorkController {
         List<Work> works = workService.getWork(null);
         List<WorkStep> res = new ArrayList<>();
         for (Work w : works) {
-            List<WorkStep> wss = workStepService.getWorkStep(w.getWfId());
+            List<WorkStep> wss = workStepService.getWorkStepByWfId(w.getWfId());
             for (var ws : wss) {
                 if (ws.getWfId() == w.getWfId() && ws.getRanking() == w.getRanking()) {
                     if (u.getrId() == ws.getrId()) {

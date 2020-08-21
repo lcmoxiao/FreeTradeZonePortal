@@ -8,6 +8,8 @@ public interface WorkFlowMapper {
 
     List<WorkFlow> findWorkFlow(Integer wfId);
 
+    void addWorkFlowLength(Integer wfId);
+    void subWorkFlowLength(Integer wfId);
     void insertWorkFlow(WorkFlow workFlow);
 
     void deleteWorkFlow(Integer wfId);

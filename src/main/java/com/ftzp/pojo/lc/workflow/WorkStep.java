@@ -144,4 +144,23 @@ public class WorkStep {
         this.ranking = ranking;
     }
 
+    @Override
+    public String toString() {
+        return "WorkStep{" +
+                "wsId=" + wsId +
+                ", wsName='" + wsName + '\'' +
+                ", wsType='" + wsType + '\'' +
+                ", rId=" + rId +
+                ", wId=" + wId +
+                ", wfId=" + wfId +
+                ", ranking=" + ranking +
+                ", wsdesc='" + wsdesc + '\'' +
+                ", wLastDoTime=" + wLastDoTime +
+                ", wPostTime=" + wPostTime +
+                ", wContent='" + wContent + '\'' +
+                ", wdesc='" + wdesc + '\'' +
+                ", wFile='" + wFile + '\'' +
+                ", wUnCheckedContentId=" + wUnCheckedContentId +
+                '}';
+    }
 }

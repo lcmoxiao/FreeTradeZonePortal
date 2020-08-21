@@ -40,7 +40,6 @@
         wFile = #{wFile},
         wLastDoTime = #{wLastDoTime},
         wContent = #{wContent}
-        <if test="wUncheckedContentId!=null">,#{wUncheckedContentId}</if>
         where wId = #{wId}
     </update>
 

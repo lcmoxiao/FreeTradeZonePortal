@@ -173,6 +173,7 @@
             url: "/permission/" + pId,
             success: function () {
                 closeTmpWindow();
+                layer.msg('删除权限ID为'+pId+'的权限成功');
             }
         });
     }
@@ -185,6 +186,7 @@
             success: function () {
                 showPermissionManager();
                 closeTmpWindow();
+                layer.msg('添加ID为'+pId+'的权限成功');
             }
         });
     }
@@ -197,6 +199,7 @@
             success: function () {
                 showPermissionManager();
                 closeTmpWindow();
+                layer.msg('更新ID为'+pId+'的权限成功');
             }
         });
     }
