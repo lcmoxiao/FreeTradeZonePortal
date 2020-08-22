@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>修改内容</title>
+    <link href="/css/main_css.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+</head>
+<body class="layui-layout-body" >
+<div id="navigator"></div>
+<script>
+    layui.use('element', function () {
+        let element = layui.element;
+    });
+    $.ready(showNavigator());
+</script>
+<style type="text/css">
+    * {
+        padding: 0;
+        margin: 0;
+    }
+</style>
+
+<div class="navigation">
+    <button class="fbnr" type="button" style="float: left;margin-left: 14px" value="栏目管理" onclick="backContentManag2()">
+        <h3>返回主页</h3>
+    </button>
+</div>
+<div class="content_r"
+     style="width: 85%;float: right;color: black;background-color: white;height: 700px;text-align: center;">
+    <div style="width: 100%;background-color: #f2f2f2;height: 48px">
+        <h3 style="float: left;margin-top: 12px;margin-left: 8px">人才信息</h3>
+    </div>
+    <div style="color:#666666;width: 92%;margin-left: 4%">
+        <ul id="hiringShow" style="margin-left: 4%">
+
+        </ul>
+    </div>
+
+</div>
+
+<script>
+    function backContentManag2() {
+        window.location.href = "/webContent/main"
+    }
+
+    $.ajax({
+        url: "/webContent/hiring",
+        type: "GET",
+        dataType: "JSON",
+        success: function (hiringList) {
+            $("#hiringShow").html('');
+
+            $.each(hiringList, function (index, item) {
+                var hiringId = hiringList[index].hiringId;
+                var hiringName = hiringList[index].hiringName;
+                var hiringTime=hiringList[index].hiringTime;
+                var hiringContent = hiringList[index].hiringContent;
+                var hiringEmail = hiringList[index].hiringEmail;
+                var hiringFile = hiringList[index].hiringFile;
+
+                $("#hiringShow").html($("#hiringShow").html() + "<br/>" +
+                    "<div style='border: #e6e6e6 1px solid;border-bottom: none;line-height: 24px;'>" +
+                    "<span style='float: left'>"+"人才姓名：" +"</span>"+hiringName+"<br/>"+ "</div>"
+                    + "<div  style='border: #e6e6e6 1px solid;border-bottom: none;line-height: 24px'>"
+                    + "<span style='float: left'>" + "发布时间：" + "</span>" + "<span>" + dateToStr(hiringTime) + "</span>" + "</div>"
+                    +"<div style='border-top: #e6e6e6 1px solid;border-left:  #e6e6e6 1px solid;border-right:  #e6e6e6 1px solid;line-height: 24px;'>"+
+                    "<span style='float: left'>" + "人才信息：" + "</span>" +
+                    "<span style=''>" + hiringContent+ "</span>"  +"</div>"
+                    +"<div style='border-top: #e6e6e6 1px solid;border-left:  #e6e6e6 1px solid;border-right:  #e6e6e6 1px solid;line-height: 24px;'>"+
+                    "<span style='float: left'>" + "Email信息：" + "</span>" +
+                    "<span style=''>" + hiringEmail+ "</span>"  +"</div>"
+                    + "<div style='border: #e6e6e6 1px solid;line-height: 24px'>" + "<span style='float: left'>" + "信息操作：" + "</span>" +
+                    "<button type='button' style='margin-left: 16px;margin-right: -41%' class='scCon' onclick='delHiring(" + hiringId + ")'>" + "删除" + "</button>" +
+                    "<a class='fbnr' style='background-color: #ff5722;width: 30px;height: 24px;margin-right: 44%' href='/webContent/hiring/"+hiringId+"'>" + "下载" + "</a>" +
+                    "</div>"
+                )
+            })
+        }
+    })
+
+
+
+    function delHiring(hiringId) {
+        $.ajax({
+            url: "/webContent/hiring/" + hiringId,
+            type: "DELETE",
+            success: function (flag) {
+                if (flag == "success") {
+                    alert("删除成功！");
+                    window.location.reload();
+                } else {
+                    alert("删除失败！");
+                }
+            }
+        })
+    }
+
+
+</script>
+</body>
+</html>

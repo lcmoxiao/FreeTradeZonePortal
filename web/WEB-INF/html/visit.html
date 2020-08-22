@@ -11,29 +11,73 @@
     <script src="./js/navigator.js"></script>
     <script charset="utf-8" src="./layui/layui.js"></script>
     <link rel="stylesheet" href="./layui/css/layui.css" media="all">
+    <script>
+        function getLongDate() {
+            //创建当前系统时间的Date对象
+            var dateObj = new Date();
+            //获取完整年份值
+            var year = dateObj.getFullYear();
+            //获取月份
+            var month = dateObj.getMonth() + 1;
+            //获取月份中的日
+            var date = dateObj.getDate();
+            //获取星期值
+            var day = dateObj.getDay();
+            var weeks = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+            //根据星期值，从数组中获取对应的星期字符串
+            var week = weeks[day];
+            //获取小时
+            var hour = dateObj.getHours();
+            //获取分钟
+            var minute = dateObj.getMinutes();
+            //获取秒钟
+            var second = dateObj.getSeconds();
+            //如果月、日、时、分、秒的值小于10，在前面补0
+            if (month < 10) {
+                month = "0" + month;
+            }
+            if (date < 10) {
+                date = "0" + date;
+            }
+            if (hour < 10) {
+                hour = "0" + hour;
+            }
+            if (minute < 10) {
+                minute = "0" + minute;
+            }
+            if (second < 10) {
+                second = "0" + second;
+            }
+            var newDate = year + "年" + month + "月" + date + "日 " + week + " " + hour + ":" + minute + ":" + second;
+            document.getElementById("dateStr").innerHTML = "当前时间:[" + newDate + "]";
+            setTimeout("getLongDate()", 1000);//每隔一秒重新调用一次该函数
+        }
+
+        $(document).ready(function () {
+            $("#closeButton").click(function () {
+                $("#hiringMessage").hide();
+            });
+        });
+    </script>
 </head>
-<body >
+<body onload="getLongDate()">
 <div class="showTop">
-    <h2 style="padding-top: 20px">自贸区门户网站</h2>
+    <div id="dateStr"></div>
+    <h2 style="margin-top: -20px;">自贸区门户网站欢迎您</h2>
 </div>
-<style type="text/css">
-    .lmgl {
-        float: right;
-        width: 50px;
-        margin-right: 14px;
-        margin-top: 6px;
-        height: 26px;
-        text-align: center;
-        font-size: 10px;
-        color: white;
-        border-radius: 3px;
-        background-color: #009688;
-        border: 1px solid white;
-    }
-</style>
-<div class="main_content" style="">
-    <div style="margin-top: 11px">
+
+<div id="hiringMessage" class="hiringMessage">
+    <div style="background-color: white;">
+    <div id="closeButton" class="closeButton">X</div><br/></div>
+    <div class="advertisingContent">
+        <p>本公司正在大力招收人才，如果你有兴趣，请点击这里</p>
+
     </div>
+    <button class="hiringButton" type="button" onclick="goToHiring()">招聘</button>
+</div>
+
+<div class="main_content" style="">
+
     <div class="navigation">
         <h4 style="float: left;margin-top: 6px;color: #009688"><b>内容导航</b></h4>
         <br/>
@@ -76,7 +120,7 @@
         </ul>
     </div>
     <div class="content_r"
-         style="width: 80%;float: right;color: black;background-color: white;height: auto;text-align: center;">
+         style="">
         <div style="width: 100%;background-color: #f2f2f2;height: 48px">
             <h3 style="float: left;margin-top: 12px;margin-left: 8px">内容信息</h3>
             <h3 class="publishMess" style="float: right">
@@ -92,6 +136,10 @@
 </div>
 
 <script>
+
+    function goToHiring() {
+        window.location.href="/webContent/hiringPage"
+    }
 
     function submintMessage() {
         window.location.href = "/webContent/submitMessage";
@@ -136,8 +184,9 @@
                 if (columnList[index].channelId == chanId1) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in").html($("#ul_in").html() + "<br/>" + "<span style='margin-left: 12px;' id='cName" + columnId + "'>" + columnName
-                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>" + "</div>")
+                    $("#ul_in").html($("#ul_in").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        + "<span style='margin-left: 10%'>" + columnName + "</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
 
                 }
             })
@@ -172,7 +221,8 @@
                 if (columnList[index].channelId == chanId2) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_2").html($("#ul_in_2").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_2").html($("#ul_in_2").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        + "<span style='margin-left: 10%'>" + columnName + "</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -206,7 +256,8 @@
                 if (columnList[index].channelId == chanId3) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_3").html($("#ul_in_3").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_3").html($("#ul_in_3").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        + "<span style='margin-left: 10%'>" + columnName + "</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -240,7 +291,8 @@
                 if (columnList[index].channelId == chanId4) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_4").html($("#ul_in_4").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_4").html($("#ul_in_4").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        + "<span style='margin-left: 10%'>" + columnName + "</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -274,7 +326,8 @@
                 if (columnList[index].channelId == chanId5) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_5").html($("#ul_in_5").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_5").html($("#ul_in_5").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        + "<span style='margin-left: 10%'>" + columnName + "</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -308,7 +361,8 @@
                 if (columnList[index].channelId == chanId6) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_6").html($("#ul_in_6").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_6").html($("#ul_in_6").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        + "<span style='margin-left: 10%'>" + columnName + "</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -342,7 +396,8 @@
                 if (columnList[index].channelId == chanId7) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_7").html($("#ul_in_7").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_7").html($("#ul_in_7").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        + "<span style='margin-left: 10%'>" + columnName + "</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -376,7 +431,8 @@
                 if (columnList[index].channelId == chanId8) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_8").html($("#ul_in_8").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_8").html($("#ul_in_8").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        + "<span style='margin-left: 10%'>" + columnName + "</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -410,7 +466,8 @@
                 if (columnList[index].channelId == chanId9) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_9").html($("#ul_in_9").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_9").html($("#ul_in_9").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        + "<span style='margin-left: 10%'>" + columnName + "</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -494,7 +551,7 @@
                         $.each(contentList, function (index, item) {
                             var contentId = contentList[index].contentId;
                             var contentName = contentList[index].contentName;
-                            var birth = contentList[index].birth;
+                            var birth = dateToStr(contentList[index].birth);
                             var columnId1 = contentList[index].columnId1;
                             var columnId2 = contentList[index].columnId2;
                             var columnId3 = contentList[index].columnId3;

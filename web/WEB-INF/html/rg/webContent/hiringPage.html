@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="multipart/form-data;         charset=utf-8" />
+    <title>提交留言</title>
+    <link href="/css/main_css.css" rel="stylesheet"/>
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+</head>
+<body>
+<div style="height: 100%">
+    <div class="showTop">
+        <h2 style="padding-top: 20px">自贸区门户网站</h2>
+    </div>
+    <style type="text/css">
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+    </style>
+    <div style="width: 100%;fcolor: black;background-color: white;height: 700px;text-align: center;">
+        <div style="width: 100%;background-color: #f2f2f2;height: 48px">
+            <h3 style="float:left;margin-top: 12px;margin-left: 49%">投递信息</h3>
+            <button class="fbnr" type="button" style="float: right;margin-left: 14px" value="栏目管理"
+                    onclick="backCkMess3()">
+                <h3>返回主页</h3>
+            </button>
+        </div>
+        <div style="margin-top: 40px;width: 500px;margin-left: 35%;border: #e6e6e6 1px solid;height: 240px">
+            <div style="margin-left: -77%;">你的信息：</div>
+            <div style="">
+                <form id="hiringMessage" role="form" enctype="multipart/form-data" method="post">
+                    <div style="">姓名：<input type="text" name="hiringName" style="margin-left: 6px;border: #e6e6e6 1px solid;"/><br/><br/></div>
+                    Email：<input type="email" name="hiringEmail" style="border: #e6e6e6 1px solid;"/><br/><br/>
+                    理由：<textarea name="hiringContent" style=" margin-left: 6px;width: 178px;border: #e6e6e6 1px solid; vertical-align:top;"></textarea>
+                    <br/><br/>
+                    <input type="file" name="uploadHiringFile" style="margin-left: 130px"/>
+                    <br/>
+                    <input type="button" class="fbnr" style="margin-right: 28%;width: 198px" id="submitHiring" value="提交"/>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+</div>
+
+<script>
+    function backCkMess3() {
+        window.location.href = "/visit"
+    }
+
+    $('#submitHiring').click(function () {
+        var form = $('#hiringMessage')[0];
+        var formData = new FormData(form);
+        $.ajax({
+            url:"/webContent/hiring",
+            type:"POST",
+            data: formData,
+            processData:false,
+            contentType:false,
+            cache: false,
+            success:function (result) {
+                if (result == "success")
+                {
+                    alert("投递成功！");
+                    window.location.href = "/visit";
+                }else {
+                    alert("投递失败！")
+                }
+            }
+        })
+    })
+
+
+
+</script>
+</body>
+</html>

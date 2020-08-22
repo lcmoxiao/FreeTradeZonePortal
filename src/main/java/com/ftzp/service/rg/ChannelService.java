@@ -12,9 +12,8 @@ public class ChannelService {
     @Autowired
     private ChannelMapper channelMapper;
 
-    public List<Channel> getChannels() {
-        List<Channel> channels = channelMapper.findChannels();
-        System.out.println(channels);
+    public List<Channel> getChannels(List channelId) {
+        List<Channel> channels = channelMapper.findChannels(channelId);
         return channels;
     }
 
@@ -36,5 +35,10 @@ public class ChannelService {
     public Integer addChannel(Channel channel) {
         Integer flag = channelMapper.addChannel(channel);
         return flag;
+    }
+
+    public List<Integer> findChannelIdsByUid(Integer uId){
+        List<Integer> channelId=channelMapper.findChannelIdsByUid(uId);
+        return channelId;
     }
 }

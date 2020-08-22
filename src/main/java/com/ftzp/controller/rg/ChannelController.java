@@ -1,13 +1,13 @@
 package com.ftzp.controller.rg;
 
 import com.ftzp.cache.RedisObjCache;
-import com.ftzp.controller.VisitController;
 import com.ftzp.pojo.lc.user.User;
 import com.ftzp.pojo.rg.Channel;
+
+
 import com.ftzp.service.rg.ChannelService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
-import java.util.Map;
 
 import static com.ftzp.controller.lc.LoginController.getRemoteIP;
 
@@ -29,13 +28,17 @@ public class ChannelController {
 
     @Resource(name = "redisObjCache")
     RedisObjCache redisObjCache;
-    @Autowired
-    private ChannelService channelService;
+    @Resource
+    ChannelService channelService;
+
 
     @RequestMapping(value = "/channels", method = RequestMethod.GET)
     @ResponseBody
-    public List<Channel> channels() {
-        List<Channel> channels = channelService.getChannels();
+    public List<Channel> channels(HttpServletRequest request) {
+        User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
+        System.out.println(u.getuId());
+        List<Integer> channelId = channelService.findChannelIdsByUid(u.getuId());
+        List<Channel> channels = channelService.getChannels(channelId);
         System.out.println(channels);
         return channels;
     }
@@ -43,7 +46,7 @@ public class ChannelController {
 
     @ResponseBody
     @RequestMapping(value = "/channel/{channelId}", method = RequestMethod.DELETE)
-    public String delChannel(@PathVariable("channelId") Integer channelId,HttpServletRequest request) {
+    public String delChannel(@PathVariable("channelId") Integer channelId, HttpServletRequest request) {
 
         User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
         logger.info(u.getuName() + "删除了频道channelId：" + channelId);
@@ -59,7 +62,7 @@ public class ChannelController {
 
     @ResponseBody
     @RequestMapping(value = "/channel/{channelId}", method = RequestMethod.POST)
-    public String updateChannel(Channel channel, @PathVariable("channelId") Integer channelId,HttpServletRequest request) {
+    public String updateChannel(Channel channel, @PathVariable("channelId") Integer channelId, HttpServletRequest request) {
         channel.setChannelId(channelId);
 
         User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
@@ -83,7 +86,7 @@ public class ChannelController {
 
     @RequestMapping(value = "channel", method = RequestMethod.POST)
     @ResponseBody
-    public String addChannel(Channel channel,HttpServletRequest request) {
+    public String addChannel(Channel channel, HttpServletRequest request) {
 
         User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
         logger.info(u.getuName() + "增加了频道channelId：" + channel.getChannelId());

@@ -4,8 +4,18 @@
 
     <select id="findChannels" resultType="com.ftzp.pojo.rg.Channel">
         select channelId,channelName from channel
+        <where>
+            channelId in
+            <foreach collection="list" separator="," open="(" item="cId" close=")">
+                #{cId}
+            </foreach>
+        </where>
     </select>
 
+    <select id="findChannelIdsByUid" resultType="java.lang.Integer">
+        select fchannelId from forbit
+        where fuId = #{uId}
+    </select>
 
     <delete id="delChannel">
        delete from channel where channelId=#{channelId}

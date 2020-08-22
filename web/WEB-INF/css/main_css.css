@@ -36,9 +36,10 @@ html, body {
 
 /*左侧导航*/
 .navigation {
-    width: 20%;
+    width: 15%;
     float: left;
     color: #bdbec1;
+    border-top: #14161a 2px solid;
     background-color: #23262e;
     height: 1500px;
 }
@@ -51,14 +52,27 @@ html, body {
     margin-left: 20px;
 }
 
+/*右侧内容*/
+.content_r{
+    width: 85%;float: right;color: black;background-color: white;height: auto;text-align: center;
+}
+
+
 #ul_out, #ul_out_2, #ul_out_3, #ul_out_4, #ul_out_5 {
 }
 
 #ul_in, #ul_in_2, #ul_in_3, #ul_in_4, #ul_in_5, #ul_in_6, #ul_in_7, #ul_in_8, #ul_in_9 {
     display: none;
     background-color: #545c71;
-    margin-left: -6%;
-    padding-left: 14%;
+    width: 100%;
+    margin-left: 0;
+
+}
+
+#dateStr{
+    text-align: left;
+    padding-left: 22px;
+    padding-top: 22px;
 }
 
 .lmgl {
@@ -164,5 +178,39 @@ html, body {
     color: white;
     border-radius: 3px;
     background-color: #ffb800;
+    border: 1px solid white;
+}
+
+.hiringMessage{
+    width: 182px;
+    height: 100px;
+    position: fixed;
+    margin-top: 460px;
+    margin-left: 88%;
+    border: #bfbfbf 1px solid;
+}
+
+.closeButton{
+    width: 10px;
+    height: 14px;
+    float: right;
+    background-color: #9F9F9F;
+}
+
+.advertisingContent{
+    background-color: #009688;
+    color: white;
+    padding-bottom: 26px;
+}
+
+.hiringButton{
+    width: 182px;
+    margin-right: 14px;
+    height: 20px;
+    text-align: center;
+    font-size: 13px;
+    color: white;
+    border-radius: 3px;
+    background-color: #36a9ff;
     border: 1px solid white;
 }

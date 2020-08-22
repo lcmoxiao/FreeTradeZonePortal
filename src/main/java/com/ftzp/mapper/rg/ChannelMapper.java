@@ -5,7 +5,7 @@ import com.ftzp.pojo.rg.Channel;
 import java.util.List;
 
 public interface ChannelMapper {
-    List<Channel> findChannels();
+    List<Channel> findChannels(List channelId);
 
     Integer addChannel(Channel channel);
 
@@ -14,4 +14,6 @@ public interface ChannelMapper {
     boolean delChannel(Integer channelId);
 
     Channel findChannelById(Integer channelId);
+
+    List<Integer> findChannelIdsByUid(Integer uId);
 }

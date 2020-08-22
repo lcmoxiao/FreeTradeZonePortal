@@ -77,7 +77,7 @@ public class WorkController {
     @ResponseBody
     void downloadFile(@RequestParam("path") String path, HttpServletRequest request, HttpServletResponse response) {
 
-        User u = (User) redisObjCache.getValue(getRemoteIP(request) + "p");
+        User u = (User) redisObjCache.getValue(getRemoteIP(request) + "u");
         logger.info(u.getuName() + "下载了工作附件path：" + path);
 
         String uploadPath = request.getServletContext().getRealPath("/worksUpload");

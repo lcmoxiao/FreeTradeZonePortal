@@ -78,4 +78,14 @@ public class GoRgController {
     String submitMessage() {
         return "/rg/webContent/submitMessage";
     }
+
+    @RequestMapping("/hiringPage")
+    String hiringPage() {
+        return "/rg/webContent/hiringPage";
+    }
+
+    @RequestMapping("/hiringSituation")
+    String hiringSituation() {
+        return "/rg/webContent/hiringSituation";
+    }
 }

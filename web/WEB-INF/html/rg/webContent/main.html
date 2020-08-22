@@ -74,11 +74,10 @@
     }
 </style>
 <div class="main_content" style="">
-    <div style="margin-top: 11px">
-    </div>
+
     <div class="navigation">
-        <h4 style="float: left;margin-top: 6px;color: #009688"><b>内容导航</b></h4>
-        <button class="lmgl" style="" value="栏目管理" onclick="navigationManag()">栏目管理
+        <h4 style="float: left;margin-top: 16px;color: #009688"><b>内容导航</b></h4>
+        <button class="lmgl" style="margin-top: 10px" value="栏目管理" onclick="navigationManag()">栏目管理
         </button>
         <br/>
         <br/>
@@ -120,7 +119,7 @@
         </ul>
     </div>
     <div class="content_r"
-         style="width: 80%;float: right;color: black;background-color: white;height: auto;text-align: center;">
+         style="">
         <div style="width: 100%;background-color: #f2f2f2;height: 48px">
             <h3 style="float: left;margin-top: 12px;margin-left: 8px">内容信息</h3>
             <h3 class="publishMess" style="float: right">
@@ -129,6 +128,10 @@
             </h3>
             <h3 class="publishMess" style="float: right">
                 <button class="fbnr" style="background-color: #ffb800;" type="button" onclick="messageSituation()">留言情况
+                </button>
+            </h3>
+            <h3 class="publishMess" style="float: right">
+                <button class="fbnr" style="background-color: #36a9ff;" type="button" onclick="hiringSituation()">人才信息
                 </button>
             </h3>
             <h3 class="publishMess" style="float: right">
@@ -144,8 +147,13 @@
 </div>
 
 <script>
+
+    function hiringSituation() {
+        window.location.href="/webContent/hiringSituation";
+    }
+
     function messageSituation(){
-        window.location.href="/webContent/viewMessage"
+        window.location.href="/webContent/viewMessage";
     }
 
     var chanId1 = 1;
@@ -187,8 +195,9 @@
                 if (columnList[index].channelId == chanId1) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in").html($("#ul_in").html() + "<br/>" + "<span style='margin-left: 12px;' id='cName" + columnId + "'>" + columnName
-                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>" + "</div>")
+                    $("#ul_in").html($("#ul_in").html()  + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        +"<span style='margin-left: 10%'>"+ columnName+"</span>"
+                        + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>" )
 
                 }
             })
@@ -223,7 +232,8 @@
                 if (columnList[index].channelId == chanId2) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_2").html($("#ul_in_2").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_2").html($("#ul_in_2").html()  + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        +"<span style='margin-left: 10%'>"+ columnName+"</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -257,7 +267,8 @@
                 if (columnList[index].channelId == chanId3) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_3").html($("#ul_in_3").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_3").html($("#ul_in_3").html()  + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        +"<span style='margin-left: 10%'>"+ columnName+"</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -291,7 +302,8 @@
                 if (columnList[index].channelId == chanId4) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_4").html($("#ul_in_4").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_4").html($("#ul_in_4").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        +"<span style='margin-left: 10%'>"+ columnName+"</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -325,7 +337,8 @@
                 if (columnList[index].channelId == chanId5) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_5").html($("#ul_in_5").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_5").html($("#ul_in_5").html()+ "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        +"<span style='margin-left: 10%'>"+ columnName+"</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -359,7 +372,8 @@
                 if (columnList[index].channelId == chanId6) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_6").html($("#ul_in_6").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_6").html($("#ul_in_6").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        +"<span style='margin-left: 10%'>"+ columnName+"</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -393,7 +407,8 @@
                 if (columnList[index].channelId == chanId7) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_7").html($("#ul_in_7").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_7").html($("#ul_in_7").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        +"<span style='margin-left: 10%'>"+ columnName+"</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -427,7 +442,8 @@
                 if (columnList[index].channelId == chanId8) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_8").html($("#ul_in_8").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_8").html($("#ul_in_8").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        +"<span style='margin-left: 10%'>"+ columnName+"</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })
@@ -461,7 +477,8 @@
                 if (columnList[index].channelId == chanId9) {
                     var columnName = columnList[index].columnsName;
                     var columnId = columnList[index].columnId;
-                    $("#ul_in_9").html($("#ul_in_9").html() + "<br/>" + "<span style='margin-left: 12px'  id='cName" + columnId + "'>" + columnName + "</span>"
+                    $("#ul_in_9").html($("#ul_in_9").html() + "<div style='margin-left: 12px;height: 26px;line-height: 26px;' id='cName" + columnId + "'>"
+                        +"<span style='margin-left: 10%'>"+ columnName+"</span>"
                         + "<span style='display: none;' id='cId" + columnId + "'>" + columnId + "</span>")
                 }
             })

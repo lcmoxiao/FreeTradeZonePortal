@@ -53,8 +53,6 @@
     }
 </style>
 <div>
-    <div style="margin-top: 11px">
-    </div>
     <div class="navigation">
         <button class="fbnr" type="button" style="float: left;margin-left: 14px" value="栏目管理" onclick="backMain()"><h3>
             返回主页</h3>
@@ -155,7 +153,7 @@
                     if (channelList[index].channelId == chanId1) {
                         var channelName = channelList[index].channelName;
                         var channelId = channelList[index].channelId;
-                        $("#ulout").html($("#ulout").html() + "<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
+                        $("#ulout").html($("#ulout").html() +"<div style='height:14px '>"+ "<span style='width: 200px;float: left;margin-top: 4px' >"+
                             "频道管理：" + "<span id='chName" + channelId + "'>" + channelName + "</span>"
                             +"</span>"+"<span style='width:100px;float: left ;margin-top: -4px'>"
                             + "<button type='button' class='scC' onclick='delChannel(" + channelId + ")'>" + "删除" + "</button>" +

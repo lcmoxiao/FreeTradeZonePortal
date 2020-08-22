@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?> <!DOCTYPE mapper  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ftzp.mapper.rg.HiringMapper">
+
+    <select id="findHiring" resultType="com.ftzp.pojo.rg.Hiring">
+        select * from hiring
+    </select>
+
+    <delete id="delHiring">
+       delete from hiring where hiringId=#{hiringId}
+    </delete>
+
+    <insert id="addHiring">
+        insert into hiring(hiringContent,hiringName,hiringEmail,hiringFile,hiringTime)
+        value(#{hiringContent},#{hiringName},#{hiringEmail},#{hiringFile},#{hiringTime})
+    </insert>
+
+    <select id="findHiringById" resultType="com.ftzp.pojo.rg.Hiring">
+        select * from hiring where hiringId=#{hiringId}
+    </select>
+
+</mapper>
