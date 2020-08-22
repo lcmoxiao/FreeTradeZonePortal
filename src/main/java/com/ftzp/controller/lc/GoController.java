@@ -57,4 +57,14 @@ public class GoController {
         return "/lc/logging";
     }
 
+    @RequestMapping("/voteManager")
+    String voteManager() {
+        return "/lc/vote/voteManager";
+    }
+
+    @RequestMapping("/voting")
+    String voting() {
+        return "/lc/vote/vote";
+    }
+
 }

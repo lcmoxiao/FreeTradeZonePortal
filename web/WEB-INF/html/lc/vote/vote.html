@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>voteManager</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/js/Chart.bundle.min.js"></script>
+</head>
+<body>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="check">查看</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="vote">投票</a>
+</script>
+<div id="tmpContent" style='text-align: center'>
+</div>
+<div class="bar-chart"></div>
+
+
+<script>
+    let index;
+    $.ready(showVoteManager());
+    function showVoteManager() {
+        $.ajax({
+            url: "/vote",
+            method: "get",
+            success: function (res) {
+                layui.use('table', function () {
+                    let table = layui.table;
+                    table.render({
+                        elem: '#test'
+                        , data: res
+                        , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        , title: '投票记录表'
+                        , cols: [[
+                            {field: 'vName', title: '投票名', check: 'text', sort: true}
+                            , {field: 'vdesc', title: '投票描述',}
+                            , {
+                                field: 'vPublishTime', title: '发布时间', sort: true,
+                                templet: function (d) {
+                                    return dateToStr(d.vPublishTime);
+                                }
+                            }
+                            , {
+                                field: 'vDeadTime', title: '截止时间', sort: true,
+                                templet: function (d) {
+                                    return dateToStr(d.vDeadTime);
+                                }
+                            }
+                            , {
+                                field: 'vActive', title: '是否截止', sort: true,
+                                templet: function (d) {
+                                    let nowTime = new Date().getTime();
+                                    if (nowTime > d.vDeadTime) {
+                                        d.vActive = false;
+                                        return ("<p id=\"deadTime\" style=\"color: #df0000\">已截止</p>");
+                                    }else{
+                                        if (d.vActive === false) {
+                                            return ("<p id=\"stop\" style=\"color: #FD482C\">已截止</p>");
+                                        } else {
+                                            return ("<p id=\"voting\" style=\"color: #0b960b\">正在进行</p>");
+                                        }
+                                    }
+
+                                }
+                            }
+                            , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 200}
+
+                        ]]
+                        , page: true
+                    });
+
+                    //监听行工具事件
+                    table.on('tool(test)', function (obj) {
+                        var data = obj.data;
+
+                        if (obj.event === 'vote') {
+                            if (data.vActive === true){
+                                $.ajax({
+                                    url: "/voting/" + data.vId,
+                                    method: "get",
+                                    success: function (res) {
+                                        addRadio(res ,data.vId);
+                                    }})
+                                index = layer.open({
+                                    type:1,
+                                    title:data.vName,//投票标题
+                                    area: ["30%","30%"],
+                                    maxmin:false,
+                                    resize:false,
+                                    shade:0.4,
+                                    shadeClose: true,
+                                    content:$("#tmpContent"),
+                                    end:function (index,layero) {
+                                        $("#tmpContent").html("");
+                                    }
+                                })
+                            }else {
+                                alert("投票已截止！");
+                            }
+
+                        } else if (obj.event === 'check') {
+                            newCanvas();
+                            displayVote(data.vId);
+                            index = layer.open({
+                                type: 1,
+                                title: "投票信息",
+                                area: ['600px', '600px'],
+                                fix: false,
+                                scrollbar:false,
+                                resize:false,
+                                maxmin: false,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#myChart"),
+                                end: function (index, layero) {
+                                    $("#myChart").remove();
+                                }
+                            });
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+
+</script>
+
+<script>
+    function newCanvas() {
+        var canvas = "<canvas id=\"myChart\" width=\"50%\" height=\"40%\"></canvas>";
+        $(".bar-chart").append(canvas);
+    }
+
+    function displayVote(vId) {
+        $.ajax({
+            url: "/voting/" + vId,
+            type: "get",
+            success: function (res) {
+                myPie(res);
+            }
+        })
+    }
+
+    function addRadio(data, vId) {
+        var choose = " <form class=\"layui-form\" id=\"fm\">" +
+            "<input type=\"hidden\" value=" + vId + " name=\"vId\">" +
+            "<div class=\"layui-form-item\">\n" +
+
+            "<div class=\"\" id=\"voteOption\">\n" +
+            "</div>\n" +
+
+            "</div>\n" +
+
+            "<div class=\"layui-form-item\">\n" +
+            "<div class=\"\">\n" +
+            "<input type=\"button\" class=\"layui-btn\" onclick=\"voteResult()\" value=\"提交\">" +
+            "</div>\n" +
+            "</div>\n" +
+            "</form> "
+        ;
+        $("#tmpContent").append(choose);
+
+        for (let i = 0; i < data.length; i++){
+            let voteOption = "<input type=\"radio\" title=\""+data[i].odesc+"\" name=\"oId\" value=\"" + data[i].oId + "\">";
+            $("#voteOption").append(voteOption);
+        }
+        layui.use('form', function () {
+            layui.form.render();
+        });
+    }
+
+    function voteResult() {
+    let data = new FormData($("#fm")[0]);
+        $.ajax({
+            url: "/voting/"+data.get("vId")+"/"+data.get("oId"),
+            type: "post",
+            success: function (res) {
+                showVoteManager();
+                layer.close(index);
+                alert(res);
+            }
+        });
+    }
+
+
+    function myPie(Data) {
+        let ctx = document.getElementById("myChart");
+        let optionsName = [];
+        let voteCount = [];
+        let backColor1 = [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'];
+        let borderColor = [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ];
+        for (i = 0; i < Data.length; i++) {
+            optionsName.push(Data[i].odesc);
+            voteCount.push(Data[i].oCount);
+        }
+        var myPieChart = new Chart(ctx, {
+                type: "pie",
+                data: {
+                    datasets: [{
+                        label: "",
+                        data: voteCount,
+                        backgroundColor: backColor1,
+                        borderColor: borderColor,
+                        borderWidth: 1
+                    }],
+                    labels: optionsName,
+                },
+                options: {
+
+                }
+            }
+        );
+    }
+
+</script>
+
+
+</body>
+</html>

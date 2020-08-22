@@ -37,6 +37,7 @@ function showNavigator() {
             if (ps.indexOf("/main") >= 0) tmp += "            <li class=\"layui-nav-item\"><a href='/webContent/main'>内容管理</a></li>\n";
             if (ps.indexOf("/statistic") >= 0) tmp += "            <li class=\"layui-nav-item\"><a href='/statisticOfLogin'>访问分析</a></li>\n";
             if (ps.indexOf("/log") >= 0) tmp += "            <li class=\"layui-nav-item\"><a href='/logging'>操作日志</a></li>\n";
+            if (ps.indexOf("/log") >= 0) tmp += "            <li class=\"layui-nav-item\"><a href='/voteManager'>投票管理</a></li>\n";
             tmp +=
                 "        </ul>\n" +
                 "        <ul class=\"layui-nav layui-layout-right\">\n" +

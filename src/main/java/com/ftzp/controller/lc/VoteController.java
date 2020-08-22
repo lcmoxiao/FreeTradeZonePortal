@@ -9,13 +9,12 @@ import com.ftzp.service.lc.vote.VotingService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -54,13 +53,15 @@ public class VoteController {
             @RequestParam("vo") String[] vo,
             @RequestParam("vdesc") String vdesc,
             @RequestParam("vName") String vName,
-            @RequestParam("vDeadTime") Date vDeadTime
-    ) {
+            @RequestParam("vDeadTime") String vDeadTime
+    ) throws ParseException {
         //添加投票选项
         Vote v = new Vote();
         v.setvPublishTime(nowTime());
         v.setvActive(true);
-        v.setvDeadTime(vDeadTime);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date d = sdf.parse(vDeadTime);
+        v.setvDeadTime(d);
         v.setVdesc(vdesc);
         v.setvName(vName);
         vs.insertVote(v);
@@ -80,31 +81,34 @@ public class VoteController {
     /*
     删除关于该投票的所有信息
     */
-    @RequestMapping(value = "/vote", method = RequestMethod.DELETE)
-    public void deleteVote(@RequestParam("vId") Integer vId) {
+    @RequestMapping(value = "/vote/{vId}", method = RequestMethod.DELETE)
+    public String deleteVote(@PathVariable("vId") Integer vId) {
         List<Integer> oIds = vos.getOIdsByVId(vId);
         oIds.forEach(it -> vos.deleteVoteOptions(it));
         vs.deleteVote(vId);
         vis.deleteVotingByVId(vId);
         logger.info("删除了投票 vId:" + vId);
+        return ("删除了投票vId：" + vId);
     }
 
     /*
     提前终止投票
    */
-    @RequestMapping(value = "/vote/stop", method = RequestMethod.PUT)
-    public void stopVote(@RequestParam("vId") Integer vId) {
+    @RequestMapping(value = "/vote/stop/{vId}", method = RequestMethod.PUT)
+    @ResponseBody
+    public String stopVote(@PathVariable("vId") Integer vId) {
         vs.stopVote(vId);
         logger.info("提前终止了投票 vId:" + vId);
+        return "提前终止了投票vId：" + vId;
     }
 
     /*
     获取该vote的详细投票信息
      */
-    @RequestMapping(value = "/voting", method = RequestMethod.GET)
+    @RequestMapping(value = "/voting/{vId}", method = RequestMethod.GET)
     @ResponseBody
     public List<VoteOption> getVoting(
-            @RequestParam("vId") Integer vId
+            @PathVariable("vId") Integer vId
     ) {
         List<Integer> oIds = vos.getOIdsByVId(vId);
         return vos.getVoteOptions(oIds);
@@ -113,11 +117,11 @@ public class VoteController {
     /*
     进行投票，提供vId，以及oId即可
      */
-    @RequestMapping(value = "/voting", method = RequestMethod.POST)
+    @RequestMapping(value = "/voting/{vId}/{oId}", method = RequestMethod.POST,produces = "text/html;charset=UTF-8")
     @ResponseBody
     public String insertVoting(
-            @RequestParam("vId") Integer vId,
-            @RequestParam("oId") Integer oId,
+            @PathVariable("vId") Integer vId,
+            @PathVariable("oId") Integer oId,
             HttpServletRequest re
     ) {
         Voting voting = new Voting();
@@ -126,7 +130,7 @@ public class VoteController {
         voting.setvId(vId);
         //判断是不是投过票了，投过了返回之前投的选项ID
         Integer toId = vis.getOIdFromVotingByVIdAndVuIP(voting);
-        if (toId != null) return "你已经投过了" + toId;
+        if (toId != null) return "你已经投过了";
         Vote v = vs.getVote(vId).get(0);
         if (nowTime().after(v.getvDeadTime())) return "时间已经截止了";
         if (!v.getvActive()) return "已经停止投票了";

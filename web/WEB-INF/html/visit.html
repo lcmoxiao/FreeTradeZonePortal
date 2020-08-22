@@ -127,6 +127,10 @@
                 <button class="fbnr" style="" type="button" onclick="submintMessage()">站内留言
                 </button>
             </h3>
+            <h3 class="publishMess" style="float: right">
+                <button class="fbnr" style="background-color: #FF5722" type="button" onclick="gotoVote()">点击投票
+                </button>
+            </h3>
         </div>
         <div style="color:#666666;width: 92%;margin-left: 4%;height: 100%">
             <ul id="contentPage">
@@ -136,6 +140,9 @@
 </div>
 
 <script>
+    function gotoVote(){
+        window.location.href="/voting";
+    }
 
     function goToHiring() {
         window.location.href="/webContent/hiringPage"

@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>voteManager</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <script src="/js/jquery-3.5.1.min.js"></script>
+    <script src="/js/navigator.js"></script>
+    <script charset="utf-8" src="/layui/layui.js"></script>
+    <link rel="stylesheet" href="/layui/css/layui.css" media="all">
+    <script src="/js/Chart.bundle.min.js"></script>
+</head>
+<body>
+<div id="navigator"></div>
+<table class="layui-hide" id="test" lay-filter="test"></table>
+
+
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="add">新增投票</button>
+    </div>
+</script>
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="check">查看</a>
+    <a class="layui-btn layui-btn-warm layui-btn-xs" lay-event="stop">截止</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+<div id="tmpContent" style='text-align: center'></div>
+<div class="bar-chart"></div>
+
+<script>
+    let index;
+
+    var count = 2;
+
+    $.ready(showVoteManager());
+    $.ready(showNavigator());
+
+    function showVoteManager() {
+        $.ajax({
+            url: "/vote",
+            method: "get",
+            success: function (res) {
+                layui.use('table', function () {
+                    let table = layui.table;
+                    table.render({
+                        elem: '#test'
+                        , data: res
+                        , toolbar: '#toolbarDemo' //开启头部工具栏，并为其绑定左侧模板
+                        , title: '投票记录表'
+                        , cols: [[
+                            {field: 'vName', title: '投票名', check: 'text', sort: true}
+                            , {field: 'vdesc', title: '投票描述',}
+                            , {
+                                field: 'vPublishTime', title: '发布时间', sort: true,
+                                templet: function (d) {
+                                    return dateToStr(d.vPublishTime);
+                                }
+                            }
+                            , {
+                                field: 'vDeadTime', title: '截止时间', sort: true,
+                                templet: function (d) {
+                                    return dateToStr(d.vDeadTime);
+                                }
+                            }
+                            , {
+                                field: 'vActive', title: '是否截止', sort: true,
+                                templet: function (d) {
+                                    let nowTime = new Date().getTime();
+                                    if (nowTime > d.vDeadTime) {
+                                        d.vActive = false;
+                                        return ("<p id=\"deadTime\" style=\"color: #df0000\">已截止</p>");
+                                    } else {
+                                        if (d.vActive === false) {
+                                            return ("<p id=\"stop\" style=\"color: #FD482C\">已截止</p>");
+                                        } else {
+                                            return ("<p id=\"voting\" style=\"color: #0b960b\">正在进行</p>");
+                                        }
+                                    }
+
+                                }
+                            }
+                            , {fixed: 'right', title: '操作', toolbar: '#barDemo', width: 200}
+
+                        ]]
+                        , page: true
+                    });
+
+                    //监听行工具事件
+                    table.on('tool(test)', function (obj) {
+                        var data = obj.data;
+                        if (obj.event === 'del') {
+                            deleteVote(data.vId);
+                            obj.del();
+                        } else if (obj.event === 'check') {
+                            newCanvas();
+                            displayVote(data.vId);
+                            index = layer.open({
+                                type: 1,
+                                title: "投票信息",
+                                area: ['600px', '600px'],
+                                fix: false,
+                                scrollbar: false,
+                                resize: false,
+                                maxmin: false,
+                                shadeClose: true,
+                                shade: 0.4,
+                                skin: 'layui-layer-rim',
+                                content: $("#myChart"),
+                                end: function (index, layero) {
+                                    $("#myChart").remove();
+                                }
+                            });
+                        } else if (obj.event = 'stop') {
+                            if (data.vActive === true) {
+                                stopVote(data.vId);
+                                data.vActive = false;
+                            } else {
+                                alert("投票已截止！")
+                            }
+                        }
+                    });
+
+                    //头工具栏事件，添加投票
+                    table.on('toolbar(test)', function (obj) {
+                        switch (obj.event) {
+                            case 'add':
+                                $("#tmpContent").html(newVote);
+                                count=2;
+                                layui.use('layer', function () {
+                                    var layer = layui.layer;
+                                    index = layer.open({
+                                        type: 1,
+                                        title: '新增投票信息',
+                                        maxmin: true,
+                                        shade: [0],
+                                        shadeClose: true,
+                                        area: ['40%', '60%'],
+                                        content: $("#tmpContent"),
+                                        end: function (index, layero) {
+                                            $("#tmpContent").html("");
+                                        }
+                                    });
+                                });
+                                layui.use('laydate', function () {
+                                    var laydate = layui.laydate;
+                                    //执行一个laydate实例
+                                    laydate.render({
+                                        elem: '#date' //指定元素
+                                        , type: 'datetime'
+                                        , format: 'yyyy-MM-dd HH:mm:ss'
+                                    });
+                                });
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+
+</script>
+
+
+<script>
+    let newVote = "<div id=\"\"  style=\"width:37.5rem ;\">\n" +
+        "\t<div  style=\" margin-top: 30px;\" >\n" +
+        "\t\t<form class=\"layui-form\" id=\"fm\">\n" +
+        "\t\t\t<div class=\"layui-form-item\">\n" +
+        "\t\t\t\t<label class=\"layui-form-label\">投票名：</label>\n" +
+        "\t\t\t\t<div class=\"layui-input-block\">\n" +
+        "\t\t\t\t\t<input type=\"text\" id=\"title\" value=\"\" name=\"vName\" required  lay-verify=\"required\" placeholder=\"请输入投票标题\" autocomplete=\"off\" class=\"layui-input\">\n" +
+        "\t\t\t\t</div>\n" +
+        "\t\t\t</div>\n" +
+        "\n" +
+
+        "\t\t\t<div class=\"layui-form-item layui-form-text\">\n" +
+        "\t\t\t\t<label class=\"layui-form-label\">投票描述：</label>\n" +
+        "\t\t\t\t<div class=\"layui-input-block\">\n" +
+        "\t\t\t\t\t<input type=\"text\" id=\"desc\" value=\"\" name=\"vdesc\" placeholder=\"请输入内容\" class=\"layui-textarea\">\n" +
+        "\t\t\t\t</div>\n" +
+        "\t\t\t</div>\n" +
+        "\n" +
+        "\t\t\t<div class=\"layui-form-item\">\n" +
+        "\t\t\t\t<label class=\"layui-form-label\">截止时间：</label>\n" +
+        "\t\t\t\t<div class=\"layui-input-inline\">\n" +
+        "\t\t\t\t\t<input type=\"text\" name=\"vDeadTime\" class=\"layui-input\" id=\"date\" placeholder=\"yyyy-MM-dd HH:mm:ss\">\n" +
+        "<!--\n" +
+        "\t\t\t\t\t<input type=\"text\" name=\"vDeadTime\" id=\"date\" lay-verify=\"datetime\" placeholder=\"yyyy-MM-dd HH:mm:ss\" autocomplete=\"off\" class=\"layui-input\">\n" +
+        "-->\n" +
+        "\t\t\t\t</div>\n" +
+        "\t\t\t</div>\n" +
+        "\n" +
+        "\t\t\t<div class=\"layui-form-item\">\n" +
+        "\t\t\t\t<label class=\"layui-form-label\">选项1：</label>\n" +
+        "\t\t\t\t<div class=\"layui-input-block\">\n" +
+        "\t\t\t\t\t<input type=\"text\" value=\"\" name=\"vo\" placeholder=\"选项1\" autocomplete=\"off\" class=\"layui-input\">\n" +
+        "\t\t\t\t</div>\n" +
+        "\t\t\t</div>\n" +
+        "\n" +
+        "\t\t\t<div class=\"layui-form-item\">\n" +
+        "\t\t\t\t<label class=\"layui-form-label\">选项2：</label>\n" +
+        "\t\t\t\t<div class=\"layui-input-block\">\n" +
+        "\t\t\t\t\t<input type=\"text\" value=\"\" name=\"vo\" placeholder=\"选项2\" autocomplete=\"off\" class=\"layui-input\">\n" +
+        "\t\t\t\t</div>\n" +
+        "\t\t\t</div>\n" +
+        "\n" +
+        "\n" +
+        "\t\t\t<div class=\"layui-form-item\" id=\"addOption\">\n" +
+        "\t\t\t\t<div class=\"layui-input-block\">\n" +
+        "\t\t\t\t\t<input type=\"button\" class=\"layui-btn\" name=\"\" onclick=\"addOpt()\" id=\"addButton\" value=\"添加选项+\" />\n" +
+        "\t\t\t\t</div>\n" +
+        "\t\t\t</div>\n" +
+        "\n" +
+        "\n" +
+        "\t\t\t<div class=\"layui-form-item\">\n" +
+        "\t\t\t\t<div class=\"layui-input-block\">\n" +
+        "\t\t\t\t\t<input type=\"button\" class=\"layui-btn\" onclick=\"postVote()\" id=\"sub\" value=\"立即提交\">\n" +
+        "\t\t\t\t\t<button type=\"reset\" class=\"layui-btn layui-btn-primary\" >重置</button>\n" +
+        "\t\t\t\t</div>\n" +
+        "\t\t\t</div>\n" +
+        "\t\t</form>\n" +
+        "\t</div>\n" +
+        "</div>";
+
+
+</script>
+
+
+<script>
+    function newCanvas() {
+        var canvas = "<canvas id=\"myChart\" width=\"50%\" height=\"40%\"></canvas>";
+        $(".bar-chart").append(canvas);
+    }
+
+    //获取后台投票信息并展示
+    function displayVote(vId) {
+        $.ajax({
+            url: "/voting/" + vId,
+            type: "get",
+            success: function (res) {
+                myPie(res);
+            }
+        })
+    }
+
+    //删除投票
+    function deleteVote(vId) {
+        $.ajax({
+            method: "delete",
+            url: "/vote/" + vId,
+            success: function () {
+            }
+        });
+    }
+
+    //提前截止投票
+    function stopVote(vId) {
+        $.ajax({
+            url: "/vote/stop/" + vId,
+            type: "put",
+            success: function () {
+                showVoteManager();
+                alert("投票截止成功！");
+            }
+        })
+    }
+
+    //上传新增投票内容
+    function postVote() {
+        let data = new FormData(document.getElementById("fm"));
+        $.ajax({
+            url: "/vote",
+            type: "post",
+            data: data,
+            cache: false,        // 不缓存数据
+            processData: false,  // 不处理数据
+            contentType: false,   // 不设置内容类型
+            success: function () {
+                showVoteManager();
+                layer.close(index);
+            }
+        });
+    }
+
+    //添加投票选项
+    function addOpt() {
+        count++;
+        let tem = "<div class=\"layui-form-item\">\n" +
+            "<label class=\"layui-form-label\"> 选项" + count + "：</label>\n" +
+            "<div class=\"layui-input-block\">\n" +
+            "<input type=\"text\" name=\"vo\" \"placeholder=\"选项" + count + "\" autocomplete=\"off\" class=\"layui-input\">\n" +
+            "</div>" +
+            "</div>";
+        $("#addOption").before(tem);
+    }
+
+    //画饼
+    function myPie(Data) {
+        let ctx = document.getElementById("myChart");
+        let optionsName = [];
+        let voteCount = [];
+        let backColor1 = [
+            'rgba(255, 99, 132, 0.2)',
+            'rgba(54, 162, 235, 0.2)',
+            'rgba(255, 206, 86, 0.2)',
+            'rgba(75, 192, 192, 0.2)',
+            'rgba(153, 102, 255, 0.2)',
+            'rgba(255, 159, 64, 0.2)'];
+        let borderColor = [
+            'rgba(255,99,132,1)',
+            'rgba(54, 162, 235, 1)',
+            'rgba(255, 206, 86, 1)',
+            'rgba(75, 192, 192, 1)',
+            'rgba(153, 102, 255, 1)',
+            'rgba(255, 159, 64, 1)'
+        ];
+        for (i = 0; i < Data.length; i++) {
+            optionsName.push(Data[i].odesc);
+            voteCount.push(Data[i].oCount);
+        }
+
+        var myPieChart = new Chart(ctx, {
+                type: "pie",
+                data: {
+                    datasets: [{
+                        label: "",
+                        data: voteCount,
+                        backgroundColor: backColor1,
+                        borderColor: borderColor,
+                        borderWidth: 1
+                    }],
+                    labels: optionsName,
+                },
+                options: {}
+            }
+        );
+    }
+
+</script>
+
+
+</body>
+</html>
